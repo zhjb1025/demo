@@ -17,7 +17,7 @@ public class TestUser {
 			request.setService("user_login");
 			request.setVersion("1.0.0");
 			request.setLoginName("admin");
-			request.setPwd("111111");
+//			request.setPwd("111111");
 			Map<String,String> header =new HashMap<String, String>();
 			header.put("contentType", "application/json");
 //			rqUserInfo.setName("问问");
