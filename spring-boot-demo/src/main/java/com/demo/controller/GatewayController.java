@@ -81,7 +81,6 @@ public class GatewayController {
      */
 	private String getRequestParameter(HttpServletRequest request){
 		String parameter="";
-		logger.info(request.getContentType());
 		if(request.getMethod().equals(RequestMethod.POST.name())){
 			try {
 				parameter=getPostData(request);
