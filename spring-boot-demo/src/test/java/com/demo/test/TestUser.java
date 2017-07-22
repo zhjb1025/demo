@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
+import com.demo.common.util.CommUtil;
 import com.demo.common.util.HttpUtils;
 import com.demo.controller.msg.UserLoginRequest;
 
@@ -17,11 +18,13 @@ public class TestUser {
 			request.setService("user_login");
 			request.setVersion("1.0.0");
 			request.setLoginName("admin");
-//			request.setPwd("111111");
+			request.setPwd("111111");
 			Map<String,String> header =new HashMap<String, String>();
 			header.put("contentType", "application/json");
 //			rqUserInfo.setName("问问");
-			System.out.println(HttpUtils.post("http://127.0.0.1:8081/demo/gateway/trade",JSON.toJSONString(request) ,header));
+			String json = HttpUtils.post("http://127.0.0.1:8081/demo/gateway/trade", JSON.toJSONString(request), header);
+			System.out.println("["+ json+"]");
+			System.out.println("["+ CommUtil.getJsonValue(json,"userName")+"]");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

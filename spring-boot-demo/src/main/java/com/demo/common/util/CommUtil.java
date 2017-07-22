@@ -1,19 +1,16 @@
 package com.demo.common.util;
 
-import java.io.BufferedReader;
+import org.apache.log4j.Logger;
+
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.math.BigDecimal;
-import java.sql.Clob;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.apache.log4j.Logger;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommUtil {
 	
@@ -22,11 +19,13 @@ public class CommUtil {
 	
 	
 	
-	private static SimpleDateFormat sdfYYYYMMDD = new SimpleDateFormat("yyyyMMdd");
+	private static String DATE_FORMAT_YYYYMMDD = "yyyyMMdd";
 	
-	private static SimpleDateFormat sdfYYYY_MM_DD = new SimpleDateFormat("yyyy-MM-dd");
+	private static String DATE_FORMAT_YYYY_MM_DD ="yyyy-MM-dd";
 	
-	private static SimpleDateFormat sdfYYYY_MM_DD_HMS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static String DATE_FORMAT_YYYY_MM_DD_HMS ="yyyy-MM-dd HH:mm:ss";
+
+	private static String DATE_FORMAT_YYYYMMDDHMS ="yyyyMMddHHmmss";
 	
 	
 	 
@@ -86,7 +85,6 @@ public class CommUtil {
 	 * 直接读取对象属性值, 无视private/protected修饰符, 不经过getter函数.
 	 * @param object
 	 * @param field
-	 * @param fieldName
 	 * @return
 	 */
 	public static Object getFieldValue(final Object object,Field field) {
@@ -167,7 +165,7 @@ public class CommUtil {
 	 * @return
 	 */
 	public static String getDateYYYYMMDD(){
-		return sdfYYYYMMDD.format(new Date());
+		return new SimpleDateFormat(DATE_FORMAT_YYYYMMDD).format(new Date());
 	}
 	
 	/**
@@ -175,7 +173,7 @@ public class CommUtil {
 	 * @return
 	 */
 	public static String getDateYYYY_MM_DD(){
-		return sdfYYYY_MM_DD.format(new Date());
+		return new SimpleDateFormat(DATE_FORMAT_YYYY_MM_DD).format(new Date());
 	}
 	
 	/**
@@ -183,218 +181,91 @@ public class CommUtil {
 	 * @return
 	 */
 	public static String getDateYYYY_MM_DD_HMS(){
-		return sdfYYYY_MM_DD_HMS.format(new Date());
-	}
-	
-
-	public static int getNvlInt(ResultSet rs, int columnIndex)
-			throws SQLException {
-		int tmpInt = rs.getInt(columnIndex);
-		return tmpInt;
+		return new SimpleDateFormat(DATE_FORMAT_YYYY_MM_DD_HMS).format(new Date());
 	}
 
-	public static int getNvlInt(ResultSet rs, String columnName)
-			throws SQLException {
-		int tmpInt = rs.getInt(columnName);
-		return tmpInt;
+	/**
+	 * 获取当前时间
+	 * @return
+	 */
+	public static String getDateFormatYYYYMMDDHMS(){
+		return new SimpleDateFormat(DATE_FORMAT_YYYYMMDDHMS).format(new Date());
 	}
 
-	public static long getNvlLong(ResultSet rs, int columnIndex)
-			throws SQLException {
-		long tmpLong = rs.getLong(columnIndex);
-		return tmpLong;
+	/**
+	 * 格式化时间
+	 * @param date
+	 * @param format
+	 * @return
+	 */
+	public static String dateFormat(Date date,String format){
+		return new SimpleDateFormat(format).format(date);
 	}
 
-	public static long getNvlLong(ResultSet rs, String columnName)
-			throws SQLException {
-		long tmpLong = rs.getLong(columnName);
-		return tmpLong;
-	}
+    /**
+     * json格式数据脱敏
+     * @param src
+     * @param fieldList
+     * @return
+     */
+    public static String desensitizationForJson(String src,List<String> fieldList){
+        if(fieldList!=null&&fieldList.size()>0){
+            try {
+                for (String sensitiveLabel : fieldList) {
+                    Pattern jsonp = Pattern.compile("(\"" + sensitiveLabel
+                            + "\")([^,}]*)(,|})",Pattern.CASE_INSENSITIVE);
+                    Matcher jsonm = jsonp.matcher(src);
+                    if (jsonm.find()) {
+                        int start = jsonm.start();
+                        int end = jsonm.end() - 1;
+                        src = src.replace(src.substring(start, end), "\""
+                                + sensitiveLabel + "\"" + ":\"******\"");
+                    }
+                    String regXML = "(\\<"+sensitiveLabel+"\\>)([^\\<]*)(\\<\\/"+sensitiveLabel+"\\>)";
+                    src = src.replaceAll(regXML, "$1******$3");
+                }
+            } catch (Exception e) {
+                logger.error("对请求，响应消息体进行脱敏错误",e);
+            }
+        }else{
+            return src;
+        }
+        return src;
+    }
 
-	public static double getNvlDouble(ResultSet rs, int columnIndex)
-			throws SQLException {
-		return rs.getDouble(columnIndex);
-	}
 
-	public static double getNvlDouble(ResultSet rs, String columnName)
-			throws SQLException {
-		return rs.getDouble(columnName);
-	}
-	
-	public static String getNvlClob(ResultSet rs, String columnName)throws SQLException,IOException {
-		StringBuffer sbResult = new StringBuffer();
-		Clob clob = rs.getClob(columnName);
-		BufferedReader brClob = null;
-		try
-		{
-			brClob = new BufferedReader(clob.getCharacterStream());
-			
-			for(;;)
-			{
-				String line = brClob.readLine();
-				if ( line == null )
-					break;
-				sbResult.append(line);
-			}
-		}finally{
-			if ( brClob != null )
-				brClob.close();
-		}
-		return sbResult.toString();
-	}
-	
-	public static String getNvlClob(ResultSet rs, int columnIndex) throws SQLException,IOException{
-		StringBuffer sbResult = new StringBuffer();
-		Clob clob = rs.getClob(columnIndex);
-		BufferedReader brClob = null;
-		try
-		{
-			brClob = new BufferedReader(clob.getCharacterStream());
-			
-			for(;;)
-			{
-				String line = brClob.readLine();
-				if ( line == null )
-					break;
-				sbResult.append(line);
-			}
-		}finally{
-			if ( brClob != null )
-				brClob.close();
-		}
-		return sbResult.toString();
-	}
+    /**
+     * 从JSON获取变量值，如果有多个key 只获取第一个
+     * @param json
+     * @param key
+     * @return
+     */
+    public static String getJsonValue(String json,String key) {
+        char separatorValue=':';
+        if ( json == null || json.length() <= 0 )
+            return null;
+        if ( key == null || key.length() <= 0 )
+            return null;
+        key="\""+key+"\"";
+        int jsonLength = json.length();
+        int keyLen = key.length();
+        if ( jsonLength > 0 && keyLen > 0 ) {
+            int startIndex = 0;
+            while ( true ){
+                startIndex = json.indexOf(key,startIndex);
+                if ( startIndex <= -1 )
+                    break;
+                int endIndex=json.indexOf(",",startIndex);
+                if(endIndex<0){
+                    endIndex=json.indexOf("}",startIndex);
+                }
+                if(endIndex<0){
+                    break;
+                }
+                return json.substring(startIndex+keyLen+1,endIndex).replaceAll("\"","").trim();
+            }
 
-	public static BigDecimal getNvlMoney(ResultSet rs,int columnIndex )			throws SQLException 
-	{
-		BigDecimal bd_money = rs.getBigDecimal(columnIndex);
-		if ( bd_money == null )
-			return BigDecimal.ZERO;
-		else
-			return bd_money.setScale(2,BigDecimal.ROUND_HALF_UP);
-	}
-	
-	public static BigDecimal getNvlMoney(ResultSet rs,String columnName )			throws SQLException 
-	{
-		BigDecimal bd_money = rs.getBigDecimal(columnName);
-		if ( bd_money == null )
-			return BigDecimal.ZERO;
-		else
-			return bd_money.setScale(2,BigDecimal.ROUND_HALF_UP);
-	}
-	
-	public static String getNvlString(ResultSet rs, int columnIndex) 			throws SQLException {
-		String tmpStr = rs.getString(columnIndex);
-		if (tmpStr == null) {
-			tmpStr = "";
-		}
-		return tmpStr.trim();
-	}
-
-	public static String getNvlString(ResultSet rs, String columnName) 			throws SQLException {
-		String tmpStr = rs.getString(columnName);
-		if (tmpStr == null) {
-			tmpStr = "";
-		}
-		return tmpStr.trim();
-	}
-	
-	public static boolean getNvlBoolean(ResultSet rs, int columnIndex) 			throws SQLException {
-		String tmpStr = rs.getString(columnIndex);
-		if ("1".equals(tmpStr)) {
-			return true;
-		}
-		return false;
-	}
-
-	public static boolean getNvlBoolean(ResultSet rs, String columnName) 			throws SQLException {
-		String tmpStr = rs.getString(columnName);
-		if ("1".equals(tmpStr)) {
-			return true;
-		}
-		return false;
-	}
-	public static byte[] getNvlBytes(ResultSet rs, int columnIndex)			throws SQLException {
-		String str = rs.getString(columnIndex);
-		if (str == null) {
-			return "".getBytes();
-		} else
-			return str.getBytes();
-	}
-
-	public static byte[] getNvlBytes(ResultSet rs, String columnName)			throws SQLException {
-		String str = rs.getString(columnName);
-		if (str == null) {
-			return "".getBytes();
-		} else
-			return str.getBytes();
-	}
-
-	public static char getNvlChar(ResultSet rs, int columnIndex)			throws SQLException {
-		byte[] bytes = rs.getBytes(columnIndex);
-		if (bytes == null || bytes.length <= 0) {
-			return '\0';
-		}
-		return (char) bytes[0];
-	}
-
-	public static char getNvlChar(ResultSet rs, String columnName) 			throws SQLException {
-		byte[] bytes = rs.getBytes(columnName);
-		if (bytes == null || bytes.length <= 0 ) {
-			return '\0';
-		}
-		return (char) bytes[0];
-	}
-
-	public static BigDecimal getNvlBigDecimalByPrecision(ResultSet rs,
-			int columnIndex, int pre) throws SQLException {
-		return getNvlBigDecimal(rs, columnIndex).setScale(pre,BigDecimal.ROUND_HALF_UP);
-	}
-
-	public static BigDecimal getNvlBigDecimalByPrecision(ResultSet rs,
-			String columnName, int pre) throws SQLException {
-		return getNvlBigDecimal(rs, columnName).setScale(pre,BigDecimal.ROUND_HALF_UP);
-	}
-
-	public static BigDecimal getNvlBigDecimal(ResultSet rs, int columnIndex) 			throws SQLException {
-		BigDecimal tmpBigDecimal = rs.getBigDecimal(columnIndex);
-		if (tmpBigDecimal == null) {
-			tmpBigDecimal = new BigDecimal(0.00);
-		}
-		return tmpBigDecimal;
-	}
-
-	public static BigDecimal getNvlBigDecimal(ResultSet rs, String columnName) 			throws SQLException {
-		BigDecimal tmpBigDecimal = rs.getBigDecimal(columnName);
-		if (tmpBigDecimal == null) {
-			tmpBigDecimal = new BigDecimal(0.00);
-		}
-		return tmpBigDecimal;
-	}
-	
-
-	public static String getNvlDateString(ResultSet rs, int columnIndex) 			throws SQLException {
-		java.sql.Timestamp date = rs.getTimestamp(columnIndex);
-		if ( date != null )
-		{
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			return sdf.format(date);
-		}else
-		{
-			return "";
-		}
-	}
-
-	
-	public static String getNvlDateString(ResultSet rs, String columnName) 			throws SQLException {
-		java.sql.Timestamp date = rs.getTimestamp(columnName);
-		if ( date != null )
-		{
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			return sdf.format(date);
-		}else
-		{
-			return "";
-		}
-	}
+        }
+        return null;
+    }
 }

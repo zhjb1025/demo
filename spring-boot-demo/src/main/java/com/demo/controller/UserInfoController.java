@@ -57,7 +57,7 @@ public class UserInfoController {
 		  response.setToken(SpringContextUtil.getThreadLocalData().request.getSession().getId());
 		  response.setBranchId(u.getBranchId());
 		  response.setUserName(u.getUserName());
-
+		  SpringContextUtil.getThreadLocalData().request.getSession().setAttribute("LOGIN_USER",response);
 		  //更新登录时间
 		  UserInfo update= new UserInfo();
 		  update.setLoginTime(new Date());

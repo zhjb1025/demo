@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.demo.common.enums.ErrorCodeEnum;
+import com.demo.common.util.CommUtil;
 import com.demo.common.util.ThreadCacheData;
+import com.demo.controller.msg.UserLoginResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,6 @@ import com.demo.common.enums.TradeStatusEnum;
 import com.demo.common.exception.CommException;
 import com.demo.common.util.SpringContextUtil;
 import com.demo.common.validate.ValidatorService;
-import com.demo.controller.msg.BaseRequest;
 import com.demo.controller.msg.BaseResponse;
 import com.demo.service.RouteService;
 
@@ -69,23 +70,29 @@ public class GatewayController {
 			logger.info("5.响应数据[{}毫秒][{}]",endTime-beginTime,baseResponse);
 			SpringContextUtil.cleanThreadCacheData();
 		}
-		
+
 		return baseResponse;
 	}
-	private String getRequestPrameter(HttpServletRequest request){
-		String prameter="";
+
+    /**
+     * 获取JSON格式的请求参数
+     * @param request
+     * @return
+     */
+	private String getRequestParameter(HttpServletRequest request){
+		String parameter="";
 		logger.info(request.getContentType());
 		if(request.getMethod().equals(RequestMethod.POST.name())){
 			try {
-				prameter=getPostData(request);
+				parameter=getPostData(request);
 			} catch (Exception e) {
 				logger.info("获取POST数据报错",e);
 			}
 		}else{
-			Map<String, String> map = getPrameter(request);
-			prameter=JSON.toJSONString(map);
+			Map<String, String> map = getParameter(request);
+			parameter=JSON.toJSONString(map);
 		}
-		return prameter;
+		return parameter;
 	}
 	private BaseResponse handle(HttpServletRequest request) throws CommException {
 		try {
@@ -105,56 +112,53 @@ public class GatewayController {
 
 	}
 	private BaseResponse handle_(HttpServletRequest request) throws CommException, InvocationTargetException ,Exception{
-		String threadName=request.getRemoteAddr()+":"+request.getRemotePort();
-		Thread.currentThread().setName(threadName);
-		logger.info("0.接收到请求 method={}, ip={},port={}",request.getMethod(), request.getRemoteAddr(),request.getRemotePort());
+//		logger.info("0.接收到请求 method={}, ip={},port={}",request.getMethod(), request.getRemoteAddr(),request.getRemotePort());
 		// 1.获取请求参数
-		String prameter=getRequestPrameter(request);
-		logger.info("1.接收到请求数据[{}]",prameter);
+		String parameter=getRequestParameter(request);
+		String seqNo=CommUtil.getJsonValue(parameter,"seqNo");
+		String service=CommUtil.getJsonValue(parameter,"service");
+		String version=CommUtil.getJsonValue(parameter,"version");
+
+		Thread.currentThread().setName(service+":"+version+":"+seqNo);
+		logger.info("1.接收到请求数据[{}]",parameter);
 		// 2.服务路由
-		BaseRequest head=null;
-		BaseResponse baseResponse=null;
-		try {
-			head=JSON.parseObject(prameter,BaseRequest.class);
-		} catch (Exception e) {
-			logger.info("JSON 转换报错",e);
-			throw new CommException(ErrorCodeEnum.SYSTEM_ERROR,"JSON 转换报错");
-		}
-		SpringContextUtil.getThreadLocalData().seqNo=head.getSeqNo();
-		Thread.currentThread().setName(threadName+":"+head.getService()+":"+head.getSeqNo());
-		
-		Object serviceBean = routeService.getServiceBean(head.getService(), head.getVersion());
-		Method serviceMethod = routeService.getServiceMethod(head.getService(), head.getVersion());
-		Class<?> serviceParameter = routeService.getServiceParameter(head.getService(), head.getVersion());
+		Object serviceBean = routeService.getServiceBean(service, version);
+		Method serviceMethod = routeService.getServiceMethod(service, version);
+		Class<?> serviceParameter = routeService.getServiceParameter(service, version);
 		
 		if(serviceBean==null || serviceMethod==null || serviceParameter==null){
 			throw new CommException(ErrorCodeEnum.SYSTEM_ERROR,"服务名或者版本号错误");
 		}
 		// 进行访问权限控制
 		logger.info("2.进行访问权限控制");
-		validate(head.getService(),head);
+		validate(service,parameter);
 
 		Object arg=null;
 		try {
-			arg = JSON.parseObject(prameter, serviceParameter);
+			arg = JSON.parseObject(parameter, serviceParameter);
 		} catch (Exception e) {
 			logger.info("JSON 转换报错",e);
 			throw new CommException(ErrorCodeEnum.SYSTEM_ERROR,"JSON 转换报错");
 		}
 		logger.info("3.进行参数校验[{}]",serviceParameter.getName());
-		validatorService.validate(arg,getValidatorGroup(head.getService()));
+		validatorService.validate(arg,getValidatorGroup(service));
 
 		logger.info("4.调用业务方法进行处理",serviceParameter.getName());
-		baseResponse=(BaseResponse)serviceMethod.invoke(SpringContextUtil.getBean(serviceBean.getClass()), new Object []{arg});
+        BaseResponse baseResponse = (BaseResponse) serviceMethod.invoke(SpringContextUtil.getBean(serviceBean.getClass()), new Object[]{arg});
 		return baseResponse;
 	}
-	
-	private  Map<String, String> getPrameter(HttpServletRequest request) {
+
+    /**
+     * 获取GET的参数
+     * @param request
+     * @return
+     */
+	private  Map<String, String> getParameter(HttpServletRequest request) {
 		Map<String, String> parameterMap = new HashMap<String, String>();
-		@SuppressWarnings("rawtypes")
-		Iterator iter = request.getParameterMap().keySet().iterator();
-		while (iter.hasNext()) {
-			String key = iter.next().toString();
+
+		Iterator<String> iterator = request.getParameterMap().keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = iterator.next().toString();
 			String val = request.getParameter(key);
 			parameterMap.put(key, val);
 		}
@@ -167,8 +171,15 @@ public class GatewayController {
 		baseResponse.setTradeStatus(TradeStatusEnum.FAIL.getTradeStatus());
 		return baseResponse;
 	}
+
+    /**
+     * 获取POST的请求参数
+     * @param request
+     * @return
+     * @throws Exception
+     */
 	private  String getPostData(HttpServletRequest request)throws Exception {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		InputStream is = request.getInputStream();
 
 		int read = 1;
@@ -176,25 +187,36 @@ public class GatewayController {
 			byte[] bb = new byte[1024];
 			read = is.read(bb);
 			if (read > 0) {
-				baos.write(bb, 0, read);
+				outputStream.write(bb, 0, read);
 			}
 		}
-		byte[] bb = baos.toByteArray();
-		baos.close();
+		byte[] bb = outputStream.toByteArray();
+		outputStream.close();
 		return new String(bb, "UTF-8");
 	}
 
-
-	private void validate(String serviceName,BaseRequest head) throws CommException {
+    /**
+     * 访问控制
+     * @param serviceName
+     * @param parameter
+     * @throws CommException
+     */
+	private void validate(String serviceName,String parameter) throws CommException {
 		if ("user_login".equals(serviceName)){
 			return;
 		}
-
-		String token=SpringContextUtil.getThreadLocalData().request.getSession().getId();
-		if(!token.equals(head.getToken())){
-			throw new CommException(ErrorCodeEnum.SYSTEM_ILLEGAL_ACCESS);
-		}
+        String token=CommUtil.getJsonValue(parameter,"token");
+        String userId=CommUtil.getJsonValue(parameter,"userId");
+        UserLoginResponse loginUser=(UserLoginResponse)SpringContextUtil.getThreadLocalData().
+                request.getSession().getAttribute("LOGIN_USER");
+        if (loginUser==null){
+            throw  new CommException(ErrorCodeEnum.USER_LOGIN_SESSION_TIMEOUT);
+        }
+		if (!loginUser.getToken().equals(token)|| !loginUser.getUserId().toString().equals(userId)){
+            throw  new CommException(ErrorCodeEnum.SYSTEM_ILLEGAL_ACCESS);
+        }
 	}
+
 
 	private Class<?> getValidatorGroup(String serviceName){
 		if ("user_login".equals(serviceName)){
