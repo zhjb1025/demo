@@ -23,8 +23,6 @@ public class TestUser {
 //			rqUserInfo.setName("问问");
 			System.out.println(HttpUtils.post("http://127.0.0.1:8081/demo/gateway/trade",JSON.toJSONString(request) ,header));
 		} catch (Exception e) {
-
-
 			e.printStackTrace();
 		}
 
