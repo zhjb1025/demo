@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.demo</groupId>
-	<artifactId>spring-demo</artifactId>
-	<version>1.0,0</version>
-	<name>spring-demo</name>
-	<description>Spring学习工程</description>
+	<artifactId>spring-boot-demo</artifactId>
+	<version>1.0.0</version>
+	<name>spring-boot-demo</name>
+	<description>SpringBoot学习工程</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
