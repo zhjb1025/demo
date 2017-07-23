@@ -67,7 +67,7 @@ function ajaxPost(data,callBack){
         type: "POST",
         dataType:"json" ,
         contentType: "application/json",
-        url: "/gateway/trade",
+        url: "/gateway",
         data: jsonString,
         error:function(msg){
             var rsp={};
@@ -94,7 +94,7 @@ function ajaxPostSynch(data){
         dataType:"json" ,
         async:false,
         contentType: "application/json",
-        url: "/gateway/trade",
+        url: "/gateway",
         data: jsonString,
         success: function(msg){
             rsp=msg;

@@ -2,16 +2,10 @@ package com.demo.mapper;
 
 import com.demo.mapper.MenuInfo;
 
+import java.util.List;
+
 public interface MenuInfoMapper {
-    int deleteByPrimaryKey(Integer id);
 
-    int insert(MenuInfo record);
+    List<MenuInfo> queryUserMenuInfo(Integer userID);
 
-    int insertSelective(MenuInfo record);
-
-    MenuInfo selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(MenuInfo record);
-
-    int updateByPrimaryKey(MenuInfo record);
 }

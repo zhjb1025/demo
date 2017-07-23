@@ -48,7 +48,7 @@ public class GatewayController {
 	@Autowired
 	private ValidatorService validatorService;
 
-	@RequestMapping(value = "/gateway/trade", method = { RequestMethod.POST,RequestMethod.GET })
+	@RequestMapping(value = "/gateway", method = { RequestMethod.POST,RequestMethod.GET })
 	@ResponseBody
 	public BaseResponse gateway(HttpServletRequest request,
 			HttpServletResponse response) throws CommException {
@@ -60,9 +60,18 @@ public class GatewayController {
 		data.request=request;
 		data.response=response;
 		SpringContextUtil.setThreadLocalData(data);
-
+        String seqNo=null;
 		try {
-			baseResponse=handle(request);
+            // 1.获取请求参数
+            String parameter=getRequestParameter(request);
+            seqNo=CommUtil.getJsonValue(parameter,"seqNo");
+            String service=CommUtil.getJsonValue(parameter,"service");
+            String version=CommUtil.getJsonValue(parameter,"version");
+            Thread.currentThread().setName(service+":"+version+":"+seqNo);
+            logger.info("session=[{}]",request.getSession().getId());
+
+            logger.info("1.接收到请求数据[{}]",parameter);
+			baseResponse=handle(parameter,seqNo,service,version);
 		} catch (CommException e) {
 			baseResponse= makeErrorResponse(e.getErrCode(),e.getErrMsg());
 		}finally{
@@ -70,7 +79,7 @@ public class GatewayController {
 			logger.info("5.响应数据[{}毫秒][{}]",endTime-beginTime,baseResponse);
 			SpringContextUtil.cleanThreadCacheData();
 		}
-
+        baseResponse.setSeqNo(seqNo);
 		return baseResponse;
 	}
 
@@ -93,9 +102,9 @@ public class GatewayController {
 		}
 		return parameter;
 	}
-	private BaseResponse handle(HttpServletRequest request) throws CommException {
+	private BaseResponse handle(String parameter,String seqNo,String service,String version ) throws CommException {
 		try {
-			return handle_(request);
+			return handle_(parameter,seqNo,service,version);
 		} catch (InvocationTargetException e) {
 			if(e.getTargetException() instanceof CommException){
 				CommException ex=(CommException)e.getTargetException();
@@ -104,22 +113,19 @@ public class GatewayController {
 				logger.info("系统异常",e.getTargetException());
 				throw new CommException(ErrorCodeEnum.SYSTEM_FAIL);
 			}
-		}catch(Throwable e){
+		}catch(CommException e){
+            throw e;
+        }catch(Throwable e){
 			logger.info("系统异常",e);
 			throw new CommException(ErrorCodeEnum.SYSTEM_FAIL);
 		}
 
 	}
-	private BaseResponse handle_(HttpServletRequest request) throws CommException, InvocationTargetException ,Exception{
-//		logger.info("0.接收到请求 method={}, ip={},port={}",request.getMethod(), request.getRemoteAddr(),request.getRemotePort());
-		// 1.获取请求参数
-		String parameter=getRequestParameter(request);
-		String seqNo=CommUtil.getJsonValue(parameter,"seqNo");
-		String service=CommUtil.getJsonValue(parameter,"service");
-		String version=CommUtil.getJsonValue(parameter,"version");
 
-		Thread.currentThread().setName(service+":"+version+":"+seqNo);
-		logger.info("1.接收到请求数据[{}]",parameter);
+
+
+    private BaseResponse handle_(String parameter,String seqNo,String service,String version) throws CommException, InvocationTargetException ,Exception{
+//		logger.info("0.接收到请求 method={}, ip={},port={}",request.getMethod(), request.getRemoteAddr(),request.getRemotePort());
 		// 2.服务路由
 		Object serviceBean = routeService.getServiceBean(service, version);
 		Method serviceMethod = routeService.getServiceMethod(service, version);
@@ -215,7 +221,6 @@ public class GatewayController {
             throw  new CommException(ErrorCodeEnum.SYSTEM_ILLEGAL_ACCESS);
         }
 	}
-
 
 	private Class<?> getValidatorGroup(String serviceName){
 		if ("user_login".equals(serviceName)){
