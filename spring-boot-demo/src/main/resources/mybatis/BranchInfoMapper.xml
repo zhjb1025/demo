@@ -16,27 +16,19 @@
     id, branch_name, branch_code, parent_id, remark, create_time, create_user_id, update_time, 
     update_user_id
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from branch_info
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from branch_info
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
+    <select id="getAll" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from branch_info
+        order by branch_code
+    </select>
   <insert id="insert" parameterType="com.demo.mapper.BranchInfo" >
-    insert into branch_info (id, branch_name, branch_code, 
-      parent_id, remark, create_time, 
-      create_user_id, update_time, update_user_id
-      )
-    values (#{id,jdbcType=INTEGER}, #{branchName,jdbcType=VARCHAR}, #{branchCode,jdbcType=VARCHAR}, 
-      #{parentId,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{createUserId,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=INTEGER}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.demo.mapper.BranchInfo" >
     insert into branch_info
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -97,7 +89,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.demo.mapper.BranchInfo" >
+  <update id="updateByID" parameterType="com.demo.mapper.BranchInfo" >
     update branch_info
     <set >
       <if test="branchName != null" >
@@ -127,16 +119,5 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.demo.mapper.BranchInfo" >
-    update branch_info
-    set branch_name = #{branchName,jdbcType=VARCHAR},
-      branch_code = #{branchCode,jdbcType=VARCHAR},
-      parent_id = #{parentId,jdbcType=INTEGER},
-      remark = #{remark,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      create_user_id = #{createUserId,jdbcType=INTEGER},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      update_user_id = #{updateUserId,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+
 </mapper>

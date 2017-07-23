@@ -2,16 +2,16 @@ package com.demo.mapper;
 
 import com.demo.mapper.BranchInfo;
 
+import java.util.List;
+
 public interface BranchInfoMapper {
-    int deleteByPrimaryKey(Integer id);
+
+    List<BranchInfo> getAll();
 
     int insert(BranchInfo record);
 
-    int insertSelective(BranchInfo record);
+    BranchInfo selectByID(Integer id);
 
-    BranchInfo selectByPrimaryKey(Integer id);
+    int updateByID(BranchInfo record);
 
-    int updateByPrimaryKeySelective(BranchInfo record);
-
-    int updateByPrimaryKey(BranchInfo record);
 }
