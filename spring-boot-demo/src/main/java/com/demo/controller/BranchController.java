@@ -1,10 +1,9 @@
 package com.demo.controller;
 
 import com.demo.common.annotation.TradeService;
-import com.demo.controller.msg.BaseRequest;
-import com.demo.controller.msg.BaseResponse;
-import com.demo.controller.msg.QueryAllBranchResponse;
-import com.demo.controller.msg.QueryUserMenuResponse;
+import com.demo.common.util.CommUtil;
+import com.demo.common.util.SpringContextUtil;
+import com.demo.controller.msg.*;
 import com.demo.mapper.BranchInfo;
 import com.demo.mapper.MenuInfo;
 import com.demo.service.BranchService;
@@ -13,7 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.awt.geom.AreaOp;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -41,4 +42,46 @@ public class BranchController {
       response.setBranchList(list);
       return response;
   }
+    @TradeService(value="update_branch")
+    public BaseResponse updateBranch(UpdateBranchRequest request) throws Exception {
+        BaseResponse response=new BaseResponse();
+        BranchInfo branchInfo = new BranchInfo();
+        branchInfo.setId(request.getId());
+        branchInfo.setBranchName(request.getBranchName());
+        branchInfo.setRemark(request.getRemark());
+        branchInfo.setUpdateTime(new Date());
+        UserLoginResponse loginUser=(UserLoginResponse) SpringContextUtil.getThreadLocalData().
+                request.getSession().getAttribute("LOGIN_USER");
+        branchInfo.setUpdateUserId(loginUser.getUserId());
+        branchService.updateBranchInfo(branchInfo);
+        return response;
+    }
+
+    @TradeService(value="add_branch")
+    public BaseResponse addBranch(AddBranchRequest request) throws Exception {
+        BaseResponse response=new BaseResponse();
+        BranchInfo branchInfo = new BranchInfo();
+        branchInfo.setParentId(request.getParentId());
+        branchInfo.setBranchName(request.getBranchName());
+        branchInfo.setRemark(request.getRemark());
+        branchInfo.setUpdateTime(new Date());
+        branchInfo.setCreateTime(new Date());
+        UserLoginResponse loginUser=(UserLoginResponse) SpringContextUtil.getThreadLocalData().
+                request.getSession().getAttribute("LOGIN_USER");
+        branchInfo.setUpdateUserId(loginUser.getUserId());
+        branchInfo.setCreateUserId(loginUser.getUserId());
+        BranchInfo parentBranch = branchService.getBranchInfo(request.getParentId());
+        String maxBranchCode=branchService.getMaxBranchCode(request.getParentId());
+        if(maxBranchCode==null){
+            branchInfo.setBranchCode(parentBranch.getBranchCode()+"00");
+        }else{
+            long code=Long.parseLong(maxBranchCode);
+            code++;
+            String branchCode=CommUtil.fill(code+"",'0',maxBranchCode.length(),'L');
+            branchInfo.setBranchCode(branchCode);
+        }
+
+        branchService.addBranchInfo(branchInfo);
+        return response;
+    }
 }

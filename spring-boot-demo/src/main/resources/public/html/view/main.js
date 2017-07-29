@@ -56,8 +56,10 @@ function queryMenuInfo() {
         node.id=rsp.menuInfoList[i].id;
         node.text=rsp.menuInfoList[i].menuName;
         node.attributes=rsp.menuInfoList[i].url;
+        node.children=new Array();
         var pNode=nodeMap[rsp.menuInfoList[i].parentId ];
         pNode.children[pNode.children.length]=node;
+        nodeMap[node.id]=node;
     }
     var menuTree = $('#treeMenu');
     menuTree.tree('loadData',menuList);

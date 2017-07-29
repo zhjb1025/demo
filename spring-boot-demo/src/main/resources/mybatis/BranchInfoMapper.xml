@@ -28,7 +28,8 @@
         from branch_info
         order by branch_code
     </select>
-  <insert id="insert" parameterType="com.demo.mapper.BranchInfo" >
+
+    <insert id="insert" parameterType="com.demo.mapper.BranchInfo" >
     insert into branch_info
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

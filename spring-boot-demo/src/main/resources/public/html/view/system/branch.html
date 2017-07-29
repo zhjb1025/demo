@@ -24,16 +24,35 @@
         <div data-options="region:'north',border:false" style="height:50px"></div>
         <div data-options="region:'west',border:false"  style="width:100px;"></div>
         <div data-options="region:'center',border:false">
-            <li>
-                <lu>wwww</lu>
-                <lu>1111</lu>
-            </li>
-            <li>
-                <lu>qqqq</lu>
-                <lu>22222</lu>
-            </li>
+            <div class="easyui-panel" style="width:100%;max-width:500px;padding:30px 60px;">
+                <form id="ff" class="easyui-form">
+                    <input type="hidden" id="id" >
+                    <div style="margin-bottom:20px">
+                        <input id="parentName" name="parentName" class="easyui-textbox"  data-options="
+                                                        disabled:true" label="父机构名称" labelPosition="top" style="width:100%">
+                    </div>
+                    <div style="margin-bottom:20px">
+                        <input id="branchName" name="branchName" class="easyui-textbox"  data-options="required:true,
+													validateOnCreate:false,
+													validateOnBlur:false,
+													validType:['length[2,32]']"
+                               label="机构名称" labelPosition="top" style="width:100%">
+                    </div>
+                    <div style="margin-bottom:20px">
+                        <input id="remark" name="remark" class="easyui-textbox"  data-options=""
+                               label="备注" multiline="true" labelPosition="top" style="width:100%;height:120px">
+                    </div>
+                    <div style="text-align:center;padding:5px 0">
+                        <a id="saveButton" href="javascript:void(0)" class="easyui-linkbutton"   style="width:80px">保&nbsp;&nbsp;存</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+</div>
+
+<div id="mm" class="easyui-menu" style="width:120px;">
+    <div id="addButton" data-options="iconCls:'icon-add'">新增</div>
 </div>
 </body>
 </body>
