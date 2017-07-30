@@ -6,6 +6,7 @@ import com.demo.common.util.CommUtil;
 import com.demo.common.util.SpringContextUtil;
 import com.demo.controller.msg.*;
 import com.demo.mapper.BranchInfo;
+import com.demo.mapper.MenuInfo;
 import com.demo.service.BranchService;
 import com.demo.service.RoleService;
 import com.github.pagehelper.PageHelper;
@@ -44,4 +45,26 @@ public class RoleController {
         return response;
     }
 
+    @TradeService(value="query_all_menu_api")
+    public BaseResponse queryAllMenuApi(BaseRequest request) throws Exception {
+        AllMenuApiResponse response= new AllMenuApiResponse();
+        List<MenuInfo> list = roleService.queryAllMenuApi();
+        response.setMenuInfoList(list);
+        return response;
+    }
+
+    @TradeService(value="query_role_menu_api")
+    public BaseResponse queryRoleMenuApi(QueryRoleMenuApiRequest request) throws Exception {
+        QueryRoleMenuApiResponse response= new QueryRoleMenuApiResponse();
+        response.setApiIDs(roleService.queryRoleAipIDs(request.getRoleID()));
+        response.setMenuIDs(roleService.queryRoleMenuIDs(request.getRoleID()));
+        return response;
+    }
+
+    @TradeService(value="add_role")
+    public BaseResponse queryRoleMenuApi(AddRoleRequest request) throws Exception {
+        BaseResponse response= new BaseResponse();
+        roleService.addRole(request);
+        return response;
+    }
 }

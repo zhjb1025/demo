@@ -33,7 +33,25 @@
            and  r.role_name like   CONCAT('%', #{roleName,jdbcType=VARCHAR}, '%')
         </if>
     </select>
-    <insert id="insert" parameterType="com.demo.mapper.RoleInfo" >
+
+    <resultMap id="menuApiResultMap" type="com.demo.mapper.MenuInfo" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
+        <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+        <collection property="apiServiceInfos" ofType="com.demo.mapper.ApiServiceInfo">
+            <id column="api_id" property="id" jdbcType="INTEGER" />
+            <result column="remark" property="remark" jdbcType="VARCHAR" />
+        </collection>
+    </resultMap>
+
+    <select id="queryAllMenuApi" resultMap="menuApiResultMap">
+        select m.id,m.menu_name,m.parent_id,a.id as api_id,a.remark from menu_info m
+        LEFT JOIN menu_api_service ma  on ma.menu_id= m.id
+        LEFT JOIN api_service_info a on a.id=ma.api_service_id
+        ORDER BY m.menu_code
+    </select>
+
+    <insert id="insert" parameterType="com.demo.mapper.RoleInfo" useGeneratedKeys="true" keyProperty="id" >
     insert into role_info
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

@@ -2,6 +2,8 @@ package com.demo.mapper;
 
 import com.demo.common.msg.BaseObject;
 
+import java.util.List;
+
 public class MenuInfo extends BaseObject{
     private Integer id;
 
@@ -12,6 +14,16 @@ public class MenuInfo extends BaseObject{
     private Integer parentId;
 
     private String url;
+
+    private List<ApiServiceInfo> apiServiceInfos;
+
+    public List<ApiServiceInfo> getApiServiceInfos() {
+        return apiServiceInfos;
+    }
+
+    public void setApiServiceInfos(List<ApiServiceInfo> apiServiceInfos) {
+        this.apiServiceInfos = apiServiceInfos;
+    }
 
     public Integer getId() {
         return id;

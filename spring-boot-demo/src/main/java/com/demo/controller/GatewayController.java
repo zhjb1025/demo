@@ -226,7 +226,7 @@ public class GatewayController {
 		    return;
         }
         if (loginUser.getApiServiceInfoMap().get(serviceName+":"+version)==null){
-            throw  new CommException(ErrorCodeEnum.SYSTEM_ILLEGAL_ACCESS);
+            throw  new CommException(ErrorCodeEnum.SYSTEM_NO_ACCESS);
         }
 	}
 
