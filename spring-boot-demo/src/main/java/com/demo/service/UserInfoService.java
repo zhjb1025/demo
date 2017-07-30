@@ -2,6 +2,7 @@ package com.demo.service;
 
 import java.util.List;
 
+import com.demo.mapper.ApiServiceInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,5 +40,8 @@ public class UserInfoService {
     public int addUser(UserInfo userInfo){
       return userInfoMapper.insert(userInfo);
     }
-    
+
+    public List<ApiServiceInfo> queryUserApiService(Integer userID){
+        return userInfoMapper.queryUserApiService(userID);
+    }
 }

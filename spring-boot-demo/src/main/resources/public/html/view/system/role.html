@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title> XXX系统</title>
+    <link rel="stylesheet" type="text/css" href="../../jquery-easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../jquery-easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../demo.css">
+    <script type="text/javascript" src="../../jquery-easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="../../jquery-easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../utils.js"></script>
+    <script type="text/javascript" src="role.js"></script>
+</head>
+<body>
+<body class="easyui-layout">
+    <div data-options="region:'north',border:false" style="height:30px;"></div>
+    <div data-options="region:'west',border:false"  style="width:30px;"></div>
+    <div data-options="region:'east',border:false"  style="width:30px;"></div>
+    <div data-options="region:'center',border:false" style="width:100%">
+        <table id="role" class="easyui-datagrid"></table>
+    </div>
+
+    <div id="tb" style="padding:2px 5px;">
+        角色名称: <input id="roleName" name="roleName" class="easyui-textbox" style="width:110px">
+        &nbsp;&nbsp;&nbsp;&nbsp;<a id="queryButton" href="#" class="easyui-linkbutton" iconCls="icon-search">查询</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="easyui-linkbutton" iconCls="icon-add">增加</a>
+    </div>
+
+</body>
+</body>
+</html>

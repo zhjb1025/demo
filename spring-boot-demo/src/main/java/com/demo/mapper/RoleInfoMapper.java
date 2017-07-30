@@ -1,17 +1,21 @@
 package com.demo.mapper;
 
+import com.demo.controller.msg.RolePageQueryResult;
 import com.demo.mapper.RoleInfo;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
+@Mapper
 public interface RoleInfoMapper {
-    int deleteByPrimaryKey(Integer id);
 
     int insert(RoleInfo record);
 
-    int insertSelective(RoleInfo record);
+    RoleInfo selectByID(Integer id);
 
-    RoleInfo selectByPrimaryKey(Integer id);
+    int updateByID(RoleInfo record);
 
-    int updateByPrimaryKeySelective(RoleInfo record);
-
-    int updateByPrimaryKey(RoleInfo record);
+    List<RolePageQueryResult> queryRole(@Param("roleName") String roleName);
 }

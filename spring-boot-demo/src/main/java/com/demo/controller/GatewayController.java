@@ -11,10 +11,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.demo.common.Constant;
 import com.demo.common.enums.ErrorCodeEnum;
 import com.demo.common.util.CommUtil;
 import com.demo.common.util.ThreadCacheData;
-import com.demo.controller.msg.UserLoginResponse;
+import com.demo.controller.msg.LoginUserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +77,7 @@ public class GatewayController {
 			baseResponse= makeErrorResponse(e.getErrCode(),e.getErrMsg());
 		}finally{
 			long endTime = System.currentTimeMillis(); 
-			logger.info("5.响应数据[{}毫秒][{}]",endTime-beginTime,baseResponse);
+			logger.info("5.响应数据[{}毫秒][{}]",endTime-beginTime,JSON.toJSONString(baseResponse));
 			SpringContextUtil.cleanThreadCacheData();
 		}
         baseResponse.setSeqNo(seqNo);
@@ -136,7 +137,7 @@ public class GatewayController {
 		}
 		// 进行访问权限控制
 		logger.info("2.进行访问权限控制");
-		validate(service,parameter);
+		validate(service,version,parameter);
 
 		Object arg=null;
 		try {
@@ -203,21 +204,28 @@ public class GatewayController {
     /**
      * 访问控制
      * @param serviceName
+     * @param version
      * @param parameter
      * @throws CommException
      */
-	private void validate(String serviceName,String parameter) throws CommException {
+	private void validate(String serviceName,String version,String parameter) throws CommException {
 		if ("user_login".equals(serviceName)){
 			return;
 		}
         String token=CommUtil.getJsonValue(parameter,"token");
         String userId=CommUtil.getJsonValue(parameter,"userId");
-        UserLoginResponse loginUser=(UserLoginResponse)SpringContextUtil.getThreadLocalData().
-                request.getSession().getAttribute("LOGIN_USER");
+        LoginUserInfo loginUser=(LoginUserInfo)SpringContextUtil.getThreadLocalData().
+                request.getSession().getAttribute(Constant.LOGIN_USER);
         if (loginUser==null){
             throw  new CommException(ErrorCodeEnum.USER_LOGIN_SESSION_TIMEOUT);
         }
 		if (!loginUser.getToken().equals(token)|| !loginUser.getUserId().toString().equals(userId)){
+            throw  new CommException(ErrorCodeEnum.SYSTEM_ILLEGAL_ACCESS);
+        }
+        if ("query_user_menu".equals(serviceName)){
+		    return;
+        }
+        if (loginUser.getApiServiceInfoMap().get(serviceName+":"+version)==null){
             throw  new CommException(ErrorCodeEnum.SYSTEM_ILLEGAL_ACCESS);
         }
 	}

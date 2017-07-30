@@ -1,5 +1,7 @@
 package com.demo.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.demo.common.Constant;
 import com.demo.common.annotation.TradeService;
 import com.demo.common.enums.ErrorCodeEnum;
 import com.demo.common.enums.UserInfoStatus;
@@ -7,8 +9,10 @@ import com.demo.common.exception.CommException;
 import com.demo.common.security.DESede;
 import com.demo.common.util.SpringContextUtil;
 import com.demo.controller.msg.BaseResponse;
+import com.demo.controller.msg.LoginUserInfo;
 import com.demo.controller.msg.UserLoginRequest;
 import com.demo.controller.msg.UserLoginResponse;
+import com.demo.mapper.ApiServiceInfo;
 import com.demo.mapper.UserInfo;
 import com.demo.service.UserInfoService;
 import org.slf4j.Logger;
@@ -57,7 +61,17 @@ public class UserInfoController {
 		  response.setToken(SpringContextUtil.getThreadLocalData().request.getSession().getId());
 		  response.setBranchId(u.getBranchId());
 		  response.setUserName(u.getUserName());
-		  SpringContextUtil.getThreadLocalData().request.getSession().setAttribute("LOGIN_USER",response);
+
+          LoginUserInfo loginUserInfo= new LoginUserInfo();
+          loginUserInfo.setUserId(response.getUserId());
+          loginUserInfo.setToken(response.getToken());
+          List<ApiServiceInfo> apiList = userInfoService.queryUserApiService(response.getUserId());
+          for(ApiServiceInfo api:apiList){
+              loginUserInfo.getApiServiceInfoMap().put(api.getService()+":"+api.getVersion(),api);
+          }
+		  SpringContextUtil.getThreadLocalData().request.getSession().setAttribute(Constant.LOGIN_USER,loginUserInfo);
+
+          logger .info("用户[{}]登录信息[{}]",request.getLoginName(), JSON.toJSONString(loginUserInfo));
 		  //更新登录时间
 		  UserInfo update= new UserInfo();
 		  update.setLoginTime(new Date());

@@ -1,18 +1,16 @@
 package com.demo.controller;
 
+import com.demo.common.Constant;
 import com.demo.common.annotation.TradeService;
 import com.demo.common.util.CommUtil;
 import com.demo.common.util.SpringContextUtil;
 import com.demo.controller.msg.*;
 import com.demo.mapper.BranchInfo;
-import com.demo.mapper.MenuInfo;
 import com.demo.service.BranchService;
-import com.demo.service.MenuInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.awt.geom.AreaOp;
 
 import java.util.Date;
 import java.util.List;
@@ -50,8 +48,8 @@ public class BranchController {
         branchInfo.setBranchName(request.getBranchName());
         branchInfo.setRemark(request.getRemark());
         branchInfo.setUpdateTime(new Date());
-        UserLoginResponse loginUser=(UserLoginResponse) SpringContextUtil.getThreadLocalData().
-                request.getSession().getAttribute("LOGIN_USER");
+        LoginUserInfo loginUser=(LoginUserInfo) SpringContextUtil.getThreadLocalData().
+                request.getSession().getAttribute(Constant.LOGIN_USER);
         branchInfo.setUpdateUserId(loginUser.getUserId());
         branchService.updateBranchInfo(branchInfo);
         return response;
@@ -66,8 +64,8 @@ public class BranchController {
         branchInfo.setRemark(request.getRemark());
         branchInfo.setUpdateTime(new Date());
         branchInfo.setCreateTime(new Date());
-        UserLoginResponse loginUser=(UserLoginResponse) SpringContextUtil.getThreadLocalData().
-                request.getSession().getAttribute("LOGIN_USER");
+        LoginUserInfo loginUser=(LoginUserInfo) SpringContextUtil.getThreadLocalData().
+                request.getSession().getAttribute(Constant.LOGIN_USER);
         branchInfo.setUpdateUserId(loginUser.getUserId());
         branchInfo.setCreateUserId(loginUser.getUserId());
         BranchInfo parentBranch = branchService.getBranchInfo(request.getParentId());
