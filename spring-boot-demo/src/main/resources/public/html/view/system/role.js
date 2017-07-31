@@ -23,8 +23,8 @@ $(document).ready(function(){
     });
     var pager = $('#role').datagrid('getPager');
     pager.pagination({
-        pageSize:2,
-        pageList: [2,20,30,50],
+        pageSize:20,
+        pageList: [20,30,40,50],
         showRefresh:false,
         onSelectPage:function (pageNumber, pageSize) {
             queryRole(pageNumber,pageSize);
