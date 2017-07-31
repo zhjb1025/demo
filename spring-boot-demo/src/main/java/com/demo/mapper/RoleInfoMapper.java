@@ -2,10 +2,7 @@ package com.demo.mapper;
 
 import com.demo.controller.msg.RolePageQueryResult;
 import com.demo.mapper.RoleInfo;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -34,4 +31,9 @@ public interface RoleInfoMapper {
     @Insert("insert into role_menu(role_id,menu_id) values (#{roleID,jdbcType=INTEGER},#{menuID,jdbcType=INTEGER})")
     int insertRoleMenu(@Param("roleID") Integer roleID, @Param("menuID") Integer menuID);
 
+    @Delete("delete from role_api_service where role_id=#{roleID,jdbcType=INTEGER}")
+    int deleteRoleAip(@Param("roleID") Integer roleID);
+
+    @Delete("delete from role_menu where role_id=#{roleID,jdbcType=INTEGER}")
+    int deleteRoleMenu(@Param("roleID") Integer roleID);
 }

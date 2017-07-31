@@ -67,4 +67,11 @@ public class RoleController {
         roleService.addRole(request);
         return response;
     }
+
+    @TradeService(value="update_role")
+    public BaseResponse queryRoleMenuApi(UpdateRoleRequest request) throws Exception {
+        BaseResponse response= new BaseResponse();
+        roleService.updateRole(request);
+        return response;
+    }
 }

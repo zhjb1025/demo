@@ -23,14 +23,11 @@ $(document).ready(function(){
     });
     var pager = $('#role').datagrid('getPager');
     pager.pagination({
-        pageSize:10,
-        pageList: [10,20,30,50],
+        pageSize:2,
+        pageList: [2,20,30,50],
         showRefresh:false,
         onSelectPage:function (pageNumber, pageSize) {
-            alert("pageNumber:"+pageNumber+","+pageSize);
-        },
-        onRefresh:function (pageNumber, pageSize) {
-            alert("onRefresh:"+pageNumber+","+pageSize);
+            queryRole(pageNumber,pageSize);
         }
     });
 
@@ -49,7 +46,8 @@ $(document).ready(function(){
         $("#id").val("");
         $('#w').window('open');
     });
-    queryRole();
+
+    queryRole(1,pager.pagination("options").pageSize);
     queryAllMenuApi();
 });
 function saveRole() {
@@ -81,14 +79,14 @@ function saveRole() {
     }else{
         $.messager.alert('提示信息',rsp.rspMsg,'info');
     }
-    queryRole();
+    queryRole(1,$('#role').datagrid('getPager').pagination("options").pageSize);
     $('#w').window('close');
 }
-function queryRole() {
+function queryRole(pageNumber,pageSize) {
     var request={};
     request.roleName=$("#queryRoleName").textbox("getValue");
-    request.pageNumber=0;
-    request.pageSize=10;
+    request.pageNumber=pageNumber;
+    request.pageSize=pageSize;
     request.service ="page_query_role";
     var rsp=ajaxPostSynch(request);
     if(rsp.tradeStatus!=1){
@@ -107,7 +105,7 @@ function viewRole(index){
 
     $("#roleName").textbox("setValue",row.roleName);
     $("#remark").textbox("setValue",row.remark);
-
+    $("#id").val(row.id);
     var request={};
     request.roleID=row.id;
     request.service ="query_role_menu_api";

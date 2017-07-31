@@ -32,6 +32,7 @@
         <if test="roleName != null" >
            and  r.role_name like   CONCAT('%', #{roleName,jdbcType=VARCHAR}, '%')
         </if>
+        order by r.id desc
     </select>
 
     <resultMap id="menuApiResultMap" type="com.demo.mapper.MenuInfo" >

@@ -5,6 +5,7 @@ import com.demo.common.util.SpringContextUtil;
 import com.demo.controller.msg.AddRoleRequest;
 import com.demo.controller.msg.LoginUserInfo;
 import com.demo.controller.msg.RolePageQueryResult;
+import com.demo.controller.msg.UpdateRoleRequest;
 import com.demo.mapper.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,29 @@ public class RoleService {
         roleInfo.setUpdateUserId(loginUser.getUserId());
         roleInfoMapper.insert(roleInfo);
 
+        for (Integer menuID:request.getMenuIDs()){
+            roleInfoMapper.insertRoleMenu(roleInfo.getId(),menuID);
+        }
+        for (Integer apiID:request.getApiIDs()){
+            roleInfoMapper.insertRoleAip(roleInfo.getId(),apiID);
+        }
+    }
+
+
+    @Transactional(rollbackFor=Exception.class)
+    public void updateRole(UpdateRoleRequest request){
+        LoginUserInfo loginUser=(LoginUserInfo) SpringContextUtil.getThreadLocalData().
+                request.getSession().getAttribute(Constant.LOGIN_USER);
+        RoleInfo roleInfo= new RoleInfo();
+        roleInfo.setId(request.getId());
+        roleInfo.setRoleName(request.getRoleName());
+        roleInfo.setRemark(request.getRemark());
+        roleInfo.setUpdateTime(new Date());
+        roleInfo.setUpdateUserId(loginUser.getUserId());
+        roleInfoMapper.updateByID(roleInfo);
+
+        roleInfoMapper.deleteRoleAip(request.getId());
+        roleInfoMapper.deleteRoleMenu(request.getId());
         for (Integer menuID:request.getMenuIDs()){
             roleInfoMapper.insertRoleMenu(roleInfo.getId(),menuID);
         }
