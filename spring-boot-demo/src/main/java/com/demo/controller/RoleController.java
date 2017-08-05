@@ -33,15 +33,13 @@ public class RoleController {
   private RoleService roleService;
 
     @TradeService(value="page_query_role")
-    public BaseResponse queryAllBranch(RoleQueryRequest request) throws Exception {
+    public BaseResponse pageQueryRole(RoleQueryRequest request) throws Exception {
         PageQueryResponse<RolePageQueryResult> response= new PageQueryResponse<RolePageQueryResult>();
         PageHelper.startPage(request.getPageNumber(), request.getPageSize());
         List<RolePageQueryResult> list = roleService.queryRole(request.getRoleName());
         PageInfo<RolePageQueryResult> page=new PageInfo<RolePageQueryResult>(list);
         response.setRows(list);
-        logger.info(JSON.toJSONString(list));
         response.setTotal(page.getTotal());
-        logger.info(JSON.toJSONString(response));
         return response;
     }
 
@@ -72,6 +70,16 @@ public class RoleController {
     public BaseResponse queryRoleMenuApi(UpdateRoleRequest request) throws Exception {
         BaseResponse response= new BaseResponse();
         roleService.updateRole(request);
+        return response;
+    }
+
+
+    @TradeService(value="query_all_role")
+    public BaseResponse queryAllRole(BaseRequest request) throws Exception {
+        PageQueryResponse<RolePageQueryResult> response= new PageQueryResponse<RolePageQueryResult>();
+        List<RolePageQueryResult> list = roleService.queryRole(null);
+        response.setRows(list);
+        response.setTotal(Long.valueOf(list.size()));
         return response;
     }
 }

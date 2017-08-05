@@ -6,28 +6,28 @@ import com.demo.common.validate.ValidatorService;
 import org.hibernate.validator.constraints.Length;
 
 import com.demo.common.msg.BaseObject;
+import org.hibernate.validator.constraints.NotBlank;
 
 public class BaseRequest extends BaseObject {
 	
-	@NotNull(message="流水号不能空",groups = {ValidatorService.AuthGroup.class,ValidatorService.NotAuthGroup.class})
-	@Length(min=14,max=32 ,message="流水号长度不能小于{min} 不能大于{max}"
-			,groups = {ValidatorService.AuthGroup.class,ValidatorService.NotAuthGroup.class})
+	@NotBlank(message="流水号不能空")
+	@Length(min=14,max=32 ,message="流水号长度不能小于{min} 不能大于{max}")
 	private String seqNo;
 	
 	
-	@NotNull(message="服务名不能空",groups = {ValidatorService.AuthGroup.class,ValidatorService.NotAuthGroup.class})
-	@Length(min=3,max=32 ,message="服务名长度不能小于{min} 不能大于{max}",groups = {ValidatorService.AuthGroup.class,ValidatorService.NotAuthGroup.class})
+	@NotBlank(message="服务名不能空")
+	@Length(min=3,max=32 ,message="服务名长度不能小于{min} 不能大于{max}")
 	private String service;
 	
 	
-	@NotNull(message="版本号不能空",groups = {ValidatorService.AuthGroup.class,ValidatorService.NotAuthGroup.class})
-	@Length(min=5,max=10 ,message="版本号长度不能小于{min} 不能大于{max}",groups = {ValidatorService.AuthGroup.class,ValidatorService.NotAuthGroup.class})
+	@NotBlank(message="版本号不能空")
+	@Length(min=5,max=10 ,message="版本号长度不能小于{min} 不能大于{max}")
 	private String version;
 
-	@NotNull(message="用户ID不能空",groups = {ValidatorService.AuthGroup.class})
+
 	private Integer userId;
 
-	@NotNull(message="令牌不能空",groups = {ValidatorService.AuthGroup.class})
+
 	private String token;
 
 

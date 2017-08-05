@@ -126,7 +126,6 @@ public class GatewayController {
 
 
     private BaseResponse handle_(String parameter,String seqNo,String service,String version) throws CommException, InvocationTargetException ,Exception{
-//		logger.info("0.接收到请求 method={}, ip={},port={}",request.getMethod(), request.getRemoteAddr(),request.getRemotePort());
 		// 2.服务路由
 		Object serviceBean = routeService.getServiceBean(service, version);
 		Method serviceMethod = routeService.getServiceMethod(service, version);
@@ -147,7 +146,7 @@ public class GatewayController {
 			throw new CommException(ErrorCodeEnum.SYSTEM_ERROR,"JSON 转换报错");
 		}
 		logger.info("3.进行参数校验[{}]",serviceParameter.getName());
-		validatorService.validate(arg,getValidatorGroup(service));
+		validatorService.validate(arg);
 
 		logger.info("4.调用业务方法进行处理",serviceParameter.getName());
         BaseResponse baseResponse = (BaseResponse) serviceMethod.invoke(SpringContextUtil.getBean(serviceBean.getClass()), new Object[]{arg});
@@ -229,13 +228,4 @@ public class GatewayController {
             throw  new CommException(ErrorCodeEnum.SYSTEM_NO_ACCESS);
         }
 	}
-
-	private Class<?> getValidatorGroup(String serviceName){
-		if ("user_login".equals(serviceName)){
-			return  ValidatorService.NotAuthGroup.class;
-		}else {
-			return ValidatorService.AuthGroup.class;
-		}
-	}
-
 }

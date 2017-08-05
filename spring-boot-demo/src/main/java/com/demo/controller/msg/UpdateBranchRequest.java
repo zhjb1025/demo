@@ -1,6 +1,7 @@
 package com.demo.controller.msg;
 
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 
@@ -9,7 +10,7 @@ public class UpdateBranchRequest extends BaseRequest{
     @NotNull(message = "ID不能为空")
     private Integer id;
 
-	@NotNull(message="机构名称不能为空")
+	@NotBlank(message="机构名称不能为空")
 	@Length(min=2,max=32 ,message="机构名称长度不能小于{min} 不能大于{max}")
 	private String branchName;
 

@@ -1,12 +1,12 @@
 package com.demo.common.enums;
 
-public enum UserInfoStatus {
+public enum UserInfoStatusEnum {
 	NORMAL("00"),    //正常
 	FROZEN("01"),      //冻结
 	CANCEL("02"); //注销;
 	String status;
 	
-	UserInfoStatus(String status){
+	UserInfoStatusEnum(String status){
 		this.status=status;
 	}
 

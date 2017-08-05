@@ -31,9 +31,55 @@
        and login_name = #{loginName,jdbcType=VARCHAR}
     </if>
   </select>
-  
-  
-  <insert id="insert" parameterType="com.demo.mapper.UserInfo">
+    <resultMap id="pageQueryUserInfoResultMap" type="com.demo.controller.msg.UserPageQueryResult" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="login_name" property="loginName" jdbcType="VARCHAR" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+        <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+        <result column="branch_name" property="branchName" jdbcType="VARCHAR" />
+        <result column="branch_id" property="branchId" jdbcType="INTEGER" />
+        <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+        <result column="status_label" property="statusLabel" jdbcType="VARCHAR" />
+        <collection property="roleInfoList" ofType="com.demo.mapper.RoleInfo">
+            <id column="role_id" property="id" jdbcType="INTEGER" />
+            <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+        </collection>
+    </resultMap>
+    <select id="pageQueryUserInfo" resultMap="pageQueryUserInfoResultMap">
+        SELECT 	u.id,
+				u.login_name,
+				u.user_name,
+				date_format(u.create_time,'%Y-%m-%d %T') as create_time,
+				date_format(u.update_time,'%Y-%m-%d %T') as update_time,
+				b.branch_name ,
+                b.id as branch_id ,
+				uc.user_name as create_user,
+				up.user_name as update_user,
+                r.id as role_id,
+                r.role_name,
+                m.remark as status_label,
+                u.status
+        from user_info u
+        LEFT JOIN user_role ur on u.id=ur.user_id
+        LEFT JOIN role_info r on r.id=ur.role_id
+        LEFT JOIN branch_info b on b.id=u.branch_id
+        LEFT JOIN user_info uc on uc.id=u.create_user_id
+        LEFT JOIN user_info up on up.id=u.update_user_id
+        LEFT JOIN metadata m on m.meta_group='user_info_status' and m.meta_code=u.status
+        WHERE 1=1
+        <if test="loginName!=null">
+            and  u.login_name like   CONCAT('%', #{loginName,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="userName!=null">
+            and  u.user_name like   CONCAT('%', #{userName,jdbcType=VARCHAR}, '%')
+        </if>
+        order by u.id desc
+    </select>
+
+    <insert id="insert" parameterType="com.demo.mapper.UserInfo" useGeneratedKeys="true" keyProperty="id">
     insert into user_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

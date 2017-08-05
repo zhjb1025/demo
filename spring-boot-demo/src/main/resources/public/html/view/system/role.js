@@ -7,6 +7,7 @@ $(document).ready(function(){
     $('#role').datagrid({
         rownumbers:true,
         toolbar:'#tb',
+        singleSelect:true,
         title:"角色信息",
         pagination:true,
         columns:[[
@@ -79,10 +80,19 @@ function saveRole() {
     }else{
         $.messager.alert('提示信息',rsp.rspMsg,'info');
     }
-    queryRole(1,$('#role').datagrid('getPager').pagination("options").pageSize);
+    var pageSize=$('#role').datagrid('getPager').pagination("options").pageSize;
+    var pageNumber=$('#role').datagrid('getPager').pagination("options").pageNumber;
+    if(id==null || id==""){
+        pageNumber=1;
+    }
+    queryRole(pageNumber,pageSize);
     $('#w').window('close');
 }
 function queryRole(pageNumber,pageSize) {
+    if(typeof(pageSize) == 'undefined' ){
+        pageNumber=1;
+        pageSize=pageSize=$('#role').datagrid('getPager').pagination("options").pageSize;
+    }
     var request={};
     request.roleName=$("#queryRoleName").textbox("getValue");
     request.pageNumber=pageNumber;
@@ -121,10 +131,30 @@ function viewRole(index){
             $('#tree').tree('check',node.target);
         }
     }
+    var apiIDMap={};
     for(var j=0;j<rsp.apiIDs.length;j++){
-        var node = $('#tree').tree('find', "api"+rsp.apiIDs[j]);
-        $('#tree').tree('check',node.target);
+        //var node = $('#tree').tree('find', "api"+rsp.apiIDs[j]);
+        //$('#tree').tree('check',node.target);
+        apiIDMap["api"+rsp.apiIDs[j]]=rsp.apiIDs[j];
     }
+    var root= $('#tree').tree('getRoots');
+
+    var leafNodeList= Array();
+    for(var i=0;i<root.length;i++){
+        var children=$('#tree').tree('getChildren',root[i].target);
+        for(var j=0;j<children.length;j++){
+            if($('#tree').tree('isLeaf',children[j].target) && apiIDMap[children[j].id]!=null){
+                $('#tree').tree('check',children[j].target);
+            }
+        }
+
+    }
+    /*
+    for(var i=0;i<leafNodeList.length;i++){
+        if(apiIDMap[leafNodeList[i].id]!=null){
+            $('#tree').tree('check',leafNodeList[i].target);
+        }
+    }*/
     $('#w').window('open');
 }
 
@@ -176,6 +206,11 @@ function queryAllMenuApi() {
         var menuTree = $('#tree');
         menuTree.tree('loadData',menuList);
     }
+}
+
+function getAllChildren(root,leafNodeList) {
+
+
 }
 
 

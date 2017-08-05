@@ -1,6 +1,7 @@
 package com.demo.controller.msg;
 
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 public class AddRoleRequest extends BaseRequest{
 
 
-	@NotNull(message="角色名称不能为空")
+	@NotBlank(message="角色名称不能为空")
 	@Length(min=2,max=32 ,message="角色名称长度不能小于{min} 不能大于{max}")
 	private String roleName;
 
