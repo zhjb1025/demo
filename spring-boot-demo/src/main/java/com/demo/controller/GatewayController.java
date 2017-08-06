@@ -221,7 +221,8 @@ public class GatewayController {
 		if (!loginUser.getToken().equals(token)|| !loginUser.getUserId().toString().equals(userId)){
             throw  new CommException(ErrorCodeEnum.SYSTEM_ILLEGAL_ACCESS);
         }
-        if ("query_user_menu".equals(serviceName)){
+        if ("query_user_menu".equals(serviceName)
+                ||"modify_password".equals(serviceName)){
 		    return;
         }
         if (loginUser.getApiServiceInfoMap().get(serviceName+":"+version)==null){

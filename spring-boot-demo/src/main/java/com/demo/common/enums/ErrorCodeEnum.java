@@ -25,6 +25,9 @@ public enum ErrorCodeEnum {
     USER_LOGIN_SESSION_TIMEOUT("0100","用户登录会话过期,请重新登录"),
     USER_LOGIN_ERROR("0101","用户名密码错误"),
     USER_STATUS_ERROR("0102","用户状态不正常不允许登录"),
+    USER_LOGIN_NAME_EXITS("0103","登录名已经存在"),
+    USER_NOT_EXITS("0104","用户不存在"),
+    USER_PASSWORD_ERROR("0105","原密码不正确"),
     /*
         系统级别错误码 99 开头
      */

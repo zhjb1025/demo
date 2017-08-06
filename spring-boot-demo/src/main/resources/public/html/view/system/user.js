@@ -21,7 +21,7 @@ $(document).ready(function(){
                 for(var i=0;i<row.roleInfoList.length;i++){
                     val=val+row.roleInfoList[i].roleName+"|"
                 }
-                return val;
+                return val.substring(0,val.length-1);
             }},
             {field:'createTime',title:'创建时间',width:'13%'},
             {field:'createUser',title:'创建人',width:'8%'},
@@ -63,10 +63,14 @@ $(document).ready(function(){
         $("#loginName").textbox("setValue","");
         $("#userName").textbox("setValue","");
         $("#branchName").textbox("setValue","");
+
         $("#id").val("");
         $('#loginName').textbox('enable');
         $("#roleName").tagbox("clear");
         $("#branch_id").val("");
+        $("#loginName").textbox("resetValidation");
+        $("#userName").textbox("resetValidation");
+
         $('#w').window('open');
     });
 
@@ -83,6 +87,17 @@ $(document).ready(function(){
 });
 
 function saveUser() {
+    if( ! $('#ff').form('enableValidation').form('validate') ){
+        return ;
+    }
+    if($("#branch_id").val()==""){
+        $.messager.alert('提示信息',"请选择机构",'info');
+        return;
+    }
+    if($('#roleName').tagbox("getValues").length==0){
+        $.messager.alert('提示信息',"请选择角色",'info');
+        return;
+    }
     var request={};
     var id=$("#id").val();
     if(id==null || id==""){

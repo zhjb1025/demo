@@ -33,10 +33,12 @@
                 <div id="tree" class="easyui-tree" data-options="checkbox:true"></div>
             </div>
             <div data-options="region:'center'" style="padding:10px;">
+                <form id="ff" class="easyui-form">
                 <div style="margin-bottom:20px">
                     <input type="hidden" id="id" >
                     <input id="roleName" name="roleName" class="easyui-textbox"  data-options="
 													validateOnCreate:false,
+													required:true,
 													validType:['length[2,32]']"
                            label="角色名称" labelPosition="top" style="width:90%">
                 </div>
@@ -44,6 +46,7 @@
                     <input id="remark" name="remark" class="easyui-textbox"  data-options=""
                            label="备注" multiline="true" labelPosition="top" style="width:90%;height:120px">
                 </div>
+                </form>
             </div>
             <div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 0;">
                 <a id=saveButton class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="#"  style="width:80px">保存</a>

@@ -65,6 +65,7 @@ public class UserInfoService {
 
     @Transactional(rollbackFor=Exception.class)
     public void addUser(AddUserRequest request) throws Exception {
+
         LoginUserInfo loginUser=(LoginUserInfo) SpringContextUtil.getThreadLocalData().
                 request.getSession().getAttribute(Constant.LOGIN_USER);
         UserInfo record= new UserInfo();

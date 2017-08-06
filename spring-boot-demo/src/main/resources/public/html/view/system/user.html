@@ -33,22 +33,25 @@
         <input type="hidden" id="id" >
         <input type="hidden" id="branch_id" >
         <div class="easyui-layout" data-options="fit:true">
+            <form id="ff" class="easyui-form">
             <div data-options="region:'center'" style="padding:10px;">
                 <div style="margin-bottom:20px">
 
                     <input id="loginName" name="loginName" class="easyui-textbox"  data-options="
 													validateOnCreate:false,
+													required:true,
 													validType:['length[3,32]']"
                            label="登录名" labelPosition="top" style="width:90%">
                 </div>
                 <div style="margin-bottom:20px">
                     <input id="userName" name="userName" class="easyui-textbox"  data-options="
 													validateOnCreate:false,
+													required:true,
 													validType:['length[2,32]']"
                            label="用户名" labelPosition="top" style="width:90%">
                 </div>
                 <div style="margin-bottom:20px">
-                    <input id="branchName" class="easyui-textbox" data-options="disabled:true"  label="所属机构" labelPosition="top" style="width:90%">
+                    <input id="branchName" class="easyui-textbox" data-options="disabled:true,required:true"  label="所属机构" labelPosition="top" style="width:90%">
                 </div>
                 <div style="margin-bottom:20px">
                     <input id="roleName" class="easyui-tagbox"  data-options="valueField: 'id',
@@ -57,6 +60,7 @@
 				                                                             limitToList: true" label="角色"  style="width:90%">
                 </div>
             </div>
+            </form>
             <div data-options="region:'east',split:true,collapsible:false" title="机构" style="width:200px;">
                 <div id="branchTree" class="easyui-tree"></div>
             </div>

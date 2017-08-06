@@ -43,6 +43,7 @@ $(document).ready(function(){
             $('#tree').tree("uncheck",nodes[i].target);
         }
         $("#roleName").textbox("setValue","");
+        $("#roleName").textbox("resetValidation");
         $("#remark").textbox("setValue","");
         $("#id").val("");
         $('#w').window('open');
@@ -52,6 +53,9 @@ $(document).ready(function(){
     queryAllMenuApi();
 });
 function saveRole() {
+    if( ! $('#ff').form('enableValidation').form('validate') ){
+        return ;
+    }
     var request={};
     var id=$("#id").val();
     if(id==null || id==""){
@@ -139,7 +143,6 @@ function viewRole(index){
     }
     var root= $('#tree').tree('getRoots');
 
-    var leafNodeList= Array();
     for(var i=0;i<root.length;i++){
         var children=$('#tree').tree('getChildren',root[i].target);
         for(var j=0;j<children.length;j++){
@@ -147,14 +150,7 @@ function viewRole(index){
                 $('#tree').tree('check',children[j].target);
             }
         }
-
     }
-    /*
-    for(var i=0;i<leafNodeList.length;i++){
-        if(apiIDMap[leafNodeList[i].id]!=null){
-            $('#tree').tree('check',leafNodeList[i].target);
-        }
-    }*/
     $('#w').window('open');
 }
 
@@ -208,9 +204,5 @@ function queryAllMenuApi() {
     }
 }
 
-function getAllChildren(root,leafNodeList) {
-
-
-}
 
 

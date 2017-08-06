@@ -28,6 +28,7 @@ $(document).ready(function(){
 });
 function addBranch(){
     $("#branchName").textbox("setValue","");
+    $("#branchName").textbox("resetValidation");
     $("#remark").textbox("setValue","");
     $("#id").val("");
     var node=$('#branchTree').tree("getSelected");

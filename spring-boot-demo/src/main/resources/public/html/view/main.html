@@ -17,6 +17,7 @@
     <div data-options="region:'north',border:false" style="height:60px;padding:10px">
         <div >
             当前登录: <label id="loginUserInfo"></label>
+            <a id="modifyPassword" href="#" class="easyui-linkbutton" data-options="plain:true">修改密码</a>&nbsp;&nbsp;&nbsp;&nbsp;
             <a id="logout" href="#" class="easyui-linkbutton" data-options="plain:true">退&nbsp;&nbsp;&nbsp;&nbsp;出</a>
         </div>
 
@@ -30,6 +31,44 @@
     <div id="mainPanle"  data-options="region:'center'">
         <div id="tabs" class="easyui-tabs"  fit="true" border="false" >
             <div title="首页" style="padding:20px;overflow:hidden;" id="home"></div>
+        </div>
+    </div>
+
+    <div id="w" class="easyui-window" title="修改密码" data-options="collapsible:false,minimizable:false,closed:true,maximizable:false" style="width:350px;height:300px;padding:5px;">
+        <div class="easyui-layout" data-options="fit:true">
+            <div data-options="region:'center'" style="padding:10px;">
+                <form id="ff" class="easyui-form">
+                    <div style="margin-bottom:20px">
+                        <input id="old_password"  class="easyui-passwordbox"  data-options="
+													validateOnCreate:false,
+													validateOnBlur:true,
+													required:true,
+													validType:['length[6,16]']"
+                               label="原密码" labelPosition="top" style="width:90%">
+                    </div>
+                    <div style="margin-bottom:20px">
+                        <input id="new_password"  class="easyui-passwordbox"  data-options="
+                                                        validateOnCreate:false,
+                                                        validateOnBlur:true,
+                                                        required:true,
+                                                        validType:{length:[6,16],password:''}"
+                               label="新密码" labelPosition="top" style="width:90%">
+                    </div>
+
+                    <div style="margin-bottom:20px">
+                        <input id="pass"  class="easyui-passwordbox"  data-options="
+                                                        validateOnCreate:false,
+                                                        validateOnBlur:true,
+                                                        required:true,
+                                                        validType:{confirmPass:'#new_password'}"
+                               label="确认密码" labelPosition="top" style="width:90%">
+                    </div>
+                </form>
+            </div>
+            <div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 0;">
+                <a id=saveButton class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="#"  style="width:80px">保存</a>
+                <a id="closeButton" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="#"  style="width:80px">关闭</a>
+            </div>
         </div>
     </div>
 </body>

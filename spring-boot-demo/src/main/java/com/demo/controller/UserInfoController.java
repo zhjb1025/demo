@@ -138,8 +138,32 @@ public class UserInfoController {
     @TradeService(value="add_user")
     public BaseResponse addUser(AddUserRequest request) throws Exception {
         BaseResponse response= new BaseResponse();
-
+        UserInfo query= new UserInfo();
+        query.setLoginName(request.getLoginName());
+        List<UserInfo> list = userInfoService.getUserInfoList(query);
+        if(list.size()>0){
+            throw new CommException(ErrorCodeEnum.USER_LOGIN_NAME_EXITS);
+        }
         userInfoService.addUser(request);
+        return response;
+    }
+
+    @TradeService(value="modify_password")
+    public BaseResponse modifyPassword(ModifyPasswordRequest request) throws Exception {
+        BaseResponse response= new BaseResponse();
+        UserInfo user = userInfoService.getUserInfoById(request.getUserId());
+        if(user==null){
+            throw new CommException(ErrorCodeEnum.USER_NOT_EXITS);
+        }
+        // 检查原密码
+        if(!user.getPassword().equals(DESede.encrypt(request.getPassword()))){
+            throw new CommException(ErrorCodeEnum.USER_PASSWORD_ERROR);
+        }
+
+        UserInfo userInfo= new UserInfo();
+        userInfo.setId(request.getUserId());
+        userInfo.setPassword(DESede.encrypt(request.getNewPassword()));
+        userInfoService.updateUserInfo(userInfo);
         return response;
     }
 }
