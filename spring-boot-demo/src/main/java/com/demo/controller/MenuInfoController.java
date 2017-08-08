@@ -29,7 +29,7 @@ public class MenuInfoController {
      * @return
      * @throws Exception
      */
-  @TradeService(value="query_user_menu")
+  @TradeService(value="query_user_menu",isLog = false,isAuth = false)
   public BaseResponse queryUserMenu(BaseRequest request) throws Exception {
       QueryUserMenuResponse  response = new QueryUserMenuResponse();
       List<MenuInfo> list = menuInfoService.queryUserMenuInfo(request.getUserId());

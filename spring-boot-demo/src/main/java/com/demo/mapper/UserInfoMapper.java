@@ -15,7 +15,7 @@ public interface UserInfoMapper {
 
     int updateById(UserInfo record);
 
-    @Select(" SELECT DISTINCT a.id,a.service,a.is_log as isLog ,a.is_auth as isAuth ,a.version " +
+    @Select(" SELECT DISTINCT a.id,a.service,a.version ,a.remark " +
             " from user_role r " +
             " LEFT JOIN role_api_service  ra on ra.role_id=r.role_id " +
             " LEFT JOIN api_service_info a on a.id=ra.api_service_id " +

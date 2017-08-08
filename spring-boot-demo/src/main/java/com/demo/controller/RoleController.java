@@ -32,7 +32,7 @@ public class RoleController {
   @Autowired
   private RoleService roleService;
 
-    @TradeService(value="page_query_role")
+    @TradeService(value="page_query_role",isLog = false)
     public BaseResponse pageQueryRole(RoleQueryRequest request) throws Exception {
         PageQueryResponse<RolePageQueryResult> response= new PageQueryResponse<RolePageQueryResult>();
         PageHelper.startPage(request.getPageNumber(), request.getPageSize());
@@ -43,7 +43,7 @@ public class RoleController {
         return response;
     }
 
-    @TradeService(value="query_all_menu_api")
+    @TradeService(value="query_all_menu_api",isLog = false)
     public BaseResponse queryAllMenuApi(BaseRequest request) throws Exception {
         AllMenuApiResponse response= new AllMenuApiResponse();
         List<MenuInfo> list = roleService.queryAllMenuApi();
@@ -51,7 +51,7 @@ public class RoleController {
         return response;
     }
 
-    @TradeService(value="query_role_menu_api")
+    @TradeService(value="query_role_menu_api",isLog = false)
     public BaseResponse queryRoleMenuApi(QueryRoleMenuApiRequest request) throws Exception {
         QueryRoleMenuApiResponse response= new QueryRoleMenuApiResponse();
         response.setApiIDs(roleService.queryRoleAipIDs(request.getRoleID()));
@@ -74,7 +74,7 @@ public class RoleController {
     }
 
 
-    @TradeService(value="query_all_role")
+    @TradeService(value="query_all_role",isLog = false)
     public BaseResponse queryAllRole(BaseRequest request) throws Exception {
         PageQueryResponse<RolePageQueryResult> response= new PageQueryResponse<RolePageQueryResult>();
         List<RolePageQueryResult> list = roleService.queryRole(null);

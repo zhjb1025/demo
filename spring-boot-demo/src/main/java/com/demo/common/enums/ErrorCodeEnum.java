@@ -18,6 +18,7 @@ public enum ErrorCodeEnum {
     VALIDATE_FAIL("0001","数据格式不正确:%s"),
     SYSTEM_ILLEGAL_ACCESS("0002","非法访问"),
     SYSTEM_NO_ACCESS("0003","无权限访问"),
+    SYSTEM_ERROR_SERVICE_VERSION("0004","错误的服务名:[%s]和版本号:[%s]"),
 
     /*
         用户相关模块  01 开头

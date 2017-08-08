@@ -33,6 +33,12 @@ public class RouteService implements ApplicationListener<ContextRefreshedEvent> 
 	 * key=serviceNane_version
 	 */
 	private Map<String, Method> serviceMethod=  new ConcurrentHashMap<String, Method>();
+
+
+    /**
+     * key=serviceNane_version
+     */
+    private Map<String, TradeService> tradeServiceMap=  new ConcurrentHashMap<String, TradeService>();
 	
 	
 	/**
@@ -54,10 +60,16 @@ public class RouteService implements ApplicationListener<ContextRefreshedEvent> 
 	private void addServiceParameter(String service,String version,Class<?> clazz){
 		serviceParameter.put(service+":"+version, clazz);
 	}
+    private void addTradeService(String service,String version,TradeService tradeService){
+        tradeServiceMap.put(service+":"+version, tradeService);
+    }
 	
 	public Class<?> getServiceParameter(String service,String version){
 		return serviceParameter.get(service+":"+version);
 	}
+    public TradeService getTradeService(String service,String version){
+        return tradeServiceMap.get(service+":"+version);
+    }
 	
 	public Object getServiceBean(String service,String version){
 		return serviceBean.get(service+":"+version); 
@@ -69,9 +81,6 @@ public class RouteService implements ApplicationListener<ContextRefreshedEvent> 
 	
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory factory)
 			throws BeansException {
-		
-		
-		
 	}
 	
 	
@@ -136,6 +145,8 @@ public class RouteService implements ApplicationListener<ContextRefreshedEvent> 
 							addServiceBean(tradeService.value(),version,bean);
 							addServiceMethod(tradeService.value(),version,m);
 							addServiceParameter(tradeService.value(),version,clazzParameter[0]);
+                            addTradeService(tradeService.value(),version,tradeService);
+
 						}else{
 							errorMsg=String.format("服务方法%s　参数不合规",bean.getClass().getName()+"."+m.getName()+"()");
 							throw new CommException(ErrorCodeEnum.SYSTEM_ERROR,errorMsg);

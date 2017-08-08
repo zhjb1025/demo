@@ -11,6 +11,8 @@ import java.lang.annotation.Target;
 @Documented
 public @interface TradeService {
 	String value() default "";
-	
-	String version() default "";
+	boolean isPublic() default false; //是否公有开放性接口
+	boolean isLog() default true;  //是否记录日志
+    boolean isAuth() default true; //是否进行权限控制
+	String version() default ""; //
 }

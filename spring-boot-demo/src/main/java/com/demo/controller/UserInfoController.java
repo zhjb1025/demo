@@ -41,7 +41,7 @@ public class UserInfoController {
   private MetadataService metadataService;
   
   
-  @TradeService(value="user_login")
+  @TradeService(value="user_login",isPublic = true)
   public BaseResponse login(UserLoginRequest request) throws Exception {
 	  logger .info("用户[{}]登录",request.getLoginName());
 	  UserInfo query= new UserInfo();
@@ -88,7 +88,7 @@ public class UserInfoController {
   }
 
 
-    @TradeService(value="page_query_user")
+    @TradeService(value="page_query_user",isLog = false)
     public BaseResponse pageQueryUserInfo(UserQueryRequest request) throws Exception {
         PageQueryResponse<UserPageQueryResult> response= new PageQueryResponse<UserPageQueryResult>();
         PageHelper.startPage(request.getPageNumber(), request.getPageSize());
@@ -148,7 +148,7 @@ public class UserInfoController {
         return response;
     }
 
-    @TradeService(value="modify_password")
+    @TradeService(value="modify_password",isAuth = false)
     public BaseResponse modifyPassword(ModifyPasswordRequest request) throws Exception {
         BaseResponse response= new BaseResponse();
         UserInfo user = userInfoService.getUserInfoById(request.getUserId());
@@ -168,7 +168,7 @@ public class UserInfoController {
     }
 
 
-    @TradeService(value="user_logout")
+    @TradeService(value="user_logout",isPublic = true)
     public BaseResponse userLogout(BaseRequest request) throws Exception {
         BaseResponse response= new BaseResponse();
         SpringContextUtil.getThreadLocalData().request.getSession().removeAttribute(Constant.LOGIN_USER);

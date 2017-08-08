@@ -12,10 +12,6 @@ public class ApiServiceInfo extends BaseObject {
 
     private String version;
 
-    private Integer isLog;
-
-    private Integer isAuth;
-
     private String remark;
 
     public String getRemark() {
@@ -50,19 +46,4 @@ public class ApiServiceInfo extends BaseObject {
         this.version = version;
     }
 
-    public Integer getIsLog() {
-        return isLog;
-    }
-
-    public void setIsLog(Integer isLog) {
-        this.isLog = isLog;
-    }
-
-    public Integer getIsAuth() {
-        return isAuth;
-    }
-
-    public void setIsAuth(Integer isAuth) {
-        this.isAuth = isAuth;
-    }
 }

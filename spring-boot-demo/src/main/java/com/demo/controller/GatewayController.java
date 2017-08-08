@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.demo.common.Constant;
+import com.demo.common.annotation.TradeService;
 import com.demo.common.enums.ErrorCodeEnum;
 import com.demo.common.util.CommUtil;
 import com.demo.common.util.ThreadCacheData;
@@ -207,9 +208,14 @@ public class GatewayController {
      * @throws CommException
      */
 	private void validate(String serviceName,String version,String parameter) throws CommException {
-		if ("user_login".equals(serviceName)||"user_logout".equals(serviceName)){
-			return;
-		}
+        TradeService tradeService = routeService.getTradeService(serviceName, version);
+        if(tradeService==null){
+            throw  new CommException(ErrorCodeEnum.SYSTEM_ERROR_SERVICE_VERSION,serviceName,version);
+        }
+        if (tradeService.isPublic()){  //公共开放接口 不进行访问控制
+            return;
+        }
+        //私有接口需要登录才能访问
         String token=CommUtil.getJsonValue(parameter,"token");
         String userId=CommUtil.getJsonValue(parameter,"userId");
         LoginUserInfo loginUser=(LoginUserInfo)SpringContextUtil.getThreadLocalData().
@@ -220,9 +226,8 @@ public class GatewayController {
 		if (!loginUser.getToken().equals(token)|| !loginUser.getUserId().toString().equals(userId)){
             throw  new CommException(ErrorCodeEnum.SYSTEM_ILLEGAL_ACCESS);
         }
-        if ("query_user_menu".equals(serviceName)
-                ||"modify_password".equals(serviceName)){
-		    return;
+        if (!tradeService.isAuth()){  //不进行基于角色的权限访问控制(RBAC)的访问控制
+            return;
         }
         if (loginUser.getApiServiceInfoMap().get(serviceName+":"+version)==null){
             throw  new CommException(ErrorCodeEnum.SYSTEM_NO_ACCESS);

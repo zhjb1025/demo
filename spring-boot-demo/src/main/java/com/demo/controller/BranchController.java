@@ -33,7 +33,7 @@ public class BranchController {
      * @return
      * @throws Exception
      */
-  @TradeService(value="query_all_branch")
+  @TradeService(value="query_all_branch",isLog = false)
   public BaseResponse queryAllBranch(BaseRequest request) throws Exception {
       QueryAllBranchResponse response = new QueryAllBranchResponse();
       List<BranchInfo> list = branchService.getAll();
