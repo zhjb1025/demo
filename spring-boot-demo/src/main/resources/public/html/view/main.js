@@ -8,6 +8,9 @@ $(document).ready(function(){
     userObject=$.parseJSON(user);
     $("#loginUserInfo").append(userObject.userName);
     $("#logout").click(function () {
+        var request={};
+        request.service ="user_logout";
+        var rsp=ajaxPostSynch(request);
         sessionStorage.clear();
         document.location="login.html";
     })

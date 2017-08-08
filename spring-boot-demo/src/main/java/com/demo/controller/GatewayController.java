@@ -69,7 +69,6 @@ public class GatewayController {
             String service=CommUtil.getJsonValue(parameter,"service");
             String version=CommUtil.getJsonValue(parameter,"version");
             Thread.currentThread().setName(service+":"+version+":"+seqNo);
-            logger.info("session=[{}]",request.getSession().getId());
 
             logger.info("1.接收到请求数据[{}]",parameter);
 			baseResponse=handle(parameter,seqNo,service,version);
@@ -208,7 +207,7 @@ public class GatewayController {
      * @throws CommException
      */
 	private void validate(String serviceName,String version,String parameter) throws CommException {
-		if ("user_login".equals(serviceName)){
+		if ("user_login".equals(serviceName)||"user_logout".equals(serviceName)){
 			return;
 		}
         String token=CommUtil.getJsonValue(parameter,"token");

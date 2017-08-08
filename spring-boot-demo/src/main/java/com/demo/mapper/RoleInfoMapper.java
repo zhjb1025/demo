@@ -3,6 +3,7 @@ package com.demo.mapper;
 import com.demo.controller.msg.RolePageQueryResult;
 import com.demo.mapper.RoleInfo;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -36,4 +37,10 @@ public interface RoleInfoMapper {
 
     @Delete("delete from role_menu where role_id=#{roleID,jdbcType=INTEGER}")
     int deleteRoleMenu(@Param("roleID") Integer roleID);
+
+    @Select(" select r.id,r.role_name as roleName  " +
+            " from user_role ur left join role_info r on ur.role_id=r.id " +
+            " where ur.user_id=#{userID,jdbcType=INTEGER} ")
+    List<RoleInfo> selectUserRole(@Param("userID") Integer userID);
+
 }

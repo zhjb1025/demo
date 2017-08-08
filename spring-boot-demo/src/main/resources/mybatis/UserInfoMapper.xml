@@ -43,8 +43,8 @@
         <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
         <result column="status" property="status" jdbcType="VARCHAR" />
         <result column="status_label" property="statusLabel" jdbcType="VARCHAR" />
-        <collection property="roleInfoList" ofType="com.demo.mapper.RoleInfo">
-            <id column="role_id" property="id" jdbcType="INTEGER" />
+        <collection property="roleInfoList" select="com.demo.mapper.RoleInfoMapper.selectUserRole" column="id" ofType="com.demo.mapper.RoleInfo">
+            <id column="id" property="id" jdbcType="INTEGER" />
             <result column="role_name" property="roleName" jdbcType="VARCHAR" />
         </collection>
     </resultMap>
@@ -58,13 +58,9 @@
                 b.id as branch_id ,
 				uc.user_name as create_user,
 				up.user_name as update_user,
-                r.id as role_id,
-                r.role_name,
                 m.remark as status_label,
                 u.status
         from user_info u
-        LEFT JOIN user_role ur on u.id=ur.user_id
-        LEFT JOIN role_info r on r.id=ur.role_id
         LEFT JOIN branch_info b on b.id=u.branch_id
         LEFT JOIN user_info uc on uc.id=u.create_user_id
         LEFT JOIN user_info up on up.id=u.update_user_id

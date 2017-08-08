@@ -166,4 +166,12 @@ public class UserInfoController {
         userInfoService.updateUserInfo(userInfo);
         return response;
     }
+
+
+    @TradeService(value="user_logout")
+    public BaseResponse userLogout(BaseRequest request) throws Exception {
+        BaseResponse response= new BaseResponse();
+        SpringContextUtil.getThreadLocalData().request.getSession().removeAttribute(Constant.LOGIN_USER);
+        return response;
+    }
 }
