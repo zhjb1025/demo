@@ -18,6 +18,7 @@ import com.demo.common.util.CommUtil;
 import com.demo.common.util.ThreadCacheData;
 import com.demo.controller.msg.AccessLog;
 import com.demo.controller.msg.LoginUserInfo;
+import com.demo.service.AccessLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,73 +54,55 @@ public class GatewayController {
 	private ValidatorService validatorService;
 
     @Autowired
-    private MongoTemplate mongoTemplate;
+    private AccessLogService accessLogService;
 
 	@RequestMapping(value = "/gateway", method = { RequestMethod.POST,RequestMethod.GET })
 	@ResponseBody
-	public BaseResponse gateway(HttpServletRequest request,
-			HttpServletResponse response) throws CommException {
-
-
+	public BaseResponse gateway(HttpServletRequest request,HttpServletResponse response) throws CommException {
 		long beginTime = System.currentTimeMillis();
+        long endTime =beginTime;
 		BaseResponse baseResponse=null;
 		ThreadCacheData data= new ThreadCacheData();
 		data.request=request;
 		data.response=response;
 		SpringContextUtil.setThreadLocalData(data);
         String seqNo=null;
-        AccessLog accessLog= new AccessLog();
-        accessLog.setTradeDate(CommUtil.getDateYYYYMMDD());
-        accessLog.setStartTimestamp(System.currentTimeMillis());
+
         String service=null;
         String version=null;
+        String parameter=null;
 		try {
             // 1.获取请求参数
-            String parameter=getRequestParameter(request);
+            parameter=getRequestParameter(request);
             seqNo=CommUtil.getJsonValue(parameter,"seqNo");
             service=CommUtil.getJsonValue(parameter,"service");
             version=CommUtil.getJsonValue(parameter,"version");
             Thread.currentThread().setName(service+":"+version+":"+seqNo);
-            accessLog.setSeqNo(seqNo);
-            accessLog.setService(service);
-            accessLog.setVersion(version);
             logger.info("1.接收到请求数据[{}]",parameter);
-			baseResponse=handle(parameter,seqNo,service,version,accessLog);
+			baseResponse=handle(parameter,seqNo,service,version);
 		} catch (CommException e) {
 			baseResponse= makeErrorResponse(e.getErrCode(),e.getErrMsg());
 		}finally{
-			long endTime = System.currentTimeMillis(); 
+			endTime = System.currentTimeMillis();
 			logger.info("5.响应数据[{}毫秒][{}]",endTime-beginTime,JSON.toJSONString(baseResponse));
 			SpringContextUtil.cleanThreadCacheData();
-
 		}
         baseResponse.setSeqNo(seqNo);
-        accessLog.setEndTimestamp(System.currentTimeMillis());
-        accessLog.setResponse(baseResponse);
-        accessLog.setRspCode(baseResponse.getRspCode());
-        accessLog.setTradeStatus(baseResponse.getTradeStatus());
-        accessLog.setRspMsg(baseResponse.getRspMsg());
         TradeService tradeService = routeService.getTradeService(service, version);
-        saveAccessLog(accessLog,tradeService);
+        if (tradeService!=null && tradeService.isLog()){
+            AccessLog accessLog = new AccessLog();
+            accessLog.setVersion(version);
+            accessLog.setService(service);
+            accessLog.setSeqNo(seqNo);
+            accessLog.setStartTimestamp(beginTime);
+            accessLog.setDealTime(endTime-beginTime);
+            accessLog.setRequest(parameter);
+            accessLog.setResponse(baseResponse);
+            accessLogService.addLog(accessLog);
+        }
         return baseResponse;
 	}
-    private void saveAccessLog(AccessLog accessLog,TradeService tradeService){
-        try {
-            if (accessLog.getUserId()==null){
-
-                Object userID=CommUtil.getFieldValue(accessLog.getResponse(),"userId");
-                if(userID!=null){
-                    accessLog.setUserId(userID.toString());
-                }
-            }
-            if(tradeService!=null &&tradeService.isLog()){
-                mongoTemplate.save(accessLog);
-            }
-        }catch (Throwable e){
-            e.printStackTrace();
-            logger.error("mongo 出错",e);
-        }
-    }
+//
     /**
      * 获取JSON格式的请求参数
      * @param request
@@ -139,9 +122,9 @@ public class GatewayController {
 		}
 		return parameter;
 	}
-	private BaseResponse handle(String parameter,String seqNo,String service,String version,AccessLog accessLog ) throws CommException {
+	private BaseResponse handle(String parameter,String seqNo,String service,String version) throws CommException {
 		try {
-			return handle_(parameter,seqNo,service,version ,accessLog);
+			return handle_(parameter,seqNo,service,version );
 		} catch (InvocationTargetException e) {
 			if(e.getTargetException() instanceof CommException){
 				CommException ex=(CommException)e.getTargetException();
@@ -161,7 +144,7 @@ public class GatewayController {
 
 
 
-    private BaseResponse handle_(String parameter,String seqNo,String service,String version,AccessLog accessLog) throws CommException, InvocationTargetException ,Exception{
+    private BaseResponse handle_(String parameter,String seqNo,String service,String version) throws CommException, InvocationTargetException ,Exception{
 		// 2.服务路由
 		Object serviceBean = routeService.getServiceBean(service, version);
 		Method serviceMethod = routeService.getServiceMethod(service, version);
@@ -172,12 +155,11 @@ public class GatewayController {
 		}
 		// 进行访问权限控制
 		logger.info("2.进行访问权限控制");
-		validate(service,version,parameter,accessLog);
+		validate(service,version,parameter);
 
 		Object arg=null;
 		try {
 			arg = JSON.parseObject(parameter, serviceParameter);
-            accessLog.setRequest(arg);
 		} catch (Exception e) {
 			logger.info("JSON 转换报错",e);
 			throw new CommException(ErrorCodeEnum.SYSTEM_ERROR,"JSON 转换报错");
@@ -223,7 +205,6 @@ public class GatewayController {
 	private  String getPostData(HttpServletRequest request)throws Exception {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		InputStream is = request.getInputStream();
-
 		int read = 1;
 		while (read > 0) {
 			byte[] bb = new byte[1024];
@@ -244,7 +225,7 @@ public class GatewayController {
      * @param parameter
      * @throws CommException
      */
-	private void validate(String serviceName,String version,String parameter,AccessLog accessLog) throws CommException {
+	private void validate(String serviceName,String version,String parameter) throws CommException {
         TradeService tradeService = routeService.getTradeService(serviceName, version);
         if(tradeService==null){
             throw  new CommException(ErrorCodeEnum.SYSTEM_ERROR_SERVICE_VERSION,serviceName,version);
@@ -255,7 +236,6 @@ public class GatewayController {
         //私有接口需要登录才能访问
         String token=CommUtil.getJsonValue(parameter,"token");
         String userId=CommUtil.getJsonValue(parameter,"userId");
-        accessLog.setUserId(userId);
         LoginUserInfo loginUser=(LoginUserInfo)SpringContextUtil.getThreadLocalData().
                 request.getSession().getAttribute(Constant.LOGIN_USER);
         if (loginUser==null){

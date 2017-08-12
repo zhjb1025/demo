@@ -1,9 +1,10 @@
 package com.demo.controller.msg;
 
+import com.demo.common.msg.BaseObject;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="access_log")
-public class AccessLog {
+public class AccessLog extends BaseObject {
     private String seqNo;
     private String service;
     private String version;
@@ -12,10 +13,10 @@ public class AccessLog {
     private String rspMsg;
     private Integer tradeStatus;
     private long startTimestamp;
-    private long endTimestamp;
+    private long dealTime;
     private String tradeDate;
     private Object request;
-    private Object  response;
+    private BaseResponse  response;
 
     public String getSeqNo() {
         return seqNo;
@@ -81,12 +82,12 @@ public class AccessLog {
         this.startTimestamp = startTimestamp;
     }
 
-    public long getEndTimestamp() {
-        return endTimestamp;
+    public long getDealTime() {
+        return dealTime;
     }
 
-    public void setEndTimestamp(long endTimestamp) {
-        this.endTimestamp = endTimestamp;
+    public void setDealTime(long dealTime) {
+        this.dealTime = dealTime;
     }
 
     public String getTradeDate() {
@@ -105,11 +106,11 @@ public class AccessLog {
         this.request = request;
     }
 
-    public Object getResponse() {
+    public BaseResponse getResponse() {
         return response;
     }
 
-    public void setResponse(Object response) {
+    public void setResponse(BaseResponse response) {
         this.response = response;
     }
 }
