@@ -24,18 +24,19 @@
     <div id="tb" style="padding:2px 5px;">
         <form id="ff" class="easyui-form">
         开始时间: <input id="startTime"  class="easyui-datetimebox" data-options="required:true,validateOnCreate:false" style="width:150px">
-        &nbsp;&nbsp;&nbsp;&nbsp;结束时间: <input id="endTime"  class="easyui-datetimebox" data-options="
+        &nbsp;&nbsp;结束时间: <input id="endTime"  class="easyui-datetimebox" data-options="
                             required:true,
                             validateOnCreate:false,
                             validType:{startEnd:'#startTime',
                                        sameYear:'#startTime',
                                        sameMonth:'#startTime',
                                        intervalDay:['#startTime',10]}" style="width:150px">
-        &nbsp;&nbsp;&nbsp;&nbsp;服务名: <input id="service"  class="easyui-textbox" style="width:110px">
-        &nbsp;&nbsp;&nbsp;&nbsp;版本号: <input id="version"  class="easyui-textbox" style="width:110px">
-        &nbsp;&nbsp;&nbsp;&nbsp;用户ID: <input id="userId"  class="easyui-textbox" style="width:110px">
-        &nbsp;&nbsp;&nbsp;&nbsp;<a id="queryButton" href="#" class="easyui-linkbutton" iconCls="icon-search">查询</a>
-        &nbsp;&nbsp;&nbsp;&nbsp;<a id="addButton" href="#" class="easyui-linkbutton" iconCls="icon-add">增加</a>
+        &nbsp;&nbsp;服务名: <input id="service"  class="easyui-textbox" style="width:110px">
+        &nbsp;&nbsp;版本号: <input id="version"  class="easyui-textbox" style="width:110px">
+        &nbsp;&nbsp;用户ID: <input id="userId"  class="easyui-textbox" style="width:60px">
+            &nbsp;&nbsp;耗时大于: <input id="dealTime"  class="easyui-textbox" style="width:40px">
+        &nbsp;&nbsp;<a id="queryButton" href="#" class="easyui-linkbutton" iconCls="icon-search">查询</a>
+        &nbsp;&nbsp;<a id="addButton" href="#" class="easyui-linkbutton" iconCls="icon-add">增加</a>
         </form>
     </div>
 
@@ -46,7 +47,7 @@
 				nowrap:false,
                columns:[[
                     {field:'name',title:'字段名称',width:'30%'},
-                    {field:'value',title:'字段值',width:'65%'}]]">
+                    {field:'value',title:'字段值',width:'65%',nowrap:false}]]">
         </table>
     </div>
 </body>

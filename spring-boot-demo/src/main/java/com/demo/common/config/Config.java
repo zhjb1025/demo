@@ -69,14 +69,12 @@ public class Config {
     return Integer.parseInt(getConfigByString(keyName));
   }
   
-  public  int getConfigByInt(String keyName,int defaultValue){
-    return Integer.parseInt(getConfigByString(keyName));
-  }
+
   
-  public  int getConfigByInt(String keyName,String defaultValue){
+  public  int getConfigByInt(String keyName,int defaultValue){
     String temp=getConfigByString(keyName);
     if(temp==null ||temp.trim().length()==0){
-      temp=defaultValue;
+      return defaultValue;
     }
     return Integer.parseInt(temp);
   }

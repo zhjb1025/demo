@@ -1,16 +1,26 @@
 package com.demo.controller.msg;
 
+import com.demo.common.annotation.DateTime;
+import com.demo.common.annotation.IntervalDay;
+import com.demo.common.annotation.SameYear;
+import com.demo.common.annotation.StartEndTime;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.NotBlank;
 
+@StartEndTime(endTimeField="endTime",startTimeField="startTime")
+@IntervalDay(endTimeField="endTime",startTimeField="startTime",interval=10)
+@SameYear(endTimeField="endTime",startTimeField="startTime")
 public class AccessLogQueryRequest extends PageQueryRequest {
     @NotBlank(message="开始时间不能为空")
+    @DateTime
     private String startTime;
     @NotBlank(message="结束时间不能为空")
+    @DateTime
     private String endTime;
     private String queryService;
     private String queryVersion;
     private String queryUserId;
+    private Integer dealTime;
 
     public String getStartTime() {
         return startTime;
@@ -50,5 +60,13 @@ public class AccessLogQueryRequest extends PageQueryRequest {
 
     public void setQueryUserId(String queryUserId) {
         this.queryUserId = queryUserId;
+    }
+
+    public Integer getDealTime() {
+        return dealTime;
+    }
+
+    public void setDealTime(Integer dealTime) {
+        this.dealTime = dealTime;
     }
 }

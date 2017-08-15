@@ -60,6 +60,9 @@ public class AccessLogService extends Thread  {
         if(!StringUtils.isBlank(request.getQueryUserId())){
             criteriaList.add(Criteria.where("userId").is(request.getQueryUserId()));
         }
+        if(request.getDealTime()!=null){
+            criteriaList.add(Criteria.where("dealTime").gt(request.getDealTime()));
+        }
         Criteria criteria= new Criteria();
         Criteria [] temp=criteriaList.toArray(new Criteria [criteriaList.size()]);
         criteria.andOperator(temp);

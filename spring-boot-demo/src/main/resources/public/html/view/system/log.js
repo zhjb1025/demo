@@ -19,8 +19,8 @@ $(document).ready(function(){
             {field:'tradeStatusLabel',title:'处理状态',width:'8%'},
             {field:'dealTime',title:'耗时',width:'8%'},
             {field:'rspCode',title:'响应码',width:'5%'},
-            {field:'rspMsg',title:'响应信息',width:'10%'},
-            {field:'opt',title:'操作',width:'10%',formatter:function (value,row,index) {
+            {field:'rspMsg',title:'响应信息',width:'13%'},
+            {field:'opt',title:'操作',width:'7%',formatter:function (value,row,index) {
                 return  "<a href=# onclick=viewLog("+index+")>详细信息</a> ";
             }}
         ]]
@@ -93,6 +93,7 @@ function queryLog(pageNumber,pageSize) {
     request.queryService=$("#service").textbox("getValue");
     request.queryVersion=$("#version").textbox("getValue");
     request.queryUserId=$("#userId").textbox("getValue");
+    request.dealTime=$("#dealTime").textbox("getValue");
     request.pageNumber=pageNumber;
     request.pageSize=pageSize;
     request.service ="page_query_access_log";

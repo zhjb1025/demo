@@ -12,7 +12,7 @@ public class UserLoginRequest extends BaseRequest{
 	private String loginName;
 
 	@NotBlank(message=" 密码不能为空")
-	@Length(min=6,max=32 ,message="密码长度不能小于{min} 不能大于{max}")
+	@Length(min=6,max=512 ,message="密码长度不能小于{min} 不能大于{max}")
     private String pwd;
 
 	public String getLoginName() {

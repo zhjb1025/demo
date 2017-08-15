@@ -4,6 +4,7 @@
 
 
 $(document).ready(function(){
+    setMaxDigits(130);
     var user=sessionStorage.getItem("LOGIN_USER");
     userObject=$.parseJSON(user);
     $("#loginUserInfo").append(userObject.userName);
@@ -134,8 +135,9 @@ function modifyPassword() {
     }
     var request={};
     request.service ="modify_password";
-    request.password=$("#old_password").passwordbox('getValue');
-    request.newPassword=$("#new_password").passwordbox('getValue');
+    var key = new RSAKeyPair("10001","","cfcbc0ca7b1656934c219695216692989660918a8934f37f5cb9538a64ca4596953ebb71a93168b3c557d2daaf82f48101727d7fcdee1f47403b6674590727f53c1fc665bbdb3cc7b0aab969cdecf0d7ce8e56227d41f2b14e626a3762597a0b0bcda28bd85ea191914ebbadbfce40b0048a16b957f50f64da3d43f59cc66fe3",1024);
+    request.password=encryptedString(key, $("#old_password").passwordbox('getValue'));
+    request.newPassword=encryptedString(key, $("#new_password").passwordbox('getValue'));
     var rsp=ajaxPostSynch(request);
     if(rsp.tradeStatus!=1){
         $.messager.alert('错误提示信息',rsp.rspMsg,'error');

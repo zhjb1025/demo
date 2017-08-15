@@ -3,10 +3,12 @@ package com.demo.controller;
 import com.alibaba.fastjson.JSON;
 import com.demo.common.Constant;
 import com.demo.common.annotation.TradeService;
+import com.demo.common.config.Config;
 import com.demo.common.enums.ErrorCodeEnum;
 import com.demo.common.enums.UserInfoStatusEnum;
 import com.demo.common.exception.CommException;
 import com.demo.common.security.DESede;
+import com.demo.common.security.RSAUtil;
 import com.demo.common.util.SpringContextUtil;
 import com.demo.controller.msg.*;
 import com.demo.mapper.ApiServiceInfo;
@@ -21,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.KeyPair;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +42,9 @@ public class UserInfoController {
 
   @Autowired
   private MetadataService metadataService;
+
+  @Autowired
+  private Config config;
   
   
   @TradeService(value="user_login",isPublic = true)
@@ -51,7 +57,8 @@ public class UserInfoController {
 	  if(list.size()>0){
 		  UserInfo u=list.get(0);
 		  // 检查密码
-		  if(!u.getPassword().equals(DESede.encrypt(request.getPwd()))){
+          String password=RSAUtil.decryptJSRsa(request.getPwd(),config.getConfigByString("rsa.key.path"));
+		  if(!u.getPassword().equals(DESede.encrypt(password))){
 			  throw new CommException(ErrorCodeEnum.USER_LOGIN_ERROR);
 		  }
 		  //检查状态
@@ -156,13 +163,15 @@ public class UserInfoController {
             throw new CommException(ErrorCodeEnum.USER_NOT_EXITS);
         }
         // 检查原密码
-        if(!user.getPassword().equals(DESede.encrypt(request.getPassword()))){
+        String password=RSAUtil.decryptJSRsa(request.getPassword(),config.getConfigByString("rsa.key.path"));
+        String newPassword=RSAUtil.decryptJSRsa(request.getNewPassword(),config.getConfigByString("rsa.key.path"));
+        if(!user.getPassword().equals(DESede.encrypt(password))){
             throw new CommException(ErrorCodeEnum.USER_PASSWORD_ERROR);
         }
 
         UserInfo userInfo= new UserInfo();
         userInfo.setId(request.getUserId());
-        userInfo.setPassword(DESede.encrypt(request.getNewPassword()));
+        userInfo.setPassword(DESede.encrypt(newPassword));
         userInfoService.updateUserInfo(userInfo);
         return response;
     }
