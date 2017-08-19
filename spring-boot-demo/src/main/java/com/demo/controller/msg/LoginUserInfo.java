@@ -1,13 +1,10 @@
 package com.demo.controller.msg;
 
-import com.demo.common.msg.BaseObject;
-import com.demo.common.validate.ValidatorService;
-import com.demo.mapper.ApiServiceInfo;
-import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.demo.common.msg.BaseObject;
+import com.demo.mapper.ApiServiceInfo;
 
 public class LoginUserInfo extends BaseObject {
     private Integer userId;

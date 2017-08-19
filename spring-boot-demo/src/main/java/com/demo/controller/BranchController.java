@@ -1,19 +1,25 @@
 package com.demo.controller;
 
-import com.demo.common.Constant;
-import com.demo.common.annotation.TradeService;
-import com.demo.common.util.CommUtil;
-import com.demo.common.util.SpringContextUtil;
-import com.demo.controller.msg.*;
-import com.demo.mapper.BranchInfo;
-import com.demo.service.BranchService;
+import java.util.Date;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
+import com.demo.common.Constant;
+import com.demo.common.annotation.TradeService;
+import com.demo.common.util.CommUtil;
+import com.demo.common.util.SpringContextUtil;
+import com.demo.controller.msg.AddBranchRequest;
+import com.demo.controller.msg.BaseRequest;
+import com.demo.controller.msg.BaseResponse;
+import com.demo.controller.msg.LoginUserInfo;
+import com.demo.controller.msg.QueryAllBranchResponse;
+import com.demo.controller.msg.UpdateBranchRequest;
+import com.demo.mapper.BranchInfo;
+import com.demo.service.BranchService;
 
 
 /**

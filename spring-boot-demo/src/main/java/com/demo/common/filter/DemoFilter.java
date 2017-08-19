@@ -8,12 +8,12 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 
@@ -29,8 +29,8 @@ public class DemoFilter implements Filter{
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
-      HttpServletResponse rsp = (HttpServletResponse) response;
-      HttpServletRequest req = (HttpServletRequest) request;
+//      HttpServletResponse rsp = (HttpServletResponse) response;
+//      HttpServletRequest req = (HttpServletRequest) request;
       System.out.println(((HttpServletRequest) request).getRequestURI());
 //      rsp.setHeader("Content-Type", "application/json; charset=UTF-8");
 //      rsp.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");

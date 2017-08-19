@@ -1,12 +1,9 @@
 package com.demo.controller.msg;
 
-import javax.validation.constraints.NotNull;
-
-import com.demo.common.validate.ValidatorService;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.demo.common.msg.BaseObject;
-import org.hibernate.validator.constraints.NotBlank;
 
 public class BaseRequest extends BaseObject {
 	

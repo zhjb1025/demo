@@ -1,7 +1,6 @@
 package com.demo.common.util;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.ApplicationContext;
 
@@ -12,7 +11,6 @@ import org.springframework.context.ApplicationContext;
  */
 public class SpringContextUtil {
       private static ApplicationContext applicationContext;
-      private static ThreadLocal<HttpServletRequest> threadLocalRequest= new ThreadLocal<HttpServletRequest>();
       
       private static ThreadLocal<ThreadCacheData> threadLocalData= new ThreadLocal<ThreadCacheData>();
       

@@ -1,7 +1,5 @@
 package com.demo.controller.msg;
 
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 

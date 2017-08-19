@@ -1,14 +1,12 @@
 package com.demo.service;
 
-import com.demo.mapper.MenuInfo;
-import com.demo.mapper.MenuInfoMapper;
-import com.demo.mapper.UserInfo;
-import com.demo.mapper.UserInfoMapper;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.demo.mapper.MenuInfo;
+import com.demo.mapper.MenuInfoMapper;
 
 @Service
 public class MenuInfoService {

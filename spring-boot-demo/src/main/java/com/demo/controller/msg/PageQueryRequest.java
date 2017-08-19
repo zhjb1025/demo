@@ -1,7 +1,5 @@
 package com.demo.controller.msg;
 
-import org.hibernate.validator.constraints.Length;
-
 import javax.validation.constraints.NotNull;
 
 public class PageQueryRequest extends BaseRequest{

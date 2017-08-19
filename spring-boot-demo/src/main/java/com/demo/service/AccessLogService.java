@@ -1,10 +1,13 @@
 package com.demo.service;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.demo.common.annotation.TradeService;
-import com.demo.common.util.CommUtil;
-import com.demo.controller.msg.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
@@ -16,12 +19,15 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.demo.common.annotation.TradeService;
+import com.demo.common.util.CommUtil;
+import com.demo.controller.msg.AccessLog;
+import com.demo.controller.msg.AccessLogPageQueryResult;
+import com.demo.controller.msg.AccessLogQueryRequest;
+import com.demo.controller.msg.BaseResponse;
+import com.demo.controller.msg.PageQueryResponse;
 
 @Service
 //@ThreadManager(name = "AccessLogService")
@@ -30,9 +36,6 @@ public class AccessLogService extends Thread  {
     private static Logger logger = LoggerFactory.getLogger(AccessLogService.class);
     @Autowired
     private MongoTemplate mongoTemplate;
-
-    @Autowired
-    private RouteService routeService;
 
     private LinkedBlockingQueue<AccessLog> logQueue= new LinkedBlockingQueue<AccessLog>(1024*100);
 
@@ -133,6 +136,5 @@ public class AccessLogService extends Thread  {
              }
         }
         mongoTemplate.save(accessLog);
-        ;
     }
 }

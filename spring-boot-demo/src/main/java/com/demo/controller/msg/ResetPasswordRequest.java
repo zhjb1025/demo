@@ -1,7 +1,5 @@
 package com.demo.controller.msg;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 import javax.validation.constraints.NotNull;
 
 public class ResetPasswordRequest extends BaseRequest{

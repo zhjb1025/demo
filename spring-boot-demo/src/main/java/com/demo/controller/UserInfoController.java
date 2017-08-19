@@ -1,5 +1,13 @@
 package com.demo.controller;
 
+import java.util.Date;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.alibaba.fastjson.JSON;
 import com.demo.common.Constant;
 import com.demo.common.annotation.TradeService;
@@ -10,7 +18,19 @@ import com.demo.common.exception.CommException;
 import com.demo.common.security.DESede;
 import com.demo.common.security.RSAUtil;
 import com.demo.common.util.SpringContextUtil;
-import com.demo.controller.msg.*;
+import com.demo.controller.msg.AddUserRequest;
+import com.demo.controller.msg.BaseRequest;
+import com.demo.controller.msg.BaseResponse;
+import com.demo.controller.msg.LoginUserInfo;
+import com.demo.controller.msg.ModifyPasswordRequest;
+import com.demo.controller.msg.PageQueryResponse;
+import com.demo.controller.msg.ResetPasswordRequest;
+import com.demo.controller.msg.UpdateUserRequest;
+import com.demo.controller.msg.UpdateUserStatusRequest;
+import com.demo.controller.msg.UserLoginRequest;
+import com.demo.controller.msg.UserLoginResponse;
+import com.demo.controller.msg.UserPageQueryResult;
+import com.demo.controller.msg.UserQueryRequest;
 import com.demo.mapper.ApiServiceInfo;
 import com.demo.mapper.Metadata;
 import com.demo.mapper.UserInfo;
@@ -18,14 +38,6 @@ import com.demo.service.MetadataService;
 import com.demo.service.UserInfoService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.security.KeyPair;
-import java.util.Date;
-import java.util.List;
 
 
 /**

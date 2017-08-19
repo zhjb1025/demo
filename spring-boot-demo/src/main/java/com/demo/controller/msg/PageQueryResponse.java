@@ -1,10 +1,8 @@
 package com.demo.controller.msg;
 
-import com.demo.common.enums.ErrorCodeEnum;
-import com.demo.common.enums.TradeStatusEnum;
-import com.demo.common.msg.BaseObject;
-
 import java.util.List;
+
+import com.demo.common.msg.BaseObject;
 
 public class PageQueryResponse<T extends BaseObject> extends BaseResponse {
 	

@@ -1,9 +1,8 @@
 package com.demo.controller.msg;
 
-import com.demo.mapper.BranchInfo;
-import com.demo.mapper.MenuInfo;
-
 import java.util.List;
+
+import com.demo.mapper.BranchInfo;
 
 /**
  *

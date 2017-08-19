@@ -2,8 +2,6 @@ package com.demo.mapper;
 
 import com.demo.common.msg.BaseObject;
 
-import java.util.Date;
-
 public class ApiServiceInfo extends BaseObject {
 	
     private Integer id;

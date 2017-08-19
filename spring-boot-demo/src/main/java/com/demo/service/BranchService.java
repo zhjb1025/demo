@@ -1,18 +1,13 @@
 package com.demo.service;
 
-import com.demo.common.util.SpringContextUtil;
-import com.demo.controller.msg.UpdateBranchRequest;
-import com.demo.controller.msg.UserLoginResponse;
-import com.demo.mapper.BranchInfo;
-import com.demo.mapper.BranchInfoMapper;
-import com.demo.mapper.MenuInfo;
-import com.demo.mapper.MenuInfoMapper;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
+import com.demo.mapper.BranchInfo;
+import com.demo.mapper.BranchInfoMapper;
 
 @Service
 public class BranchService {

@@ -1,19 +1,21 @@
 package com.demo.service;
 
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.demo.common.Constant;
 import com.demo.common.util.SpringContextUtil;
 import com.demo.controller.msg.AddRoleRequest;
 import com.demo.controller.msg.LoginUserInfo;
 import com.demo.controller.msg.RolePageQueryResult;
 import com.demo.controller.msg.UpdateRoleRequest;
-import com.demo.mapper.*;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
+import com.demo.mapper.MenuInfo;
+import com.demo.mapper.RoleInfo;
+import com.demo.mapper.RoleInfoMapper;
 
 @Service
 public class RoleService {

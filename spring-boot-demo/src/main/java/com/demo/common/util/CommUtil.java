@@ -241,7 +241,6 @@ public class CommUtil {
      * @return
      */
     public static String getJsonValue(String json,String key) {
-        char separatorValue=':';
         if ( json == null || json.length() <= 0 )
             return null;
         if ( key == null || key.length() <= 0 )
