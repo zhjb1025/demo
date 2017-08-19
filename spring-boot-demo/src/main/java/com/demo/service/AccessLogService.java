@@ -2,7 +2,6 @@ package com.demo.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.demo.common.annotation.ThreadManager;
 import com.demo.common.annotation.TradeService;
 import com.demo.common.util.CommUtil;
 import com.demo.controller.msg.*;
@@ -17,13 +16,15 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @Service
-@ThreadManager(name = "AccessLogService")
+//@ThreadManager(name = "AccessLogService")
 @TradeService(version="1.0.0")
 public class AccessLogService extends Thread  {
     private static Logger logger = LoggerFactory.getLogger(AccessLogService.class);
@@ -78,12 +79,23 @@ public class AccessLogService extends Thread  {
 
         return response;
     }
-
+    @PostConstruct
+    public void init(){
+        this.start();
+    }
+    @PreDestroy
+    public void finish(){
+        try{
+            this.interrupt();
+        }catch (Exception e){
+            logger.error("",e);
+        }
+    }
     @Override
     public void run() {
         logger.info("启动日志处理线程");
+        AccessLog accessLog=null;
         while (true){
-            AccessLog accessLog=null;
             try {
                 accessLog=logQueue.take();
                 handle(accessLog);
@@ -93,6 +105,11 @@ public class AccessLogService extends Thread  {
                 logger.error("写日mongo志异常[{}]",accessLog);
                 logger.error("",e);
             }
+        }
+        //程序退出时，把队列里面剩余的日志处理完
+        while(logQueue.size()>0){
+            accessLog=logQueue.poll();
+            handle(accessLog);
         }
         logger.info("停止日志处理线程");
     }
