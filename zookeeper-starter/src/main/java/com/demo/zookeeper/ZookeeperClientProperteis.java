@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.zookeeper")
 public class ZookeeperClientProperteis {
     private String connectString;
-    private int sessionTimeout=1000*60*30;
+    private int sessionTimeout=1000*2;
     private int connectionTimeout=1000*10;
 
     public String getConnectString() {
