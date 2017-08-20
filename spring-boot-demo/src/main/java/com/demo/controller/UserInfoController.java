@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.demo.common.Constant;
 import com.demo.common.annotation.TradeService;
-import com.demo.common.config.Config;
 import com.demo.common.enums.ErrorCodeEnum;
 import com.demo.common.enums.UserInfoStatusEnum;
 import com.demo.common.exception.CommException;
 import com.demo.common.security.DESede;
 import com.demo.common.security.RSAUtil;
 import com.demo.common.util.SpringContextUtil;
+import com.demo.config.client.ConfigCenterClient;
 import com.demo.controller.msg.AddUserRequest;
 import com.demo.controller.msg.BaseRequest;
 import com.demo.controller.msg.BaseResponse;
@@ -54,10 +54,6 @@ public class UserInfoController {
 
   @Autowired
   private MetadataService metadataService;
-
-  @Autowired
-  private Config config;
-  
   
   @TradeService(value="user_login",isPublic = true)
   public BaseResponse login(UserLoginRequest request) throws Exception {
@@ -69,7 +65,7 @@ public class UserInfoController {
 	  if(list.size()>0){
 		  UserInfo u=list.get(0);
 		  // 检查密码
-          String password=RSAUtil.decryptJSRsa(request.getPwd(),config.getConfigByString("rsa.key.path"));
+          String password=RSAUtil.decryptJSRsa(request.getPwd(),ConfigCenterClient.get("rsa.key.path"));
 		  if(!u.getPassword().equals(DESede.encrypt(password))){
 			  throw new CommException(ErrorCodeEnum.USER_LOGIN_ERROR);
 		  }
@@ -175,8 +171,8 @@ public class UserInfoController {
             throw new CommException(ErrorCodeEnum.USER_NOT_EXITS);
         }
         // 检查原密码
-        String password=RSAUtil.decryptJSRsa(request.getPassword(),config.getConfigByString("rsa.key.path"));
-        String newPassword=RSAUtil.decryptJSRsa(request.getNewPassword(),config.getConfigByString("rsa.key.path"));
+        String password=RSAUtil.decryptJSRsa(request.getPassword(),ConfigCenterClient.get("rsa.key.path"));
+        String newPassword=RSAUtil.decryptJSRsa(request.getNewPassword(),ConfigCenterClient.get("rsa.key.path"));
         if(!user.getPassword().equals(DESede.encrypt(password))){
             throw new CommException(ErrorCodeEnum.USER_PASSWORD_ERROR);
         }

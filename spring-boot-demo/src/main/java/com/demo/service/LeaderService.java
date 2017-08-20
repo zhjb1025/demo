@@ -1,6 +1,6 @@
 package com.demo.service;
 
-import com.demo.zookeeper.Client;
+import com.demo.zookeeper.ZookeeperClient;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.leader.LeaderSelector;
 import org.apache.curator.framework.recipes.leader.LeaderSelectorListenerAdapter;
@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
 public class LeaderService extends LeaderSelectorListenerAdapter {
     private static Logger logger = LoggerFactory.getLogger(LeaderService.class);
     @Autowired
-    private Client client;
+    private ZookeeperClient client;
 
     private  LeaderSelector leaderSelector;
 
@@ -25,7 +25,7 @@ public class LeaderService extends LeaderSelectorListenerAdapter {
 
     @PostConstruct
     public void init(){
-        leaderSelector = new LeaderSelector(client.getClient(), PATH, this);
+        leaderSelector = new LeaderSelector(client.getCuratorFramework(), PATH, this);
         leaderSelector.autoRequeue();
     }
     @Override

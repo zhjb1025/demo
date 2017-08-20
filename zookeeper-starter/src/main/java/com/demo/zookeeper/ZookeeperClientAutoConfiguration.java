@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties(value = ZookeeperClientProperteis.class)
-@ConditionalOnClass(Client.class)
+@ConditionalOnClass(ZookeeperClient.class)
 @ConditionalOnProperty(prefix = "spring.zookeeper", value = "enable", matchIfMissing = false)
 public class ZookeeperClientAutoConfiguration {
 
@@ -18,9 +18,9 @@ public class ZookeeperClientAutoConfiguration {
     private ZookeeperClientProperteis zookeeperClientProperteis;
 
     @Bean
-    @ConditionalOnMissingBean(Client.class)
-    public Client zookeeperClient() {
-        Client client = new Client();
+    @ConditionalOnMissingBean(ZookeeperClient.class)
+    public ZookeeperClient zookeeperClient() {
+    	ZookeeperClient client = new ZookeeperClient();
         client.setProperteis(zookeeperClientProperteis);
         return client;
     }
