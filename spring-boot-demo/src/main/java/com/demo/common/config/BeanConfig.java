@@ -27,7 +27,7 @@ public class BeanConfig {
 //		return proxyFactoryBean;
 //	}
 	
-//	@Bean
+	@Bean
     public HttpMessageConverters fastJsonHttpMessageConverters() {
        FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
        FastJsonConfig fastJsonConfig = new FastJsonConfig();
