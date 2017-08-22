@@ -1,8 +1,5 @@
 package com.demo.config.service;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.URLEncoder;
@@ -21,10 +18,11 @@ import org.apache.zookeeper.KeeperException.NodeExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSON;
+import com.demo.config.dao.ConfigCenterDao;
 import com.demo.config.dao.ConfigInfo;
 import com.demo.zookeeper.ZookeeperClient;
 
@@ -35,6 +33,9 @@ public class ConfigCenterService {
     @Autowired
     private ZookeeperClient client;
     
+    @Autowired
+    @Qualifier("${demo.config.persistence.type}")
+    private ConfigCenterDao configCenterDao;
     
     @Autowired
     private Environment env;
@@ -48,28 +49,13 @@ public class ConfigCenterService {
 
     @PostConstruct
     public void init() {
-    	loadConfig(env.getProperty("demo.config.path"));
+    	loadConfig();
     	export();
     	
     }
     
-    private void loadConfig(String path) {
-    	StringBuilder sb= new StringBuilder();
-		 try {
-			InputStreamReader read = new InputStreamReader(
-            new FileInputStream(path),"UTF-8");//考虑到编码格式
-            BufferedReader bufferedReader = new BufferedReader(read);
-            String lineTxt = null;
-            while((lineTxt = bufferedReader.readLine()) != null){
-            	sb.append(lineTxt);
-            }
-            read.close();
-			
-		} catch (Exception e) {
-			logger.error("", e);
-		}
-		List<ConfigInfo> list = JSON.parseArray(sb.toString(), ConfigInfo.class);
-		
+    private void loadConfig() {
+		List<ConfigInfo> list = configCenterDao.loadAllConfig();
 		Map<String,List<ConfigInfo>> groupMap= new HashMap<String,List<ConfigInfo>>();
 		Map<String,ConfigInfo> keyMap = new HashMap<String,ConfigInfo>();
 		for(ConfigInfo configInfo:list) {

@@ -10,6 +10,12 @@ public interface ConfigCenterDao {
 	public List<ConfigInfo> loadAllConfig();
 	
 	/**
+	 * 加载组的配置信息
+	 * @return
+	 */
+	public List<ConfigInfo> loadGroupConfig(String group);
+	
+	/**
 	 * 添加一个配置项
 	 * @param configInfo
 	 */
