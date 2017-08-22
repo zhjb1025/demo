@@ -2,7 +2,6 @@ package com.demo.common.interceptor;
 
 import java.lang.reflect.Method;
 
-import com.demo.common.enums.ErrorCodeEnum;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Pointcut;
@@ -10,10 +9,11 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.demo.common.enums.TradeStatusEnum;
-import com.demo.common.exception.CommException;
 import com.demo.controller.msg.BaseRequest;
 import com.demo.controller.msg.BaseResponse;
+import com.demo.framework.enums.ErrorCodeEnum;
+import com.demo.framework.enums.TradeStatusEnum;
+import com.demo.framework.exception.CommException;
 
 
 //@Aspect  

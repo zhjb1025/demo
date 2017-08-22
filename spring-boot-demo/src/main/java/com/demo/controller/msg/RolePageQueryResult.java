@@ -1,6 +1,6 @@
 package com.demo.controller.msg;
 
-import com.demo.common.msg.BaseObject;
+import com.demo.framework.msg.BaseObject;
 
 public class RolePageQueryResult extends BaseObject {
     private Integer id;

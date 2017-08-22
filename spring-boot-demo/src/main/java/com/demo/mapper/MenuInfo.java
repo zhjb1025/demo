@@ -1,8 +1,8 @@
 package com.demo.mapper;
 
-import com.demo.common.msg.BaseObject;
-
 import java.util.List;
+
+import com.demo.framework.msg.BaseObject;
 
 public class MenuInfo extends BaseObject{
     private Integer id;

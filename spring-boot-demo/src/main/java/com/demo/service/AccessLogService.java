@@ -21,13 +21,13 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.demo.common.annotation.TradeService;
-import com.demo.common.util.CommUtil;
 import com.demo.controller.msg.AccessLog;
 import com.demo.controller.msg.AccessLogPageQueryResult;
 import com.demo.controller.msg.AccessLogQueryRequest;
 import com.demo.controller.msg.BaseResponse;
 import com.demo.controller.msg.PageQueryResponse;
+import com.demo.framework.annotation.TradeService;
+import com.demo.framework.util.CommUtil;
 
 @Service
 //@ThreadManager(name = "AccessLogService")

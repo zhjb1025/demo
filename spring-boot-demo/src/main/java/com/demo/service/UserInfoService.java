@@ -3,18 +3,22 @@ package com.demo.service;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.demo.common.Constant;
 import com.demo.common.enums.UserInfoStatusEnum;
-import com.demo.common.security.DESede;
-import com.demo.common.util.SpringContextUtil;
 import com.demo.controller.msg.AddUserRequest;
 import com.demo.controller.msg.LoginUserInfo;
 import com.demo.controller.msg.UpdateUserRequest;
 import com.demo.controller.msg.UserPageQueryResult;
-import com.demo.mapper.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.demo.framework.security.DESede;
+import com.demo.framework.util.SpringContextUtil;
+import com.demo.mapper.ApiServiceInfo;
+import com.demo.mapper.Metadata;
+import com.demo.mapper.UserInfo;
+import com.demo.mapper.UserInfoMapper;
 
 @Service
 public class UserInfoService {

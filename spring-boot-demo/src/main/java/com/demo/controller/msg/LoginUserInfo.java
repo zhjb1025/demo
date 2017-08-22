@@ -3,7 +3,7 @@ package com.demo.controller.msg;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.demo.common.msg.BaseObject;
+import com.demo.framework.msg.BaseObject;
 import com.demo.mapper.ApiServiceInfo;
 
 public class LoginUserInfo extends BaseObject {

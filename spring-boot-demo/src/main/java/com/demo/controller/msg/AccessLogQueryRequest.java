@@ -2,10 +2,10 @@ package com.demo.controller.msg;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.demo.common.annotation.DateTime;
-import com.demo.common.annotation.IntervalDay;
-import com.demo.common.annotation.SameYear;
-import com.demo.common.annotation.StartEndTime;
+import com.demo.framework.annotation.DateTime;
+import com.demo.framework.annotation.IntervalDay;
+import com.demo.framework.annotation.SameYear;
+import com.demo.framework.annotation.StartEndTime;
 
 @StartEndTime(endTimeField="endTime",startTimeField="startTime")
 @IntervalDay(endTimeField="endTime",startTimeField="startTime",interval=10)

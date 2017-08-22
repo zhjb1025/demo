@@ -2,8 +2,8 @@ package com.demo.controller.msg;
 
 import java.util.Date;
 
-import com.demo.common.enums.TradeStatusEnum;
-import com.demo.common.util.CommUtil;
+import com.demo.framework.enums.TradeStatusEnum;
+import com.demo.framework.util.CommUtil;
 
 public class AccessLogPageQueryResult extends AccessLog {
 

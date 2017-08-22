@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.demo.common.enums.ErrorCodeEnum;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +14,11 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
-import com.demo.common.annotation.TradeService;
-import com.demo.common.exception.CommException;
 import com.demo.controller.msg.BaseRequest;
 import com.demo.controller.msg.BaseResponse;
+import com.demo.framework.annotation.TradeService;
+import com.demo.framework.enums.ErrorCodeEnum;
+import com.demo.framework.exception.CommException;
 
 
 @Service

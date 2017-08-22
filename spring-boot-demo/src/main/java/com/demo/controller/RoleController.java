@@ -2,12 +2,9 @@ package com.demo.controller;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.demo.common.annotation.TradeService;
 import com.demo.controller.msg.AddRoleRequest;
 import com.demo.controller.msg.AllMenuApiResponse;
 import com.demo.controller.msg.BaseRequest;
@@ -18,6 +15,7 @@ import com.demo.controller.msg.QueryRoleMenuApiResponse;
 import com.demo.controller.msg.RolePageQueryResult;
 import com.demo.controller.msg.RoleQueryRequest;
 import com.demo.controller.msg.UpdateRoleRequest;
+import com.demo.framework.annotation.TradeService;
 import com.demo.mapper.MenuInfo;
 import com.demo.service.RoleService;
 import com.github.pagehelper.PageHelper;
@@ -31,7 +29,7 @@ import com.github.pagehelper.PageInfo;
 @Service
 @TradeService(version="1.0.0")
 public class RoleController {
-  private static Logger logger = LoggerFactory.getLogger(RoleController.class);
+//  private static Logger logger = LoggerFactory.getLogger(RoleController.class);
   
   @Autowired
   private RoleService roleService;

@@ -1,6 +1,6 @@
 package com.demo.mapper;
 
-import com.demo.common.msg.BaseObject;
+import com.demo.framework.msg.BaseObject;
 
 public class ApiServiceInfo extends BaseObject {
 	

@@ -2,7 +2,7 @@ package com.demo.controller.msg;
 
 import java.util.List;
 
-import com.demo.common.msg.BaseObject;
+import com.demo.framework.msg.BaseObject;
 
 public class PageQueryResponse<T extends BaseObject> extends BaseResponse {
 	

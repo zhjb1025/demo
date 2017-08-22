@@ -21,17 +21,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.demo.common.Constant;
-import com.demo.common.annotation.TradeService;
-import com.demo.common.enums.ErrorCodeEnum;
-import com.demo.common.enums.TradeStatusEnum;
-import com.demo.common.exception.CommException;
-import com.demo.common.util.CommUtil;
-import com.demo.common.util.SpringContextUtil;
-import com.demo.common.util.ThreadCacheData;
-import com.demo.common.validate.ValidatorService;
 import com.demo.controller.msg.AccessLog;
 import com.demo.controller.msg.BaseResponse;
 import com.demo.controller.msg.LoginUserInfo;
+import com.demo.framework.annotation.TradeService;
+import com.demo.framework.enums.ErrorCodeEnum;
+import com.demo.framework.enums.TradeStatusEnum;
+import com.demo.framework.exception.CommException;
+import com.demo.framework.util.CommUtil;
+import com.demo.framework.util.SpringContextUtil;
+import com.demo.framework.util.ThreadCacheData;
+import com.demo.framework.validate.ValidatorService;
 import com.demo.service.AccessLogService;
 import com.demo.service.RouteService;
 

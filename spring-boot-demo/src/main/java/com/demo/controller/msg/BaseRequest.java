@@ -3,7 +3,7 @@ package com.demo.controller.msg;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.demo.common.msg.BaseObject;
+import com.demo.framework.msg.BaseObject;
 
 public class BaseRequest extends BaseObject {
 	

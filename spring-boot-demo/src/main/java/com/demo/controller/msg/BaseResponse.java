@@ -1,8 +1,8 @@
 package com.demo.controller.msg;
 
-import com.demo.common.enums.ErrorCodeEnum;
-import com.demo.common.enums.TradeStatusEnum;
-import com.demo.common.msg.BaseObject;
+import com.demo.framework.enums.ErrorCodeEnum;
+import com.demo.framework.enums.TradeStatusEnum;
+import com.demo.framework.msg.BaseObject;
 
 public class BaseResponse extends BaseObject {
 	

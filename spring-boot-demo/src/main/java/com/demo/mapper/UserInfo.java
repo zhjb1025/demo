@@ -2,7 +2,7 @@ package com.demo.mapper;
 
 import java.util.Date;
 
-import com.demo.common.msg.BaseObject;
+import com.demo.framework.msg.BaseObject;
 
 public class UserInfo extends BaseObject{
     private Integer id;

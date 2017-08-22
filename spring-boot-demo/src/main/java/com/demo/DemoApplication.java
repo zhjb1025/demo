@@ -11,8 +11,8 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
-import com.demo.common.util.SpringContextUtil;
 import com.demo.config.client.ConfigCenterClient;
+import com.demo.framework.util.SpringContextUtil;
 
 
 @SpringBootApplication

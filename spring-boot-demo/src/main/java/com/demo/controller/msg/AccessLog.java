@@ -2,7 +2,7 @@ package com.demo.controller.msg;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.demo.common.msg.BaseObject;
+import com.demo.framework.msg.BaseObject;
 
 @Document(collection="access_log")
 public class AccessLog extends BaseObject {

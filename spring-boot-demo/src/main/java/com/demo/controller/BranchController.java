@@ -3,21 +3,19 @@ package com.demo.controller;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.demo.common.Constant;
-import com.demo.common.annotation.TradeService;
-import com.demo.common.util.CommUtil;
-import com.demo.common.util.SpringContextUtil;
 import com.demo.controller.msg.AddBranchRequest;
 import com.demo.controller.msg.BaseRequest;
 import com.demo.controller.msg.BaseResponse;
 import com.demo.controller.msg.LoginUserInfo;
 import com.demo.controller.msg.QueryAllBranchResponse;
 import com.demo.controller.msg.UpdateBranchRequest;
+import com.demo.framework.annotation.TradeService;
+import com.demo.framework.util.CommUtil;
+import com.demo.framework.util.SpringContextUtil;
 import com.demo.mapper.BranchInfo;
 import com.demo.service.BranchService;
 
@@ -29,7 +27,7 @@ import com.demo.service.BranchService;
 @Service
 @TradeService(version="1.0.0")
 public class BranchController {
-  private static Logger logger = LoggerFactory.getLogger(BranchController.class);
+//  private static Logger logger = LoggerFactory.getLogger(BranchController.class);
   
   @Autowired
   private BranchService branchService;

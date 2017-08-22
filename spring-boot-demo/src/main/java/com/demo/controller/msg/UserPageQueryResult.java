@@ -1,9 +1,9 @@
 package com.demo.controller.msg;
 
-import com.demo.common.msg.BaseObject;
-import com.demo.mapper.RoleInfo;
-
 import java.util.List;
+
+import com.demo.framework.msg.BaseObject;
+import com.demo.mapper.RoleInfo;
 
 public class UserPageQueryResult extends BaseObject {
     private Integer id;
