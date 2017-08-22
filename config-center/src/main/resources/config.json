@@ -1,396 +1,404 @@
-[{
-    "group": "zookeeper",
-    "key": "spring.zookeeper.connectString",
-    "remark": "zookeeper服务器列表",
-    "value": "127.0.0.1:2181"
-},
-{
-    "group": "rabbitmq",
-    "key": "spring.rabbitmq.host",
-    "remark": "rabbitmq服务器地址",
-    "value": "192.168.105.20"
-},
-{
-    "group": "rabbitmq",
-    "key": "spring.rabbitmq.password",
-    "remark": "rabbitmq密码",
-    "value": "wewe"
-},
-{
-    "group": "redis",
-    "key": "spring.redis.timeout",
-    "remark": "redis超时时间",
-    "value": "5000"
-},
-{
-    "group": "rabbitmq",
-    "key": "spring.rabbitmq.username",
-    "remark": "rabbitmq用户名",
-    "value": "welend"
-},
-{
-    "group": "mongodb",
-    "key": "spring.data.mongodb.host",
-    "remark": "mongodb服务器地址",
-    "value": "127.0.0.1"
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.minEvictableIdleTimeMillis",
-    "remark": "待补充",
-    "value": "300000"
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.poolPreparedStatements",
-    "remark": "待补充",
-    "value": "true"
-},
-{
-    "group": "tomcat",
-    "key": "server.tomcat.accesslog.pattern",
-    "remark": "待补充",
-    "value": "%h %l %u %t  %r %s %b %D"
-},
-{
-    "group": "tomcat",
-    "key": "server.tomcat.accesslog.enabled",
-    "remark": "待补充",
-    "value": "true"
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.connectionProperties",
-    "remark": "待补充",
-    "value": "druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000"
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.minIdle",
-    "remark": "待补充",
-    "value": "2"
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.testOnBorrow",
-    "remark": "待补充",
-    "value": "false"
-},
-{
-    "group": "mybatis",
-    "key": "mybatis.config",
-    "remark": "待补充",
-    "value": "classpath:mybatis-config.xml"
-},
-{
-    "group": "zookeeper",
-    "key": "spring.zookeeper.enable",
-    "remark": "zookeeper客户端开关",
-    "value": "true"
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.maxWait",
-    "remark": "待补充",
-    "value": "60000"
-},
-{
-    "group": "tomcat",
-    "key": "server.port",
-    "remark": "服务端口",
-    "value": "8081"
-},
-{
-    "group": "rabbitmq",
-    "key": "spring.rabbitmq.dynamic",
-    "remark": "待补充",
-    "value": "true"
-},
-{
-    "group": "rabbitmq",
-    "key": "spring.rabbitmq.listener.transaction-size",
-    "remark": "待补充",
-    "value": "1"
-},
-{
-    "group": "redis",
-    "key": "spring.redis.password",
-    "remark": "redis密码",
-    "value": ""
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.initialSize",
-    "remark": "待补充",
-    "value": "5"
-},
-{
-    "group": "tomcat",
-    "key": "server.tomcat.uri-encoding",
-    "remark": "待补充",
-    "value": "UTF-8"
-},
-{
-    "group": "actuator",
-    "key": "management.context-path",
-    "remark": "",
-    "value": "/manage"
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.url",
-    "remark": "待补充",
-    "value": "jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=UTF-8"
-},
-{
-    "group": "zookeeper",
-    "key": "spring.zookeeper.connectionTimeout",
-    "remark": "待补充",
-    "value": "10000"
-},
-{
-    "group": "actuator",
-    "key": "management.port",
-    "remark": "待补充",
-    "value": "9091"
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.maxActive",
-    "remark": "待补充",
-    "value": "10"
-},
-{
-    "group": "rabbitmq",
-    "key": "spring.rabbitmq.listener.concurrency",
-    "remark": "待补充",
-    "value": "5"
-},
-{
-    "group": "redis",
-    "key": "spring.redis.database",
-    "remark": "待补充",
-    "value": "0"
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.useGlobalDataSourceStat",
-    "remark": "待补充",
-    "value": "true"
-},
-{
-    "group": "redis",
-    "key": "spring.redis.pool.max-active",
-    "remark": "待补充",
-    "value": "8"
-},
-{
-    "group": "mybatis",
-    "key": "mybatis.mapperLocations",
-    "remark": "待补充",
-    "value": "classpath:mybatis/*.xml"
-},
-{
-    "group": "redis",
-    "key": "spring.redis.pool.min-idle",
-    "remark": "待补充",
-    "value": "2"
-},
-{
-    "group": "rabbitmq",
-    "key": "spring.rabbitmq.listener.auto-startup",
-    "remark": "待补充",
-    "value": "true"
-},
-{
-    "group": "redis",
-    "key": "spring.redis.pool.max-wait",
-    "remark": "待补充",
-    "value": "1000"
-},
-{
-    "group": "redis",
-    "key": "spring.redis.port",
-    "remark": "待补充",
-    "value": "6379"
-},
-{
-    "group": "mongodb",
-    "key": "spring.data.mongodb.password",
-    "remark": "待补充",
-    "value": "111111"
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.password",
-    "remark": "待补充",
-    "value": "111111"
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.username",
-    "remark": "待补充",
-    "value": "zhjb"
-},
-{
-    "group": "redis",
-    "key": "spring.redis.pool.max-idle",
-    "remark": "待补充",
-    "value": "8"
-},
-{
-    "group": "mongodb",
-    "key": "spring.data.mongodb.username",
-    "remark": "待补充",
-    "value": "demo"
-},
-{
-    "group": "logging",
-    "key": "logging.config",
-    "remark": "待补充",
-    "value": "classpath:logback.xml"
-},
-{
-    "group": "rabbitmq",
-    "key": "spring.rabbitmq.port",
-    "remark": "待补充",
-    "value": "5672"
-},
-{
-    "group": "tomcat",
-    "key": "server.tomcat.basedir",
-    "remark": "待补充",
-    "value": "/Users/welab/tomcat"
-},
-{
-    "group": "tomcat",
-    "key": "server.context-path",
-    "remark": "待补充",
-    "value": "/demo"
-},
-{
-    "group": "mongodb",
-    "key": "spring.data.mongodb.port",
-    "remark": "待补充",
-    "value": "27017"
-},
-{
-    "group": "tomcat",
-    "key": "server.tomcat.accesslog.directory",
-    "remark": "待补充",
-    "value": ""
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.validationQuery",
-    "remark": "待补充",
-    "value": "select 1 "
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.testOnReturn",
-    "remark": "待补充",
-    "value": "false"
-},
-{
-    "group": "rabbitmq",
-    "key": "spring.rabbitmq.listener.prefetch",
-    "remark": "待补充",
-    "value": "1"
-},
-{
-    "group": "mongodb",
-    "key": "spring.data.mongodb.database",
-    "remark": "待补充",
-    "value": "demo"
-},
-{
-    "group": "rabbitmq",
-    "key": "spring.rabbitmq.listener.max-concurrency",
-    "remark": "待补充",
-    "value": "10"
-},
-{
-    "group": "zookeeper",
-    "key": "spring.zookeeper.sessionTimeout",
-    "remark": "待补充",
-    "value": "180000"
-},
-{
-    "group": "rabbitmq",
-    "key": "spring.rabbitmq.requested-heartbeat",
-    "remark": "待补充",
-    "value": "5"
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.timeBetweenEvictionRunsMillis",
-    "remark": "待补充",
-    "value": "60000"
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.driverClassName",
-    "remark": "待补充",
-    "value": "com.mysql.jdbc.Driver"
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.type",
-    "remark": "待补充",
-    "value": "com.alibaba.druid.pool.DruidDataSource"
-},
-{
-    "group": "rabbitmq",
-    "key": "spring.rabbitmq.virtual-host",
-    "remark": "待补充",
-    "value": "integration"
-},
-{
-    "group": "redis",
-    "key": "spring.redis.host",
-    "remark": "待补充",
-    "value": "192.168.105.28"
-},
-{
-    "group": "tomcat",
-    "key": "server.tomcat.max-threads",
-    "remark": "待补充",
-    "value": "300"
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.maxPoolPreparedStatementPerConnectionSize",
-    "remark": "待补充",
-    "value": "300"
-},
-{
-    "group": "actuator",
-    "key": "management.dump_requests",
-    "remark": "待补充",
-    "value": "true"
-},
-{
-    "group": "actuator",
-    "key": "endpoints.shutdown.enabled",
-    "remark": "待补充",
-    "value": "true"
-},
-{
-    "group": "actuator",
-    "key": "endpoints.shutdown.sensitive",
-    "remark": "待补充",
-    "value": "false"
-},
-{
-    "group": "datasource",
-    "key": "spring.datasource.testWhileIdle",
-    "remark": "待补充",
-    "value": "true"
-},
-{
-    "group": "demo",
-    "key": "rsa.key.path",
-    "remark": "RSA Key路径",
-    "value": "E:/work/demo/spring-boot-demo/src/main/resources/key.cer"
-}]
+[
+    {
+        "group": "actuator",
+        "key": "management.context-path",
+        "remark": "",
+        "value": "/manage"
+    },
+    {
+        "group": "actuator",
+        "key": "management.port",
+        "remark": "待补充",
+        "value": "9091"
+    },
+    {
+        "group": "actuator",
+        "key": "management.dump_requests",
+        "remark": "待补充",
+        "value": "true"
+    },
+    {
+        "group": "actuator",
+        "key": "endpoints.shutdown.enabled",
+        "remark": "待补充",
+        "value": "true"
+    },
+    {
+        "group": "actuator",
+        "key": "endpoints.shutdown.sensitive",
+        "remark": "待补充",
+        "value": "false"
+    },
+    {
+        "group": "zookeeper",
+        "key": "spring.zookeeper.connectString",
+        "remark": "zookeeper服务器列表",
+        "value": "127.0.0.1:2181"
+    },
+    {
+        "group": "zookeeper",
+        "key": "spring.zookeeper.enable",
+        "remark": "zookeeper客户端开关",
+        "value": "true"
+    },
+    {
+        "group": "zookeeper",
+        "key": "spring.zookeeper.connectionTimeout",
+        "remark": "待补充",
+        "value": "10000"
+    },
+    {
+        "group": "zookeeper",
+        "key": "spring.zookeeper.sessionTimeout",
+        "remark": "待补充",
+        "value": "180000"
+    },
+    {
+        "group": "tomcat",
+        "key": "server.tomcat.accesslog.pattern",
+        "remark": "待补充",
+        "value": "%h %l %u %t  %r %s %b %D"
+    },
+    {
+        "group": "tomcat",
+        "key": "server.tomcat.accesslog.enabled",
+        "remark": "待补充",
+        "value": "true"
+    },
+    {
+        "group": "tomcat",
+        "key": "server.port",
+        "remark": "服务端口",
+        "value": "8081"
+    },
+    {
+        "group": "tomcat",
+        "key": "server.tomcat.uri-encoding",
+        "remark": "待补充",
+        "value": "UTF-8"
+    },
+    {
+        "group": "tomcat",
+        "key": "server.tomcat.basedir",
+        "remark": "待补充",
+        "value": "/Users/welab/tomcat"
+    },
+    {
+        "group": "tomcat",
+        "key": "server.context-path",
+        "remark": "待补充",
+        "value": "/demo"
+    },
+    {
+        "group": "tomcat",
+        "key": "server.tomcat.accesslog.directory",
+        "remark": "待补充",
+        "value": ""
+    },
+    {
+        "group": "tomcat",
+        "key": "server.tomcat.max-threads",
+        "remark": "待补充",
+        "value": "300"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.minEvictableIdleTimeMillis",
+        "remark": "待补充",
+        "value": "300000"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.poolPreparedStatements",
+        "remark": "待补充",
+        "value": "true"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.connectionProperties",
+        "remark": "待补充",
+        "value": "druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.minIdle",
+        "remark": "待补充",
+        "value": "2"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.testOnBorrow",
+        "remark": "待补充",
+        "value": "false"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.maxWait",
+        "remark": "待补充",
+        "value": "60000"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.initialSize",
+        "remark": "待补充",
+        "value": "5"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.url",
+        "remark": "待补充",
+        "value": "jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=UTF-8"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.maxActive",
+        "remark": "待补充",
+        "value": "10"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.useGlobalDataSourceStat",
+        "remark": "待补充",
+        "value": "true"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.password",
+        "remark": "待补充",
+        "value": "111111"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.username",
+        "remark": "待补充",
+        "value": "zhjb"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.validationQuery",
+        "remark": "待补充",
+        "value": "select 1 "
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.testOnReturn",
+        "remark": "待补充",
+        "value": "false"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.timeBetweenEvictionRunsMillis",
+        "remark": "待补充",
+        "value": "60000"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.driverClassName",
+        "remark": "待补充",
+        "value": "com.mysql.jdbc.Driver"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.type",
+        "remark": "待补充",
+        "value": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.maxPoolPreparedStatementPerConnectionSize",
+        "remark": "待补充",
+        "value": "300"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.testWhileIdle",
+        "remark": "待补充",
+        "value": "true"
+    },
+    {
+        "group": "mybatis",
+        "key": "mybatis.config-locations",
+        "remark": "待补充",
+        "value": "classpath:mybatis-config.xml"
+    },
+    {
+        "group": "mybatis",
+        "key": "mybatis..mapper-locations",
+        "remark": "待补充",
+        "value": "classpath:mybatis/*.xml"
+    },
+    {
+        "group": "mybatis",
+        "key": "mybatis.type-aliases-package",
+        "remark": "待补充",
+        "value": "classpath:mybatis/*.xml"
+    },
+    {
+        "group": "logging",
+        "key": "logging.config",
+        "remark": "待补充",
+        "value": "classpath:logback.xml"
+    },
+    {
+        "group": "rabbitmq",
+        "key": "spring.rabbitmq.host",
+        "remark": "rabbitmq服务器地址",
+        "value": "192.168.105.20"
+    },
+    {
+        "group": "rabbitmq",
+        "key": "spring.rabbitmq.password",
+        "remark": "rabbitmq密码",
+        "value": "wewe"
+    },
+    {
+        "group": "rabbitmq",
+        "key": "spring.rabbitmq.username",
+        "remark": "rabbitmq用户名",
+        "value": "welend"
+    },
+    {
+        "group": "rabbitmq",
+        "key": "spring.rabbitmq.dynamic",
+        "remark": "待补充",
+        "value": "true"
+    },
+    {
+        "group": "rabbitmq",
+        "key": "spring.rabbitmq.listener.transaction-size",
+        "remark": "待补充",
+        "value": "1"
+    },
+    {
+        "group": "rabbitmq",
+        "key": "spring.rabbitmq.listener.concurrency",
+        "remark": "待补充",
+        "value": "5"
+    },
+    {
+        "group": "rabbitmq",
+        "key": "spring.rabbitmq.listener.auto-startup",
+        "remark": "待补充",
+        "value": "true"
+    },
+    {
+        "group": "rabbitmq",
+        "key": "spring.rabbitmq.port",
+        "remark": "待补充",
+        "value": "5672"
+    },
+    {
+        "group": "rabbitmq",
+        "key": "spring.rabbitmq.listener.prefetch",
+        "remark": "待补充",
+        "value": "1"
+    },
+    {
+        "group": "rabbitmq",
+        "key": "spring.rabbitmq.listener.max-concurrency",
+        "remark": "待补充",
+        "value": "10"
+    },
+    {
+        "group": "rabbitmq",
+        "key": "spring.rabbitmq.requested-heartbeat",
+        "remark": "待补充",
+        "value": "5"
+    },
+    {
+        "group": "rabbitmq",
+        "key": "spring.rabbitmq.virtual-host",
+        "remark": "待补充",
+        "value": "integration"
+    },
+    {
+        "group": "mongodb",
+        "key": "spring.data.mongodb.host",
+        "remark": "mongodb服务器地址",
+        "value": "127.0.0.1"
+    },
+    {
+        "group": "mongodb",
+        "key": "spring.data.mongodb.password",
+        "remark": "待补充",
+        "value": "111111"
+    },
+    {
+        "group": "mongodb",
+        "key": "spring.data.mongodb.username",
+        "remark": "待补充",
+        "value": "demo"
+    },
+    {
+        "group": "mongodb",
+        "key": "spring.data.mongodb.port",
+        "remark": "待补充",
+        "value": "27017"
+    },
+    {
+        "group": "mongodb",
+        "key": "spring.data.mongodb.database",
+        "remark": "待补充",
+        "value": "demo"
+    },
+    {
+        "group": "demo",
+        "key": "rsa.key.path",
+        "remark": "RSA Key路径",
+        "value": "E:/work/demo/spring-boot-demo/src/main/resources/key.cer"
+    },
+    {
+        "group": "redis",
+        "key": "spring.redis.timeout",
+        "remark": "redis超时时间",
+        "value": "5000"
+    },
+    {
+        "group": "redis",
+        "key": "spring.redis.password",
+        "remark": "redis密码",
+        "value": ""
+    },
+    {
+        "group": "redis",
+        "key": "spring.redis.database",
+        "remark": "待补充",
+        "value": "0"
+    },
+    {
+        "group": "redis",
+        "key": "spring.redis.pool.max-active",
+        "remark": "待补充",
+        "value": "8"
+    },
+    {
+        "group": "redis",
+        "key": "spring.redis.pool.min-idle",
+        "remark": "待补充",
+        "value": "2"
+    },
+    {
+        "group": "redis",
+        "key": "spring.redis.pool.max-wait",
+        "remark": "待补充",
+        "value": "1000"
+    },
+    {
+        "group": "redis",
+        "key": "spring.redis.port",
+        "remark": "待补充",
+        "value": "6379"
+    },
+    {
+        "group": "redis",
+        "key": "spring.redis.pool.max-idle",
+        "remark": "待补充",
+        "value": "8"
+    },
+    {
+        "group": "redis",
+        "key": "spring.redis.host",
+        "remark": "待补充",
+        "value": "192.168.105.28"
+    }
+]
