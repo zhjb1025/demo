@@ -1,0 +1,26 @@
+[
+    {
+        "group": "zookeeper",
+        "key": "spring.zookeeper.connectString",
+        "remark": "zookeeper服务器列表",
+        "value": "127.0.0.1:2181"
+    },
+    {
+        "group": "zookeeper",
+        "key": "spring.zookeeper.enable",
+        "remark": "zookeeper客户端开关",
+        "value": "true"
+    },
+    {
+        "group": "zookeeper",
+        "key": "spring.zookeeper.connectionTimeout",
+        "remark": "待补充",
+        "value": "10000"
+    },
+    {
+        "group": "zookeeper",
+        "key": "spring.zookeeper.sessionTimeout",
+        "remark": "待补充",
+        "value": "180000"
+    }
+]

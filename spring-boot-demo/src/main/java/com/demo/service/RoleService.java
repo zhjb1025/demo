@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.demo.common.Constant;
-import com.demo.common.util.SpringContextUtil;
 import com.demo.controller.msg.AddRoleRequest;
 import com.demo.controller.msg.LoginUserInfo;
 import com.demo.controller.msg.RolePageQueryResult;
 import com.demo.controller.msg.UpdateRoleRequest;
+import com.demo.framework.util.SpringContextUtil;
 import com.demo.mapper.MenuInfo;
 import com.demo.mapper.RoleInfo;
 import com.demo.mapper.RoleInfoMapper;

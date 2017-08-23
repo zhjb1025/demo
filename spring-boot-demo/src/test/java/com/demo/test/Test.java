@@ -2,7 +2,7 @@ package com.demo.test;
 
 import java.net.SocketTimeoutException;
 
-import com.demo.common.util.HttpUtils;
+import com.demo.framework.util.HttpUtils;
 
 public class Test {
 

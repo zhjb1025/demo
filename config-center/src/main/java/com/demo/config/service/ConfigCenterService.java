@@ -5,7 +5,6 @@ import java.net.NetworkInterface;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.demo.config.dao.ConfigCenterDao;
@@ -34,65 +33,67 @@ public class ConfigCenterService {
     private ZookeeperClient client;
     
     @Autowired
-    @Qualifier("${demo.config.persistence.type}")
+    @Qualifier("FILE")
     private ConfigCenterDao configCenterDao;
     
-    @Autowired
-    private Environment env;
-    
-    private Map<String,ConfigInfo> configKeyMap = new ConcurrentHashMap<String,ConfigInfo>();
     private Map<String,List<ConfigInfo>> configGroupMap = new ConcurrentHashMap<String,List<ConfigInfo>>();
 
-//    private final String lockPath = "/root/config-center/lock";
     private final String urlPath = "/root/config-center/servers";
 
-
+    @Value("${server.port}")
+    private String port;
+    
+    @Value("${server.context-path}")
+    private String contextPath;
+    
+    private String url;
+    
     @PostConstruct
-    public void init() {
+    public void init() throws Exception {
     	loadConfig();
     	export();
     	
     }
     
-    private void loadConfig() {
-		List<ConfigInfo> list = configCenterDao.loadAllConfig();
-		Map<String,List<ConfigInfo>> groupMap= new HashMap<String,List<ConfigInfo>>();
-		Map<String,ConfigInfo> keyMap = new HashMap<String,ConfigInfo>();
-		for(ConfigInfo configInfo:list) {
-			keyMap.put(configInfo.getKey(), configInfo);
-			if(groupMap.get(configInfo.getGroup())==null) {
-				List<ConfigInfo> temp=new ArrayList<ConfigInfo>();
-				groupMap.put(configInfo.getGroup(), temp);
-			}
-			groupMap.get(configInfo.getGroup()).add(configInfo);
-		}
+    private void loadConfig() throws Exception {
+//		List<ConfigInfo> list = configCenterDao.loadAllConfig();
+		Map<String,List<ConfigInfo>> groupMap= configCenterDao.loadAllConfig();
+//		Map<String,ConfigInfo> keyMap = new HashMap<String,ConfigInfo>();
+//		for(ConfigInfo configInfo:list) {
+//			keyMap.put(configInfo.getKey(), configInfo);
+//			if(groupMap.get(configInfo.getGroup())==null) {
+//				List<ConfigInfo> temp=new ArrayList<ConfigInfo>();
+//				groupMap.put(configInfo.getGroup(), temp);
+//			}
+//			groupMap.get(configInfo.getGroup()).add(configInfo);
+//		}
 		
-		Iterator<String> iter = configKeyMap.keySet().iterator();
-		while(iter.hasNext()) {
-			String key=iter.next();
-			if(keyMap.get(key)==null) {
-				logger.info("删除key:"+key);
-				iter.remove();
-			}
-		}
+//		Iterator<String> iter = configKeyMap.keySet().iterator();
+//		while(iter.hasNext()) {
+//			String key=iter.next();
+//			if(keyMap.get(key)==null) {
+//				logger.info("删除key:"+key);
+//				iter.remove();
+//			}
+//		}
 		
-		iter = configGroupMap.keySet().iterator();
-		while(iter.hasNext()) {
-			String key=iter.next();
-			logger.info("删除group:"+key);
-			if(groupMap.get(key)==null) {
-				iter.remove();
-			}
-		}
+//		iter = configGroupMap.keySet().iterator();
+//		while(iter.hasNext()) {
+//			String key=iter.next();
+//			logger.info("删除group:"+key);
+//			if(groupMap.get(key)==null) {
+//				iter.remove();
+//			}
+//		}
 		
-		iter=keyMap.keySet().iterator();
-		while(iter.hasNext()) {
-			String key=iter.next();
-			logger.info("加载配置:"+keyMap.get(key).toString());
-			configKeyMap.put(key, keyMap.get(key));
-		}
+//		iter=keyMap.keySet().iterator();
+//		while(iter.hasNext()) {
+//			String key=iter.next();
+//			logger.info("加载配置:"+keyMap.get(key).toString());
+//			configKeyMap.put(key, keyMap.get(key));
+//		}
 		
-		iter=groupMap.keySet().iterator();
+		Iterator<String> iter = groupMap.keySet().iterator();
 		while(iter.hasNext()) {
 			String key=iter.next();
 			configGroupMap.put(key, groupMap.get(key));
@@ -104,9 +105,7 @@ public class ConfigCenterService {
      * 向Zookeeper 发布服务地址
      */
     private void export() {
-    	String port=env.getProperty("server.port");
     	
-    	String contextPath=env.getProperty("server.context-path");
     	String ip=getLocalHostLANAddress();
     	if(ip==null) {
     		ip="127.0.0.1";
@@ -124,13 +123,13 @@ public class ConfigCenterService {
     		contextPath=contextPath.substring(0, contextPath.length()-1);
     	}
     	urlBuilder.append(contextPath);
-    	
+    	url=urlBuilder.toString();
     	while(true) {
     		try {
-        		String url= URLEncoder.encode(urlBuilder.toString(), "UTF-8");
-        		logger.info("发布服务URL访问地址[{}]",urlBuilder.toString());
+        		String url_= URLEncoder.encode(url, "UTF-8");
+        		logger.info("发布配置中心提供服务URL地址[{}]",url);
     			client.getCuratorFramework().create().withMode(CreateMode.EPHEMERAL)
-    			.forPath(urlPath+"/"+url);
+    			.forPath(urlPath+"/"+url_);
     			break;
     		} catch (NodeExistsException e) {
     			try {
@@ -181,24 +180,21 @@ public class ConfigCenterService {
     
     public List<ConfigInfo> queryConfigInfo(String groups){
     	List<ConfigInfo> temp=new ArrayList<ConfigInfo>();
-    	if("ALL".equals(groups.toUpperCase())) {
-			Iterator<String> iter = configGroupMap.keySet().iterator();
-    		while(iter.hasNext()) {
-    			String key=iter.next();
-    			temp.addAll(configGroupMap.get(key));
-    		}
-    	}else {
-    		String[] group = groups.split(",");
-    		for(String g:group ) {
-    			temp.addAll(configGroupMap.get(g));
-    		}
-    		
-    	}
+		String[] group = groups.split(",");
+		for(String g:group ) {
+			temp.addAll(configGroupMap.get(g));
+		}
     	return temp;
     }
-    
-    public ConfigInfo getConfigInfo(String key){
-    	return configKeyMap.get(key);
+    public List<String> getALLGroup(){
+    	List<String> list= new ArrayList<String>();
+    	Iterator<String> iter = configGroupMap.keySet().iterator();
+		while(iter.hasNext()) {
+			String key=iter.next();
+			list.add(key);
+		}
+		return list;
     }
+    
     
 }

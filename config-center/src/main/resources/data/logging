@@ -1,0 +1,8 @@
+[
+	{
+        "group": "logging",
+        "key": "logging.config",
+        "remark": "待补充",
+        "value": "classpath:logback.xml"
+    }
+]

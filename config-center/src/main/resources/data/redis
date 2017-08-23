@@ -1,0 +1,56 @@
+[
+	{
+        "group": "redis",
+        "key": "spring.redis.timeout",
+        "remark": "redis超时时间",
+        "value": "5000"
+    },
+    {
+        "group": "redis",
+        "key": "spring.redis.password",
+        "remark": "redis密码",
+        "value": ""
+    },
+    {
+        "group": "redis",
+        "key": "spring.redis.database",
+        "remark": "待补充",
+        "value": "0"
+    },
+    {
+        "group": "redis",
+        "key": "spring.redis.pool.max-active",
+        "remark": "待补充",
+        "value": "8"
+    },
+    {
+        "group": "redis",
+        "key": "spring.redis.pool.min-idle",
+        "remark": "待补充",
+        "value": "2"
+    },
+    {
+        "group": "redis",
+        "key": "spring.redis.pool.max-wait",
+        "remark": "待补充",
+        "value": "1000"
+    },
+    {
+        "group": "redis",
+        "key": "spring.redis.port",
+        "remark": "待补充",
+        "value": "6379"
+    },
+    {
+        "group": "redis",
+        "key": "spring.redis.pool.max-idle",
+        "remark": "待补充",
+        "value": "8"
+    },
+    {
+        "group": "redis",
+        "key": "spring.redis.host",
+        "remark": "待补充",
+        "value": "192.168.105.28"
+    }
+]

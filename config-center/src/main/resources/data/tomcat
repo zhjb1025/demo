@@ -1,0 +1,50 @@
+[
+    {
+        "group": "tomcat",
+        "key": "server.tomcat.accesslog.pattern",
+        "remark": "待补充",
+        "value": "%h %l %u %t  %r %s %b %D"
+    },
+    {
+        "group": "tomcat",
+        "key": "server.tomcat.accesslog.enabled",
+        "remark": "待补充",
+        "value": "true"
+    },
+    {
+        "group": "tomcat",
+        "key": "server.port",
+        "remark": "服务端口",
+        "value": "8081"
+    },
+    {
+        "group": "tomcat",
+        "key": "server.tomcat.uri-encoding",
+        "remark": "待补充",
+        "value": "UTF-8"
+    },
+    {
+        "group": "tomcat",
+        "key": "server.tomcat.basedir",
+        "remark": "待补充",
+        "value": "/Users/welab/tomcat"
+    },
+    {
+        "group": "tomcat",
+        "key": "server.context-path",
+        "remark": "待补充",
+        "value": "/demo"
+    },
+    {
+        "group": "tomcat",
+        "key": "server.tomcat.accesslog.directory",
+        "remark": "待补充",
+        "value": ""
+    },
+    {
+        "group": "tomcat",
+        "key": "server.tomcat.max-threads",
+        "remark": "待补充",
+        "value": "300"
+    }
+]

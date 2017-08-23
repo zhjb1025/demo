@@ -1,0 +1,32 @@
+[
+    {
+        "group": "actuator",
+        "key": "management.context-path",
+        "remark": "待补充",
+        "value": "/manage"
+    },
+    {
+        "group": "actuator",
+        "key": "management.port",
+        "remark": "待补充",
+        "value": "9091"
+    },
+    {
+        "group": "actuator",
+        "key": "management.dump_requests",
+        "remark": "待补充",
+        "value": "true"
+    },
+    {
+        "group": "actuator",
+        "key": "endpoints.shutdown.enabled",
+        "remark": "待补充",
+        "value": "true"
+    },
+    {
+        "group": "actuator",
+        "key": "endpoints.shutdown.sensitive",
+        "remark": "待补充",
+        "value": "false"
+    }
+]

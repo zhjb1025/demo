@@ -27,10 +27,9 @@ public class ConfigCenterController {
 		return configCenterService.queryConfigInfo(groups);
 	}
 	
-//	@RequestMapping(value = "/get/{key}", method = RequestMethod.GET)
-//	@ResponseBody
-//	public ConfigInfo getConfigInfo(@PathVariable("key") String key)  {
-//		System.out.println(key);
-//		return configCenterService.getConfigInfo(key);
-//	}
+	@RequestMapping(value = "/get/group", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> getALLGroup()  {
+		return configCenterService.getALLGroup();
+	}
 }

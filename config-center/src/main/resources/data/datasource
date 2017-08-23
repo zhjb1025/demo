@@ -1,0 +1,116 @@
+[
+    {
+        "group": "datasource",
+        "key": "spring.datasource.minEvictableIdleTimeMillis",
+        "remark": "待补充",
+        "value": "300000"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.poolPreparedStatements",
+        "remark": "待补充",
+        "value": "true"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.connectionProperties",
+        "remark": "待补充",
+        "value": "druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.minIdle",
+        "remark": "待补充",
+        "value": "2"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.testOnBorrow",
+        "remark": "待补充",
+        "value": "false"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.maxWait",
+        "remark": "待补充",
+        "value": "60000"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.initialSize",
+        "remark": "待补充",
+        "value": "5"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.url",
+        "remark": "待补充",
+        "value": "jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=UTF-8"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.maxActive",
+        "remark": "待补充",
+        "value": "10"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.useGlobalDataSourceStat",
+        "remark": "待补充",
+        "value": "true"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.password",
+        "remark": "待补充",
+        "value": "111111"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.username",
+        "remark": "待补充",
+        "value": "zhjb"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.validationQuery",
+        "remark": "待补充",
+        "value": "select 1 "
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.testOnReturn",
+        "remark": "待补充",
+        "value": "false"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.timeBetweenEvictionRunsMillis",
+        "remark": "待补充",
+        "value": "60000"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.driverClassName",
+        "remark": "待补充",
+        "value": "com.mysql.jdbc.Driver"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.type",
+        "remark": "待补充",
+        "value": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.maxPoolPreparedStatementPerConnectionSize",
+        "remark": "待补充",
+        "value": "300"
+    },
+    {
+        "group": "datasource",
+        "key": "spring.datasource.testWhileIdle",
+        "remark": "待补充",
+        "value": "true"
+    }
+]
