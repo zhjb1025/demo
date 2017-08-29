@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.support.SimpleValueWrapper;
+import org.springframework.data.redis.connection.Message;
+import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import net.sf.ehcache.Element;
@@ -16,7 +18,7 @@ import net.sf.ehcache.Element;
  * @author 
  *
  */
-public class RedisEhcache implements Cache {
+public class RedisEhcache implements Cache,MessageListener  {
 	
     private static final Logger logger = LoggerFactory.getLogger(RedisEhcache.class); 
 
@@ -102,6 +104,7 @@ public class RedisEhcache implements Cache {
 		callback.setKey(key.toString());
 		callback.setValue(value);
 		stringRedisTemplate.execute(callback);
+		stringRedisTemplate.convertAndSend(getChannel(), key);
 		Element element = new Element(key, value);
 		ehcache.put(element);
 	}
@@ -113,7 +116,7 @@ public class RedisEhcache implements Cache {
 		callback.setKey(key.toString());
 		callback.setValue(value);
 		stringRedisTemplate.execute(callback);
-		
+		stringRedisTemplate.convertAndSend(getChannel(), key);
 		Element element = new Element(key, value);
 		ehcache.putIfAbsent(element);
 		return new SimpleValueWrapper(value); 
@@ -145,5 +148,27 @@ public class RedisEhcache implements Cache {
 
 	public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
 		this.stringRedisTemplate = stringRedisTemplate;
-	} 
+	}
+	
+	public String getChannel(){
+		return "REDIS_EHCACHE:"+this.name;
+	}
+	
+	@Override
+	public void onMessage(Message message, byte[] pattern) {
+		String key= new String(message.getBody());
+		logger.info("RedisEhcache.receiveMessage,key={}",key);
+		EhcacheRedisCallback callback= new EhcacheRedisCallback();
+		callback.setKey(key.toString());
+		Object result = stringRedisTemplate.execute(callback);
+		if(result==null){
+			logger.info("删除,key={}",key);
+			ehcache.remove(key);
+		}else{
+			logger.info("更新数据,key={},value={}",key,result);
+			Element element = new Element(key, result);
+			ehcache.put(element);
+		}
+		
+	}
 }
