@@ -27,7 +27,7 @@ import com.demo.zookeeper.ZookeeperClient;
 
 @Service
 public class ConfigCenterService {
-    private static Logger logger = LoggerFactory.getLogger(ConfigCenterService.class);
+	private  Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private ZookeeperClient client;
@@ -145,7 +145,7 @@ public class ConfigCenterService {
     }
 
     @SuppressWarnings("rawtypes")
-	public static String getLocalHostLANAddress() {
+	public  String getLocalHostLANAddress() {
 	    try {
 	        InetAddress candidateAddress = null;
 	        // 遍历所有的网络接口

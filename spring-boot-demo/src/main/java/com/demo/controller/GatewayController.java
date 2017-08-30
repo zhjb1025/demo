@@ -44,7 +44,7 @@ import com.demo.service.RouteService;
 @RestController
 public class GatewayController {
 
-	private static Logger logger = LoggerFactory.getLogger(GatewayController.class);
+	private  Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private RouteService routeService;

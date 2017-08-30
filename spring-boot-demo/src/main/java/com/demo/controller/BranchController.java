@@ -27,7 +27,7 @@ import com.demo.service.BranchService;
 @Service
 @TradeService(version="1.0.0")
 public class BranchController {
-//  private static Logger logger = LoggerFactory.getLogger(BranchController.class);
+//  private  Logger logger = LoggerFactory.getLogger(this.getClass());
   
   @Autowired
   private BranchService branchService;

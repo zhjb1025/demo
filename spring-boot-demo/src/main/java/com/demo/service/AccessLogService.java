@@ -33,7 +33,7 @@ import com.demo.framework.util.CommUtil;
 //@ThreadManager(name = "AccessLogService")
 @TradeService(version="1.0.0")
 public class AccessLogService extends Thread  {
-    private static Logger logger = LoggerFactory.getLogger(AccessLogService.class);
+	private  Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private MongoTemplate mongoTemplate;
 

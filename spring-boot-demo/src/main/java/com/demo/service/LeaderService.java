@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct;
 
 @Service
 public class LeaderService extends LeaderSelectorListenerAdapter {
-    private static Logger logger = LoggerFactory.getLogger(LeaderService.class);
+	private  Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private ZookeeperClient client;
 

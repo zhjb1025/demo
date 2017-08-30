@@ -29,7 +29,7 @@ import com.github.pagehelper.PageInfo;
 @Service
 @TradeService(version="1.0.0")
 public class RoleController {
-//  private static Logger logger = LoggerFactory.getLogger(RoleController.class);
+//  private  Logger logger = LoggerFactory.getLogger(this.getClass());
   
   @Autowired
   private RoleService roleService;

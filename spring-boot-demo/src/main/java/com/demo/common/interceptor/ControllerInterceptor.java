@@ -20,14 +20,14 @@ import com.demo.framework.exception.CommException;
 //@Component 
 public class ControllerInterceptor {
 	
-	 private static Logger log = LoggerFactory.getLogger(ControllerInterceptor.class);  
+	private  Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/** 
      * 定义拦截规则：拦截com.demo.controller包下面的所有类中所有的方法。 
      */  
 	@Pointcut("execution(* com.demo.controller.*.*(..))")
     public void controllerMethodPointcut(){
-    	log.info("controllerMethodPointcut");
+    	logger.info("controllerMethodPointcut");
     }
     
     /** 
@@ -47,13 +47,13 @@ public class ControllerInterceptor {
          
         Object[] args = pjp.getArgs();  
         BaseRequest baseRequest=null;
-        log.info("开始调用{}.{}",pjp.getTarget().getClass().getName(),methodName);
+        logger.info("开始调用{}.{}",pjp.getTarget().getClass().getName(),methodName);
         if(args!=null && args.length>0){
         	for(Object arg: args){
         	 if(arg instanceof BaseRequest){
         		 baseRequest=(BaseRequest)arg;
         	 }
-        	 log.info("请求参数[{}]",arg);
+        	 logger.info("请求参数[{}]",arg);
         	}
         }
         Object rsp=null;
@@ -66,7 +66,7 @@ public class ControllerInterceptor {
         	 rsp = pjp.proceed();
         	 
 		}catch (CommException e) {
-			log.info("业务处理异常",e);
+			logger.info("业务处理异常",e);
 			BaseResponse baseResponse= new BaseResponse();
 			baseResponse.setRspCode(e.getErrCode());
 			baseResponse.setRspMsg(e.getErrMsg());
@@ -74,7 +74,7 @@ public class ControllerInterceptor {
 			baseResponse.setTradeStatus(TradeStatusEnum.FAIL.getTradeStatus());
 			rsp=baseResponse;
 		}catch (Throwable e) {
-			log.info("系统异常",e);
+			logger.info("系统异常",e);
 			BaseResponse baseResponse= new BaseResponse();
 			baseResponse.setRspCode(ErrorCodeEnum.SYSTEM_FAIL.getCode());
 			baseResponse.setRspMsg(ErrorCodeEnum.SYSTEM_FAIL.getMsg());
@@ -83,8 +83,8 @@ public class ControllerInterceptor {
 			rsp=baseResponse;
 		}finally{
 			endTime = System.currentTimeMillis();  
-			log.info("结束调用{}.{} [{}]",pjp.getTarget().getClass().getName(),methodName,endTime-beginTime);
-			log.info("响应数据[{}]",rsp);
+			logger.info("结束调用{}.{} [{}]",pjp.getTarget().getClass().getName(),methodName,endTime-beginTime);
+			logger.info("响应数据[{}]",rsp);
 		}
          
 		return  rsp;

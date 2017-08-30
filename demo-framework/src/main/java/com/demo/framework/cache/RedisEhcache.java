@@ -20,7 +20,7 @@ import net.sf.ehcache.Element;
  */
 public class RedisEhcache implements Cache,MessageListener  {
 	
-    private static final Logger logger = LoggerFactory.getLogger(RedisEhcache.class); 
+	private  Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private String name;
 

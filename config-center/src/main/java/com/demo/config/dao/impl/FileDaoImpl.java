@@ -19,7 +19,7 @@ import com.demo.config.dao.ConfigInfo;
 
 @Service("FILE")
 public class FileDaoImpl implements ConfigCenterDao {
-	private static Logger logger = LoggerFactory.getLogger(FileDaoImpl.class);
+	private  Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	
 	@Value("${demo.config.path}")

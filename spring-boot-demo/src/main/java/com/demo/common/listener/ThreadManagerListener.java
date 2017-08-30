@@ -15,7 +15,7 @@
 //import org.springframework.context.event.ContextStoppedEvent;
 //
 //public class ThreadManagerListener implements ApplicationListener {
-//    private static Logger logger = LoggerFactory.getLogger(ThreadManagerListener.class);
+//    private  Logger logger = LoggerFactory.getLogger(this.getClass());
 //    @Override
 //    public void onApplicationEvent(ApplicationEvent event) {
 //        // 在这里可以监听到Spring Boot的生命周期

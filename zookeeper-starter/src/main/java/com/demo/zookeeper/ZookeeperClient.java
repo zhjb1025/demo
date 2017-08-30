@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 public class ZookeeperClient {
-    private static Logger logger = LoggerFactory.getLogger(ZookeeperClient.class);
+	private  Logger logger = LoggerFactory.getLogger(this.getClass());
     private CuratorFramework curatorFramework;
     private ZookeeperClientProperteis properteis;
 

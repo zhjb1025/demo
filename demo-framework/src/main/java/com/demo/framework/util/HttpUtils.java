@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class HttpUtils {
-    private static Logger log = LoggerFactory.getLogger(HttpUtils.class); 
+	private static final Logger logger = LoggerFactory.getLogger(HttpUtils.class);
 	//默认编码
 	private static final String CHARSET = "UTF-8";
 	
@@ -89,7 +89,7 @@ public class HttpUtils {
 	 * @throws Exception
 	 */
 	public static String get(String url,Map<String,String> header,int timeout) throws SocketTimeoutException,Exception{
-	    log.info("请求url=" + url);
+		logger.info("请求url=" + url);
 		String rspMsg=null;
 		RequestConfig config = RequestConfig.custom().setConnectTimeout(connectTimeout).setSocketTimeout(timeout).build();
 		HttpGet httpGet = new HttpGet(url);
@@ -119,7 +119,7 @@ public class HttpUtils {
 			HttpEntity entity = response.getEntity();
 			if (entity != null) {
 				rspMsg = EntityUtils.toString(entity, CHARSET);
-				log.info("响应数据：" + rspMsg);
+				logger.info("响应数据：" + rspMsg);
 			}
 			EntityUtils.consume(entity);
 			response.close();
@@ -173,8 +173,8 @@ public class HttpUtils {
 	 * @throws Exception
 	 */
 	public static String post(String url,String data,Map<String,String> header,int timeout) throws SocketTimeoutException,Exception{
-	    log.info("请求url=" + url);
-	    log.info("请求数据=" + data);
+		logger.info("请求url=" + url);
+		logger.info("请求数据=" + data);
 		String rspMsg=null;
 		RequestConfig config = RequestConfig.custom().setConnectTimeout(connectTimeout).setSocketTimeout(timeout).build();
 		HttpPost httpPost = new HttpPost(url);
@@ -201,7 +201,7 @@ public class HttpUtils {
 			if (statusCode != 200) {
 				if(entity!=null){
 					rspMsg = EntityUtils.toString(entity, CHARSET);
-					log.info("响应数据：" + rspMsg);
+					logger.info("响应数据：" + rspMsg);
 				}
 				httpPost.abort();
 				throw new RuntimeException("HttpClient,error status code :" + statusCode+",rspMsg:");
@@ -209,7 +209,7 @@ public class HttpUtils {
 			
 			if (entity != null) {
 				rspMsg = EntityUtils.toString(entity, CHARSET);
-				log.info("响应数据：" + rspMsg);
+				logger.info("响应数据：" + rspMsg);
 			}
 			EntityUtils.consume(entity);
 			response.close();

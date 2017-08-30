@@ -13,7 +13,7 @@ import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 
 public class EhcacheRedisCallback implements RedisCallback<Object> {
-	private static final Logger logger = LoggerFactory.getLogger(EhcacheRedisCallback.class); 
+	private  Logger logger = LoggerFactory.getLogger(this.getClass());
 	private String key;
 	 
 	private Object value;

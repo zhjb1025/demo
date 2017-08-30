@@ -12,7 +12,7 @@ import com.demo.config.util.HttpUtils;
 
 public class ConfigCenterClient {
 	
-	private static Logger logger = LoggerFactory.getLogger(HttpUtils.class); 
+	private static Logger logger = LoggerFactory.getLogger(ConfigCenterClient.class); 
 	private static List<String> urlList= new ArrayList<String>(); 
 	private static Properties properties= new Properties();
 	private static String groups;

@@ -18,7 +18,7 @@ import com.demo.framework.annotation.TradeService;
 @Service
 @TradeService(version="1.0.0")
 public class ConfigCenterController {
-	
+//  private  Logger logger = LoggerFactory.getLogger(this.getClass());
   @TradeService(value="query_all_group",isLog = false)
   public BaseResponse queryAllGroup(BaseRequest request) throws Exception {
 	  QueryAllGroupResponse response = new QueryAllGroupResponse();

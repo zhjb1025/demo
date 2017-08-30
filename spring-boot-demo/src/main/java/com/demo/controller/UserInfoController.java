@@ -47,7 +47,7 @@ import com.github.pagehelper.PageInfo;
 @Service
 @TradeService(version="1.0.0")
 public class UserInfoController {
-  private static Logger logger = LoggerFactory.getLogger(UserInfoController.class);  
+  private  Logger logger = LoggerFactory.getLogger(this.getClass());
   
   @Autowired
   private UserInfoService userInfoService;

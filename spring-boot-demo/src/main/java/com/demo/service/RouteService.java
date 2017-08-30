@@ -23,7 +23,7 @@ import com.demo.framework.exception.CommException;
 
 @Service
 public class RouteService implements ApplicationListener<ContextRefreshedEvent> {
-	private static Logger logger = LoggerFactory.getLogger(RouteService.class);  
+	private  Logger logger = LoggerFactory.getLogger(this.getClass());
 	/**
 	 * key=serviceNane_version
 	 */
