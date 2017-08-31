@@ -30,29 +30,20 @@ public class EhcacheRedisCallback implements RedisCallback<Object> {
 	
 	
 	private void put(RedisConnection connection){
-        try {
-        	byte[] keyByte = key.getBytes();  
-            byte[] valueByte = toByteArray(value); 
-        	connection.set(keyByte, valueByte);
-		} catch (Exception e) {
-			logger.error("",e);
-		}
+		byte[] keyByte = key.getBytes();  
+        byte[] valueByte = toByteArray(value); 
+    	connection.set(keyByte, valueByte);
          
 	}
 	
 	private Object get(RedisConnection connection){
 		
-		try {
-			byte[] keyByte = key.toString().getBytes();  
-	        byte[] valueByte = connection.get(keyByte);  
-	        if (valueByte == null) {  
-	            return null;  
-	        }  
-	        return toObject(valueByte);
-		} catch (Exception e) {
-			logger.error("",e);
-		}
-		return null;
+		byte[] keyByte = key.toString().getBytes();  
+        byte[] valueByte = connection.get(keyByte);  
+        if (valueByte == null) {  
+            return null;  
+        }  
+        return toObject(valueByte);
 	}
 	
 	/**
@@ -86,6 +77,9 @@ public class EhcacheRedisCallback implements RedisCallback<Object> {
      */  
     private Object toObject(byte[] bytes){  
         Object obj = null; 
+        if(bytes==null){
+        	return null;
+        }
         try {  
         	ByteArrayInputStream bis = new ByteArrayInputStream(bytes);  
             ObjectInputStream ois = new ObjectInputStream(bis);  
