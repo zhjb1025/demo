@@ -1,1 +1,1 @@
-[{"group":"demo","key":"rsa.key.path","remark":"RSA Key路径","value":"E:/work/demo/spring-boot-demo/src/main/resources/key.cer"}]
+[{"group":"demo","key":"rsa.key.path","remark":"RSA Key路径","value":"E:/work/demo/spring-boot-demo/src/main/resources/key.cer"},{"group":"demo","key":"demo.test.key","remark":"测试配置项修改","value":"33333333"}]

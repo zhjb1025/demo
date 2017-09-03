@@ -1,7 +1,10 @@
 package com.demo.config.client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
@@ -17,18 +20,39 @@ public class ConfigCenterClient {
 	private static List<String> urlList= new ArrayList<String>(); 
 	private static Properties properties= new Properties();
 	private static String groups;
+	private static Map<String,List<ConfigInfo>> configGroupMap = new HashMap<String,List<ConfigInfo>>();
 	
 	public static void resetUrl(String[] urls) {
 		urlList.clear();
 		for(String url:urls) {
 			urlList.add(url);
 		}
+		logger.info("重置配置中心url[{}]",urlList);
 	}
-	
+	public static void addUrl(String url) {
+		logger.info("增加配置中心url[{}]",url);
+		urlList.add(url);
+	}
+	public static void deleteUrl(String url) {
+		Iterator<String> iter = urlList.iterator();
+		while(iter.hasNext()) {
+			if(url.equals(iter.next())) {
+				logger.info("删除配置中心url[{}]",url);
+				iter.remove();
+				return;
+			}
+		}
+	}
 	public static Properties loadConfig() throws Exception {
 		List<ConfigInfo> list = queryByGroup(groups);
 		for(int i=0;i<list.size();i++) {
 			properties.put(list.get(i).getKey(), list.get(i).getValue());
+			List<ConfigInfo> groupList=configGroupMap.get(list.get(i).getGroup());
+			if(groupList==null) {
+				groupList= new ArrayList<ConfigInfo>();
+				configGroupMap.put(list.get(i).getGroup(), groupList);
+			}
+			groupList.add(list.get(i));
 		}
 		return properties;
 	}
@@ -37,6 +61,10 @@ public class ConfigCenterClient {
 		ConfigCenterClient.groups = groups;
 	}
 	
+	public static String getGroups() {
+		return groups;
+	}
+
 	public static String get(String key) {
 		Object value = properties.get(key);
 		if(value==null) {
@@ -119,4 +147,32 @@ public class ConfigCenterClient {
 		return ret;
 	}
 	
+	public static void synGroup(String group) {
+		try {
+			List<ConfigInfo> list = queryByGroup(group);
+			Map<String,String> map=new HashMap<String,String>();
+			for(ConfigInfo c:list) {
+				map.put(c.getKey(), c.getValue());
+				String value = properties.getProperty(c.getKey());
+				if(value==null) {
+					logger.info("新增配置项[{}={}]",c.getKey(), c.getValue());
+					properties.put(c.getKey(), c.getValue());
+				}else if(!value.equals(c.getValue())) {
+					logger.info("修改配置项{}:[新值:{},旧值:{}]",c.getKey(), c.getValue(),value);
+					properties.put(c.getKey(), c.getValue());
+				}
+			}
+			List<ConfigInfo> old=configGroupMap.get(group);
+			for(ConfigInfo c:old) {
+				if(map.get(c.getKey())==null) {
+					logger.info("删除配置项[{}={}]",c.getKey(), c.getValue());
+					properties.remove(c.getKey());
+				}
+			}
+			configGroupMap.put(group, list);
+			
+		} catch (Exception e) {
+			logger.error("同步配置中心数据报错",e);
+		}
+	}
 }
