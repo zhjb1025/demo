@@ -110,7 +110,7 @@ public class FileDaoImpl implements ConfigCenterDao {
 	
 	private List<ConfigInfo> loadFile(File file) throws Exception{
 		String content=FileUtils.readFileToString(file, "UTF-8");
-		logger.error("加载[{}]:{}",file.getName(),content);
+		logger.info("加载[{}]:{}",file.getName(),content);
 		return JSON.parseArray(content, ConfigInfo.class);
 	}
 

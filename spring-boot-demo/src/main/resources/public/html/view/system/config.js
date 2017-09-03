@@ -17,23 +17,29 @@ $(document).ready(function(){
             {field:'value',title:'值',width:'20%'},
             {field:'remark',title:'说明',width:'20%'},
             {field:'opt',title:'操作',width:'10%',formatter:function (value,row,index) {
-                return  "<a href=# onclick=viewLog("+index+")>修改</a> ";
+                return  "<a href=# onclick=viewConfig("+index+")>修改</a> ";
             }}
         ]]
     });
     
-    $("#group").combobox({
+    $("#group_").combobox({
     	 valueField:'id',
     	 textField:'text',
     	 onSelect: function(rec){
     		 queryConfig(rec.id);
     	 }
-    })
+    });
+    
+    $("#group").combobox({
+    	 valueField:'id',
+    	 textField:'text',
+    });
+    
     $("#queryButton").click(queryConfig);
     $("#closeButton").click(function () {
         $('#w').window('close');
     });
-    
+    $("#saveButton").click(saveConfig);
     queryGroup();
 });
 
@@ -52,6 +58,7 @@ function queryGroup() {
     		row.text=rsp.groupList[i];
     		data[data.length]=row;
     	}
+        $('#group_').combobox("loadData",data);
         $('#group').combobox("loadData",data);
     }
 }
@@ -69,31 +76,47 @@ function queryConfig( group) {
     	$('#config').datagrid("loadData",data);
     }
 }
-function viewLog(index){
-    var row=$('#log').datagrid("getRows")[index];
-    var data={};
-    data.total=0;
-    data.rows= new Array()
-    for (x in row.request){
-        var logRow={};
-        logRow.name=x;
-        logRow.value=row.request[x];
-        logRow.group="请求参数";
-        data.rows[data.rows.length]=logRow;
-
-        //$('#pg').propertygrid('appendRow',logRow);
-    }
-    for (x in row.response){
-        var logRow={};
-        logRow.name=x;
-        logRow.value=row.response[x];
-        logRow.group="响应参数";
-        data.rows[data.rows.length]=logRow;
-        // $('#pg').propertygrid('appendRow',logRow);
-    }
-    data.total=data.rows.length;
-    $('#pg').propertygrid("loadData",data);
+function viewConfig(index){
+    var row=$('#config').datagrid("getRows")[index];
+    $("#rowIndex").val(index);
+    $("#key").textbox("setValue",row.key);
+    $("#remark").textbox("setValue",row.remark);
+    $("#value").textbox("setValue",row.value);
+    $('#key').textbox('disable');
+    $('#group').combobox("select",row.group);
+    $('#group').combobox('disable');
+   
     $('#w').window('open');
+}
+
+function saveConfig(){
+	if( ! $('#ff').form('enableValidation').form('validate') ){
+	        return ;
+	}
+	var request={};
+	var index= $("#rowIndex").val();
+	if(index==null || index==""){
+		request.service ="add_config";
+		request.group=$("#group").textbox("getValue");
+		request.key=$("#key").textbox("getValue");
+	}else{
+		request.service ="update_config";
+		var row=$('#config').datagrid("getRows")[index];
+		request.group=row.group;
+		request.key=row.key;
+	}
+	request.value= $("#value").textbox("getValue");
+	request.remark= $("#remark").textbox("getValue");
+   
+	var rsp=ajaxPostSynch(request);
+    if(rsp.tradeStatus!=1){
+        $.messager.alert('错误提示信息',rsp.rspMsg,'error');
+        return ;
+    }else{
+        $.messager.alert('提示信息',rsp.rspMsg,'info');
+    }
+    queryConfig( request.group);
+    $('#w').window('close');
 }
 
 
