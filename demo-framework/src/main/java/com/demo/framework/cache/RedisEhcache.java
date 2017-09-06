@@ -28,6 +28,8 @@ public class RedisEhcache implements Cache,MessageListener  {
 
     private StringRedisTemplate stringRedisTemplate;
     
+    private RedisExceptionHandle redisExceptionHandle= new RedisExceptionHandle(this);
+    
 	@Override
 	public String getName() {
 		logger.info("RedisEhcache.getName={}",name);
@@ -117,11 +119,12 @@ public class RedisEhcache implements Cache,MessageListener  {
 		try {
 			put_(key,value);
 		} catch (Exception e) {
+			redisExceptionHandle.add(key, value,"put");
 			logger.error("put redis 出错",e);
 		}
 	}
 	
-	private void put_(Object key, Object value){
+	public void put_(Object key, Object value){
 		EhcacheRedisCallback callback= new EhcacheRedisCallback();
 		callback.setKey(key.toString());
 		callback.setValue(value);
@@ -136,6 +139,7 @@ public class RedisEhcache implements Cache,MessageListener  {
 		try {
 			put_(key,value);
 		} catch (Exception e) {
+			redisExceptionHandle.add(key, value,"put");
 			logger.error("put redis 出错",e);
 		}
 		return new SimpleValueWrapper(value); 
@@ -149,6 +153,7 @@ public class RedisEhcache implements Cache,MessageListener  {
 			stringRedisTemplate.delete(key.toString());
 			stringRedisTemplate.convertAndSend(getChannel(), key+":remove");
 		} catch (Exception e) {
+			redisExceptionHandle.add(key, null,"remove");
 			logger.error("删除 key 出错",e);
 		}
 		
@@ -176,6 +181,7 @@ public class RedisEhcache implements Cache,MessageListener  {
 
 	public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
 		this.stringRedisTemplate = stringRedisTemplate;
+		redisExceptionHandle.setStringRedisTemplate(stringRedisTemplate);
 	}
 	
 	public String getChannel(){
