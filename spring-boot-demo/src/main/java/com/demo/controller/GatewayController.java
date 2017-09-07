@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.demo.common.Constant;
-import com.demo.controller.msg.AccessLog;
 import com.demo.controller.msg.BaseResponse;
 import com.demo.controller.msg.LoginUserInfo;
 import com.demo.framework.annotation.TradeService;
@@ -32,7 +31,6 @@ import com.demo.framework.util.CommUtil;
 import com.demo.framework.util.SpringContextUtil;
 import com.demo.framework.util.ThreadCacheData;
 import com.demo.framework.validate.ValidatorService;
-import com.demo.service.AccessLogService;
 import com.demo.service.RouteService;
 
 /**
@@ -51,9 +49,6 @@ public class GatewayController {
 	
 	@Autowired
 	private ValidatorService validatorService;
-
-    @Autowired
-    private AccessLogService accessLogService;
 
 	@RequestMapping(value = "/gateway", method = { RequestMethod.POST,RequestMethod.GET })
 	@ResponseBody
@@ -87,18 +82,7 @@ public class GatewayController {
 			SpringContextUtil.cleanThreadCacheData();
 		}
         baseResponse.setSeqNo(seqNo);
-        TradeService tradeService = routeService.getTradeService(service, version);
-        if (tradeService!=null && tradeService.isLog()){
-            AccessLog accessLog = new AccessLog();
-            accessLog.setVersion(version);
-            accessLog.setService(service);
-            accessLog.setSeqNo(seqNo);
-            accessLog.setStartTimestamp(beginTime);
-            accessLog.setDealTime(endTime-beginTime);
-            accessLog.setRequest(parameter);
-            accessLog.setResponse(baseResponse);
-            accessLogService.addLog(accessLog);
-        }
+       
         return baseResponse;
 	}
 //

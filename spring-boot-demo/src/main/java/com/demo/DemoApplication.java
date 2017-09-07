@@ -1,7 +1,5 @@
 package com.demo;
 
-import java.util.Properties;
-
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +9,6 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
-import com.demo.config.client.ConfigCenterClient;
 import com.demo.framework.util.SpringContextUtil;
 
 
@@ -24,14 +21,7 @@ public class DemoApplication {
 	public static void main(String[] args) {
 	    try {
 	      log.info("开始启动服务...................");
-	      
-//	      ConfigCenterClient.resetUrl(new String[] {"http://127.0.0.1:8080/config-center"});
-	      ConfigCenterClient.resetUrl(args[0].split(","));
-	      ConfigCenterClient.setGroups("logging,tomcat,datasource,mybatis,mongodb,actuator,zookeeper,demo");
-	      Properties properties = ConfigCenterClient.loadConfig();
-	      SpringApplication springApplication = new SpringApplication(DemoApplication.class);
-	      springApplication.setDefaultProperties(properties);
-	      ApplicationContext applicationContext =springApplication.run(args);
+	      ApplicationContext applicationContext = SpringApplication.run(DemoApplication.class, args);
 	      SpringContextUtil.setApplicationContext(applicationContext);
 	      log.info("成功启动服务...................");
         } catch (Throwable e) {

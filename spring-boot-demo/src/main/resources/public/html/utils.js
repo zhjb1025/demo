@@ -67,7 +67,7 @@ function ajaxPost(data,callBack){
         type: "POST",
         dataType:"json" ,
         contentType: "application/json",
-        url: "/gateway",
+        url: "/demo/gateway",
         timeout: 30000, //超时时间：30秒
         data: jsonString,
         error:function(msg){
@@ -96,7 +96,7 @@ function ajaxPostSynch(data){
         async:false,
         timeout: 30000, //超时时间：30秒
         contentType: "application/json",
-        url: "/gateway",
+        url: "/demo/gateway",
         data: jsonString,
         success: function(msg){
             rsp=msg;
