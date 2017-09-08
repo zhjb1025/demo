@@ -1,0 +1,290 @@
+@charset "UFT-8";
+body {
+	margin: 0px;
+	padding: 0px;
+	background-color: #ebeef6;
+}
+
+*{
+	margin:0;
+	padding:0;
+	font-family:宋体;
+	list-style-type: none;
+}
+.wrapper{ width:970px; margin:0 auto;}
+
+.top{ width:100%; height:76px; padding-top:24px;}
+
+.top_nav{ width:756px; height:76px; float:right;}
+
+.top_nav_1 a{ color:#000000; text-decoration:none;}
+
+.top_nav_1{ width:100%; float:left; height:35px; background-image:url(/chinafet/images/nav_top.jpg);}
+
+.top_nav_1 p{ float:left; padding-left:20px; font-size:12px; line-height:35px; color:#919ec1;}
+
+.top_nav_1 span{ padding-right:20px; float:right; height:35px; line-height:35px; font-size:12px; color:#919ec1;}
+
+.top_nav_1 span i{
+	padding:0 10px;
+	font-size:16px;
+	color:#FFFFFF;
+	font-family:Georgia, "Times New Roman", Times, serif;
+	font-style: normal;
+}
+
+.top_nav_2{ width:100%; height:40px; float:left; background-image:url(/chinafet/images/nav_d.gif);}
+
+.top_nav_2 ul{ width:709px; margin: 0 auto; height:40px;}
+
+.top_nav_2 li{
+	width:118px;
+	height:40px;
+	float:left; font-size:14px; line-height:40px; text-align:center;
+	list-style-type: none;
+}
+
+.top_nav_2 li a{ color:#000000; text-decoration:none;}  .top_nav_2 li a:hover{ color:#174c96;}
+
+
+
+.flash{ width:100%; height:200px; float:left;}
+
+.main{ width:100%; height:344px; float:left;}
+
+
+.main_l{ width:237px; height:344px; float:left;}
+
+.main_l h1{ width:100%; float:left;}
+
+.main_l .pic_img{ width:100%; float:left;}
+
+.main_l .about{
+	width:100%;
+	height:155px;
+	float:left;
+	background-attachment: scroll;
+	background-image: url(/chinafet/images/img_2.jpg);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+
+.main_l .about p{ padding:7%; font-size:12px; color:#010101; line-height:22px;}
+
+
+
+.main_c{ width:490px; height:344px; float:left;}
+
+.main_c .main_info{
+	width:100%;
+	height:305px;
+	background-image: url(/chinafet/images/img_bj1.gif);
+}
+
+.product_menu{
+	width:443px;
+	height:121px;
+	margin:0 auto;
+	background-attachment: scroll;
+	background-image: url(/chinafet/images/img_bj4.gif);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+
+.product_menu ul{ width:240px; float:right; height:111px; padding:5px;}
+
+.product_menu li{
+	width:100%;
+	float:left;
+	height:25px;
+	line-height:25px;
+	list-style-type: none;
+}
+.product_menu li a{
+	font-size:14px;
+	padding-left:8px; font-family:Verdana, Arial, Helvetica, sans-serif; color:#507dc0;
+	background-attachment: scroll;
+	background-image: url(/chinafet/images/jiantou.gif);
+	background-repeat: no-repeat;
+	background-position: left center; text-decoration:none;
+}
+
+.product_menu li a:hover{ color: #000000; text-decoration:underline;}
+
+
+
+
+.product_show{
+	width:443px;
+	height:174px;
+	margin:0 auto;
+}
+
+.product_show ul{ width:100%; float:left; padding-top:10px;}
+
+.product_show li{ width:33%; float:left;}
+.product_show li .pic{ width:139px; height:139px; border:1px solid #CCCCCC; margin:0 auto;}
+
+
+.main_r{ width:242px; height:344px; float:left;}
+
+.main_r .download{
+	width:100%;
+	height:150px;
+	float:left;
+	background-attachment: scroll;
+	background-image: url(/chinafet/images/img_bj2.gif);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+
+.main_r .download ul{ padding:10px; float:left;}
+
+.main_r .download ul li{
+	width:49%;
+	float:left; padding:3px 0;
+	list-style-type: none;
+}
+.main_r .download ul li a.download_ico{
+	width:103px; font-size:12px; color:#1c549f;
+	height:36px;
+	line-height:36px; display:block; float:left;
+	font-size:12px; 
+	text-align:center;
+	background-attachment: scroll;
+	background-image: url(/chinafet/images/ico.jpg);
+	background-repeat: no-repeat;
+	background-position: left top; text-decoration:none;
+} 
+
+.main_r .download ul li a.download_ico:hover{ color:#000000;}
+
+
+
+.main_r .contact{
+	width:100%;
+	height:155px;
+	background-attachment: scroll;
+	background-image: url(/chinafet/images/img_bj3.gif);
+	background-repeat: no-repeat;
+	background-position: left top; float:left;
+}
+
+.main_r .contact ul{ padding:20px; font-size:12px; line-height:23px;}
+
+
+.footer{ width:70%; height:64px; position:absolute; bottom:0;  float:left; line-height:64px;}
+
+.footer span{ float:left; font-size:12px;}
+
+.footer p{ font-size:12px; color:#666666; float:center;}
+
+.footer span a{ margin-right:6px; color:#000000;}
+
+/*列表页*/
+
+.list_flash{ width:100%; float:left; padding-top:10px;}
+
+.list_main{ max-height:570px; height:auto; _height:570px; float:left; width:100%;}
+
+.list_main_l{ width:178px; max-height:570px; height:auto; _height:570px; float:left;}
+
+.list_main_l h1{ width:100%; height:34px; padding-top:8px; line-height:34px; background-image:url(/chinafet/images/list_navh1.gif); font-size:14px; color:#FFFFFF; font-weight:bold;}
+.list_main_l_nav{
+width:100%;
+	min-height:204px;
+	height:auto;
+	_height:204px;
+	float:left;
+	background-image:url(/chinafet/images/list_nav_bj.gif);
+	background-repeat: repeat-y;
+}
+
+.list_main_l_nav ul{ width:100%; float:left;}
+.list_main_l_nav li{ width:75%; line-height:28px; font-size:12px; height:28px; float:left; color:#1c549f; padding-left:8%; text-decoration:none; }
+.list_main_l_nav a{ width:75%; line-height:28px; font-size:12px; height:28px; float:left; color:#1c549f; padding-left:8%; text-decoration:none; }
+.list_main_l_nav a:hover{ background-image:url(/chinafet/images/nav_li_hover.gif); color:#000000; text-decoration:underline;}
+
+.tel{ width:100%; float:left; height:90px;}
+
+.list_main_r{ width:790px; max-height:570px; height:auto; _height:570px; float:right;}
+
+.list_main_r_top{ width:100%; height:46px; background-image:url(/chinafet/images/list_r_top.gif); font-size:12px; color:#000000; line-height:46px;}
+
+.list_main_r_c{ width:100%; float:left;  background-image:url(/chinafet/images/list_r_bj.gif)}
+
+/*内容文字框*/
+.list_box{ width:750px; margin:0 auto; font-size:14px; line-height:25px; padding-top:10px;}
+
+/*列表文字框*/
+.list_download{ width:750px; margin:0 auto;}
+
+.list_download ul{ width:100%; float:left;}
+
+.list_download li{
+	float:left;
+	height:40px;
+	width:94%;
+	font-size:14px;
+	padding-left:6%;
+	line-height:40px;
+	border-bottom:1px dashed #efefef;
+	list-style-type: none;
+	background-attachment: scroll;
+	background-image: url(/chinafet/images/gif-0007.gif);
+	background-repeat: no-repeat;
+	background-position: left;	
+}
+
+.list_download li a{ font-size:14px; color:#507dc0; text-decoration:none; font-family:Verdana, Arial, Helvetica, sans-serif;}.list_download li a:hover{ color:#000000; text-decoration:underline; }
+
+.list_download li span{ float:right; color:#000000;}
+
+.list_download li span a{ color:#000000; font-size:12px;}
+
+
+/*产品*/
+.list_product{ width:750px; margin:0 auto;}
+.list_product ul{ width:100%; float:left;}
+
+.list_product li{
+	width:100%;
+	float:left;
+	padding:15px 0;
+	list-style-type: none;
+}
+
+.list_product dl{ width:100%; float:left;}
+
+.list_product dt{ width:15%; float:left;}
+
+.list_product dd{ width:84%; float: right;}
+
+.list_product dt .pic_box{ width:100px; height:100px; border:1px solid #CCCCCC;}
+
+.list_product dd h1{ font-size:14px; width:100%; float:left; height:25px; line-height:25px;}
+.list_product dd h1 span{ float:right; font-size:12px; color:#666666;}
+
+.list_product dd h1 a{ text-decoration:none; color:#1c549f}.list_product dd h1 a:hover{ text-decoration:none; color:#000000; text-decoration:underline;}
+.list_product dd p{ font-size:12px; line-height:23px; color:#666666; width:100%; float:left;}
+
+.list_job{ width:750px; margin:0 auto;}
+.list_job h1{ font-size:22px; font-family:Verdana, Arial, Helvetica, sans-serif; padding:20px 0; color:#1c549f;}
+
+.list_job th{ font-size:14px; font-weight:normal; color:#999999;}
+
+.list_job td{ height:35px;  padding-left:5px; line-height:35px; font-size:12px; font-family:Verdana, Arial, Helvetica, sans-serif; text-align:center;}
+
+.list_job td a{
+	text-decoration:none;
+	float:left;
+	color:#1c549f;
+	padding-left:25px;
+	background-attachment: scroll;
+	background-image: url(/chinafet/images/gif-0198.gif);
+	background-repeat: no-repeat;
+	background-position: left;
+}
+
+.list_job td a:hover{ text-decoration:underline; color:#000000;}
+

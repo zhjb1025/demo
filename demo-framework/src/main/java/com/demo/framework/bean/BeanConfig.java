@@ -26,11 +26,11 @@ public class BeanConfig {
        FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
        FastJsonConfig fastJsonConfig = new FastJsonConfig();
        fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);
-       List<MediaType> fastMediaTypes = new ArrayList<>();
+       List<MediaType> fastMediaTypes = new ArrayList<MediaType>();
        fastMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
        fastConverter.setSupportedMediaTypes(fastMediaTypes);
        fastConverter.setFastJsonConfig(fastJsonConfig);
-       HttpMessageConverter<?> converter = fastConverter;
+       HttpMessageConverter converter = fastConverter;
        return new HttpMessageConverters(converter);
 
     }

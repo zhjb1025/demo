@@ -11,7 +11,7 @@
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 		    <!-- rollover daily -->
-			<FileNamePattern>/Users/welab/log/%d{yyyy-MM-dd,aux}/demo_%d{yyyy-MM-dd_HH}_%i.log</FileNamePattern>
+			<FileNamePattern>/var/www/virtual/chinafet/logs/%d{yyyy-MM-dd,aux}/demo_%d{yyyy-MM-dd_HH}_%i.log</FileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<maxFileSize>100MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
@@ -29,28 +29,28 @@
         <appender-ref ref="FILE"/>
     </appender>
 	<logger name="com.demo">
-		<level value="DEBUG" />
+		<level value="ERROR" />
 		<appender-ref ref="ASYNC" />
 		<appender-ref ref="STDOUT" />
 		
 	</logger>
     <logger name="org.springframework">
-		<level value="INFO" />
+		<level value="ERROR" />
 		<appender-ref ref="ASYNC" />
 		<appender-ref ref="STDOUT" />
 	</logger>
 	<logger name="org.mybatis">
-		<level value="DEBUG" />
+		<level value="ERROR" />
 		<appender-ref ref="ASYNC" />
 		<appender-ref ref="STDOUT" />
 	</logger>
 	<logger name="org.apache.ibatis">
-		<level value="DEBUG" />
+		<level value="ERROR" />
 		<appender-ref ref="ASYNC" />
 		<appender-ref ref="STDOUT" />
 	</logger>
 	<logger name="com.alibaba">
-		<level value="DEBUG" />
+		<level value="ERROR" />
 		<appender-ref ref="ASYNC" />
 		<appender-ref ref="STDOUT" />
 	</logger>
