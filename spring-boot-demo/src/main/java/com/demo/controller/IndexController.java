@@ -8,11 +8,14 @@ import org.springframework.stereotype.Service;
 import com.demo.controller.msg.BaseRequest;
 import com.demo.controller.msg.BaseResponse;
 import com.demo.controller.msg.QueryConfigResponse;
+import com.demo.controller.msg.QueryJobRequest;
+import com.demo.controller.msg.QueryJobResponse;
 import com.demo.controller.msg.QueryProductRequest;
 import com.demo.controller.msg.QueryProductResponse;
 import com.demo.framework.annotation.TradeService;
 import com.demo.mapper.Config;
 import com.demo.mapper.IndexMapper;
+import com.demo.mapper.JobInfo;
 import com.demo.mapper.Product;
 import com.github.pagehelper.PageHelper;
 
@@ -37,6 +40,22 @@ public class IndexController {
 		  List<Product> list = indexMapper.getProduct(request.getType());
 		  response.setList(list);
 	      return response;
-	 } 
+	 }
+	 
+	 @TradeService(value="query_job",isLog=false,isPublic=true)
+	 public BaseResponse queryJob(BaseRequest request) throws Exception {
+		  QueryJobResponse response = new QueryJobResponse();
+		  List<JobInfo> list = indexMapper.getJob();
+		  response.setList(list);
+	      return response;
+	 }
+	 
+	 @TradeService(value="get_job",isLog=false,isPublic=true)
+	 public BaseResponse getJob(QueryJobRequest request) throws Exception {
+		  QueryJobResponse response = new QueryJobResponse();
+		  List<JobInfo> list = indexMapper.getJobByID(request.getId());
+		  response.setList(list);
+	      return response;
+	 }
 	 
 }
