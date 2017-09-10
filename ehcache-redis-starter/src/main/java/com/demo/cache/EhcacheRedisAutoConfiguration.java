@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.Cache;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.cache.support.SimpleCacheManager;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -26,6 +30,10 @@ public class EhcacheRedisAutoConfiguration {
 	
 	@Autowired
 	private Environment env;
+	
+	@Autowired  
+    private ApplicationContext applicationContext;
+	
 	@Bean
     RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
@@ -44,16 +52,27 @@ public class EhcacheRedisAutoConfiguration {
     		RedisConnectionFactory connectionFactory,
     		StringRedisTemplate stringRedisTemplate,
     		RedisMessageListenerContainer container){
-    	
        String[] cacheNames = bean.getObject().getCacheNames();
        SimpleCacheManager simpleCacheManager=new SimpleCacheManager();
        List<Cache> caches =new  ArrayList<Cache>();
        for(String name:cacheNames){
-    	   EhcacheRedis ehcacheRedis = new EhcacheRedis();
+    	   System.out.println("注册bean");
+    	   registerBean("ehcacheRedis_"+name,EhcacheRedis.class);
+    	   registerBean("redisExceptionHandle_"+name,RedisExceptionHandle.class);
+//    	   EhcacheRedis ehcacheRedis = new EhcacheRedis();
+    	   EhcacheRedis ehcacheRedis=(EhcacheRedis)applicationContext.getBean("ehcacheRedis_"+name);
            ehcacheRedis.setName(name);
            ehcacheRedis.setStringRedisTemplate(stringRedisTemplate);
            ehcacheRedis.setEhcache(bean.getObject().getCache(name));
            caches.add(ehcacheRedis);
+           
+           
+           RedisExceptionHandle redisExceptionHandle=(RedisExceptionHandle)applicationContext.getBean("redisExceptionHandle_"+name);
+           
+           ehcacheRedis.setRedisExceptionHandle(redisExceptionHandle);
+           redisExceptionHandle.setRedisEhcache(ehcacheRedis);
+           redisExceptionHandle.setStringRedisTemplate(stringRedisTemplate);
+           
            container.addMessageListener(ehcacheRedis, new ChannelTopic(ehcacheRedis.getChannel()));
        }
        simpleCacheManager.setCaches(caches);
@@ -76,6 +95,16 @@ public class EhcacheRedisAutoConfiguration {
        cacheManagerFactoryBean.setConfigLocation (new ClassPathResource(ehcacheConfigFile));  
        cacheManagerFactoryBean.setShared(true);
        return cacheManagerFactoryBean;  
+     }
+     
+     private void registerBean(String name,Class<?> clazz) {
+    	 ConfigurableApplicationContext context = (ConfigurableApplicationContext)applicationContext;  
+         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory)context.getBeanFactory();  
+    	 BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
+          /** 
+           * 注册到spring容器中 
+           */  
+         beanFactory.registerBeanDefinition(name, beanDefinitionBuilder.getBeanDefinition());  
      }
 	
 }

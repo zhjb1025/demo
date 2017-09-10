@@ -29,7 +29,7 @@ public class EhcacheRedis implements Cache,MessageListener  {
 
     private StringRedisTemplate stringRedisTemplate;
     
-    private RedisExceptionHandle redisExceptionHandle= new RedisExceptionHandle(this);
+    private RedisExceptionHandle redisExceptionHandle;
     
 	@Override
 	public String getName() {
@@ -188,7 +188,6 @@ public class EhcacheRedis implements Cache,MessageListener  {
 
 	public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
 		this.stringRedisTemplate = stringRedisTemplate;
-		redisExceptionHandle.setStringRedisTemplate(stringRedisTemplate);
 	}
 	
 	public String getChannel(){
@@ -218,4 +217,9 @@ public class EhcacheRedis implements Cache,MessageListener  {
 		}
 		
 	}
+
+	public void setRedisExceptionHandle(RedisExceptionHandle redisExceptionHandle) {
+		this.redisExceptionHandle = redisExceptionHandle;
+	}
+	
 }

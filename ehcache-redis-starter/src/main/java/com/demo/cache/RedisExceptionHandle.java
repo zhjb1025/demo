@@ -2,6 +2,9 @@ package com.demo.cache;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -26,7 +29,6 @@ public class RedisExceptionHandle extends Thread {
 	
 	public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
 		this.stringRedisTemplate = stringRedisTemplate;
-		this.start();
 	}
 
 	public void add(Object key,Object value,String action){
@@ -95,5 +97,16 @@ public class RedisExceptionHandle extends Thread {
 			}
 		}
 	 }
+	
+	@PostConstruct
+	public void init() {
+		logger.info("启动缓存异常处理线程");
+		this.start();
+	}
+	@PreDestroy
+    public void finish(){
+		logger.info("关闭缓存异常处理线程");
+		this.interrupt();
+	}
 	
 }
