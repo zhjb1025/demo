@@ -17,7 +17,7 @@ $(document).ready(function(){
             {field:'value',title:'值',width:'20%'},
             {field:'remark',title:'说明',width:'20%'},
             {field:'opt',title:'操作',width:'10%',formatter:function (value,row,index) {
-                return  "<a href=# onclick=viewConfig("+index+")>修改</a> ";
+                return  "<a href=# onclick=viewConfig("+index+")>修改</a> |"+" <a href=# onclick=deleteConfig("+index+")>删除</a> ";
             }}
         ]]
     });
@@ -30,19 +30,24 @@ $(document).ready(function(){
     	 }
     });
     
-    $("#group").combobox({
-    	 valueField:'id',
-    	 textField:'text',
-    });
-    
     $("#queryButton").click(queryConfig);
     $("#closeButton").click(function () {
         $('#w').window('close');
     });
     $("#saveButton").click(saveConfig);
+    $("#addButton").click(addConfig);
     queryGroup();
 });
-
+function addConfig(){
+    $("#key").textbox("setValue","");
+    $("#remark").textbox("setValue","");
+    $("#value").textbox("setValue","");
+    $('#group').textbox("setValue","");
+    $('#group').textbox('enable');
+    $('#key').textbox('enable');
+    
+    $('#w').window('open');
+}
 function queryGroup() {
 	var request={};
     request.service ="query_all_group";
@@ -59,7 +64,6 @@ function queryGroup() {
     		data[data.length]=row;
     	}
         $('#group_').combobox("loadData",data);
-        $('#group').combobox("loadData",data);
     }
 }
 function queryConfig( group) {
@@ -83,8 +87,8 @@ function viewConfig(index){
     $("#remark").textbox("setValue",row.remark);
     $("#value").textbox("setValue",row.value);
     $('#key').textbox('disable');
-    $('#group').combobox("select",row.group);
-    $('#group').combobox('disable');
+    $('#group').textbox("setValue",row.group);
+    $('#group').textbox('disable');
    
     $('#w').window('open');
 }
@@ -116,7 +120,27 @@ function saveConfig(){
         $.messager.alert('提示信息',rsp.rspMsg,'info');
     }
     queryConfig( request.group);
+    if(index==null || index==""){
+    	queryGroup();
+    }
     $('#w').window('close');
+}
+
+function deleteConfig(index){
+	var request={};
+	var row=$('#config').datagrid("getRows")[index];
+	request.service ="delete_config";
+	request.group=row.group;
+	request.key=row.key;
+	var rsp=ajaxPostSynch(request);
+    if(rsp.tradeStatus!=1){
+        $.messager.alert('错误提示信息',rsp.rspMsg,'error');
+        return ;
+    }else{
+        $.messager.alert('提示信息',rsp.rspMsg,'info');
+    }
+    queryConfig( request.group);
+    queryGroup();
 }
 
 

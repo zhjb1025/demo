@@ -4,6 +4,8 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.demo.framework.msg.BaseRequest;
+
 public class ModifyPasswordRequest extends BaseRequest{
 
 	@NotBlank(message="原密码不能为空")

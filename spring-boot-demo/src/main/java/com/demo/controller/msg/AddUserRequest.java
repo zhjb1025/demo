@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.demo.framework.msg.BaseRequest;
+
 public class AddUserRequest extends BaseRequest{
 
     @NotBlank(message="登录名不能为空")

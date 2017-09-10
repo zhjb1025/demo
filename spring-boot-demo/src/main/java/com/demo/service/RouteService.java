@@ -14,11 +14,11 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
-import com.demo.controller.msg.BaseRequest;
-import com.demo.controller.msg.BaseResponse;
+import com.demo.common.DemoErrorCode;
 import com.demo.framework.annotation.TradeService;
-import com.demo.framework.enums.ErrorCodeEnum;
 import com.demo.framework.exception.CommException;
+import com.demo.framework.msg.BaseRequest;
+import com.demo.framework.msg.BaseResponse;
 
 
 @Service
@@ -124,7 +124,7 @@ public class RouteService implements ApplicationListener<ContextRefreshedEvent> 
 					try {
 						if(!isParent(BaseResponse.class,returnType)){
 							errorMsg=String.format("服务:%s:方法%s　返回结果不合规", tradeService.value(),bean.getClass().getName()+"."+m.getName()+"()");
-							throw new CommException(ErrorCodeEnum.SYSTEM_ERROR,errorMsg);
+							throw new CommException(DemoErrorCode.SYSTEM_ERROR,errorMsg);
 						}
 						
 					} catch (Exception e) {
@@ -134,7 +134,7 @@ public class RouteService implements ApplicationListener<ContextRefreshedEvent> 
 					try {
 						
 						if(StringUtils.isBlank(version) && StringUtils.isBlank(beanVersion) ){
-							throw new CommException(ErrorCodeEnum.SYSTEM_ERROR,"版本号不能为空");
+							throw new CommException(DemoErrorCode.SYSTEM_ERROR,"版本号不能为空");
 						}
 						if(StringUtils.isBlank(version)){
 							version=beanVersion;
@@ -149,7 +149,7 @@ public class RouteService implements ApplicationListener<ContextRefreshedEvent> 
 
 						}else{
 							errorMsg=String.format("服务方法%s　参数不合规",bean.getClass().getName()+"."+m.getName()+"()");
-							throw new CommException(ErrorCodeEnum.SYSTEM_ERROR,errorMsg);
+							throw new CommException(DemoErrorCode.SYSTEM_ERROR,errorMsg);
 						}
 					} catch (Exception e) {
 						logger.error(bean.getClass().getName()+"配置不正确", e);

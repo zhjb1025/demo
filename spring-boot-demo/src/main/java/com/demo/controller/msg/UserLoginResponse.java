@@ -1,5 +1,7 @@
 package com.demo.controller.msg;
 
+import com.demo.framework.msg.BaseResponse;
+
 /**
  * Created by Auser on 2017/7/15.
  */

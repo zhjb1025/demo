@@ -1,7 +1,7 @@
-package com.demo.controller.msg;
+package com.demo.framework.msg;
 
-import com.demo.framework.enums.ErrorCodeEnum;
 import com.demo.framework.enums.TradeStatusEnum;
+import com.demo.framework.exception.FrameworkErrorCode;
 import com.demo.framework.msg.BaseObject;
 
 public class BaseResponse extends BaseObject {
@@ -14,12 +14,12 @@ public class BaseResponse extends BaseObject {
 	/**
 	 *  响应码
 	 */
-	private String rspCode= ErrorCodeEnum.SUCCESS.getCode();
+	private String rspCode= FrameworkErrorCode.SUCCESS.getCode();
 	
 	/**
 	 * 响应信息
 	 */
-	private String rspMsg=ErrorCodeEnum.SUCCESS.getMsg();
+	private String rspMsg=FrameworkErrorCode.SUCCESS.getMsg();
 	
 	/**
 	 * 处理状态

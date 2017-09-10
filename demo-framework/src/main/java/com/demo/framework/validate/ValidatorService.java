@@ -9,8 +9,8 @@ import javax.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.demo.framework.enums.ErrorCodeEnum;
 import com.demo.framework.exception.CommException;
+import com.demo.framework.exception.FrameworkErrorCode;
 
 @Component
 public class ValidatorService {
@@ -25,7 +25,7 @@ public class ValidatorService {
 	    	 sb.append(iter.next().getMessage()).append(",");
 	     }
 	     if(sb.length()>0){ 
-	    	 throw new CommException(ErrorCodeEnum.VALIDATE_FAIL,sb.substring(0, sb.length()-1));
+	    	 throw new CommException(FrameworkErrorCode.VALIDATE_FAIL,sb.substring(0, sb.length()-1));
 	     }
 	}
 

@@ -2,6 +2,8 @@ package com.demo.controller.msg;
 
 import javax.validation.constraints.NotNull;
 
+import com.demo.framework.msg.BaseRequest;
+
 public class QueryRoleMenuApiRequest extends BaseRequest{
 
     @NotNull(message = "角色ID不能为空")

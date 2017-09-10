@@ -1,4 +1,4 @@
-package com.demo.controller.msg;
+package com.demo.framework.msg;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;

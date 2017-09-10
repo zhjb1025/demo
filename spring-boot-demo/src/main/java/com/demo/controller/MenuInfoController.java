@@ -2,15 +2,13 @@ package com.demo.controller;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.demo.controller.msg.BaseRequest;
-import com.demo.controller.msg.BaseResponse;
 import com.demo.controller.msg.QueryUserMenuResponse;
 import com.demo.framework.annotation.TradeService;
+import com.demo.framework.msg.BaseRequest;
+import com.demo.framework.msg.BaseResponse;
 import com.demo.mapper.MenuInfo;
 import com.demo.service.MenuInfoService;
 

@@ -2,6 +2,7 @@ package com.demo.controller.msg;
 
 import java.util.List;
 
+import com.demo.framework.msg.BaseResponse;
 import com.demo.mapper.BranchInfo;
 
 /**

@@ -21,13 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.demo.common.Constant;
+import com.demo.common.DemoErrorCode;
 import com.demo.controller.msg.AccessLog;
-import com.demo.controller.msg.BaseResponse;
 import com.demo.controller.msg.LoginUserInfo;
 import com.demo.framework.annotation.TradeService;
-import com.demo.framework.enums.ErrorCodeEnum;
 import com.demo.framework.enums.TradeStatusEnum;
 import com.demo.framework.exception.CommException;
+import com.demo.framework.msg.BaseResponse;
 import com.demo.framework.util.CommUtil;
 import com.demo.framework.util.SpringContextUtil;
 import com.demo.framework.util.ThreadCacheData;
@@ -130,13 +130,13 @@ public class GatewayController {
 				throw ex;
 			}else{
 				logger.info("系统异常",e.getTargetException());
-				throw new CommException(ErrorCodeEnum.SYSTEM_FAIL);
+				throw new CommException(DemoErrorCode.SYSTEM_FAIL);
 			}
 		}catch(CommException e){
             throw e;
         }catch(Throwable e){
 			logger.info("系统异常",e);
-			throw new CommException(ErrorCodeEnum.SYSTEM_FAIL);
+			throw new CommException(DemoErrorCode.SYSTEM_FAIL);
 		}
 
 	}
@@ -150,7 +150,7 @@ public class GatewayController {
 		Class<?> serviceParameter = routeService.getServiceParameter(service, version);
 		
 		if(serviceBean==null || serviceMethod==null || serviceParameter==null){
-			throw new CommException(ErrorCodeEnum.SYSTEM_ERROR,"服务名或者版本号错误");
+			throw new CommException(DemoErrorCode.SYSTEM_ERROR,"服务名或者版本号错误");
 		}
 		// 进行访问权限控制
 		logger.info("2.进行访问权限控制");
@@ -161,7 +161,7 @@ public class GatewayController {
 			arg = JSON.parseObject(parameter, serviceParameter);
 		} catch (Exception e) {
 			logger.info("JSON 转换报错",e);
-			throw new CommException(ErrorCodeEnum.SYSTEM_ERROR,"JSON 转换报错");
+			throw new CommException(DemoErrorCode.SYSTEM_ERROR,"JSON 转换报错");
 		}
 		logger.info("3.进行参数校验[{}]",serviceParameter.getName());
 		validatorService.validate(arg);
@@ -227,7 +227,7 @@ public class GatewayController {
 	private void validate(String serviceName,String version,String parameter) throws CommException {
         TradeService tradeService = routeService.getTradeService(serviceName, version);
         if(tradeService==null){
-            throw  new CommException(ErrorCodeEnum.SYSTEM_ERROR_SERVICE_VERSION,serviceName,version);
+            throw  new CommException(DemoErrorCode.SYSTEM_ERROR_SERVICE_VERSION,serviceName,version);
         }
         if (tradeService.isPublic()){  //公共开放接口 不进行访问控制
             return;
@@ -238,16 +238,16 @@ public class GatewayController {
         LoginUserInfo loginUser=(LoginUserInfo)SpringContextUtil.getThreadLocalData().
                 request.getSession().getAttribute(Constant.LOGIN_USER);
         if (loginUser==null){
-            throw  new CommException(ErrorCodeEnum.USER_LOGIN_SESSION_TIMEOUT);
+            throw  new CommException(DemoErrorCode.USER_LOGIN_SESSION_TIMEOUT);
         }
 		if (!loginUser.getToken().equals(token)|| !loginUser.getUserId().toString().equals(userId)){
-            throw  new CommException(ErrorCodeEnum.SYSTEM_ILLEGAL_ACCESS);
+            throw  new CommException(DemoErrorCode.SYSTEM_ILLEGAL_ACCESS);
         }
         if (!tradeService.isAuth()){  //不进行基于角色的权限访问控制(RBAC)的访问控制
             return;
         }
         if (loginUser.getApiServiceInfoMap().get(serviceName+":"+version)==null){
-            throw  new CommException(ErrorCodeEnum.SYSTEM_NO_ACCESS);
+            throw  new CommException(DemoErrorCode.SYSTEM_NO_ACCESS);
         }
 	}
 }

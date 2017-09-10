@@ -1,8 +1,9 @@
 package com.demo.controller.msg;
 
-import com.demo.mapper.MenuInfo;
-
 import java.util.List;
+
+import com.demo.framework.msg.BaseResponse;
+import com.demo.mapper.MenuInfo;
 
 /**
  *

@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.demo.controller.msg.AddRoleRequest;
 import com.demo.controller.msg.AllMenuApiResponse;
-import com.demo.controller.msg.BaseRequest;
-import com.demo.controller.msg.BaseResponse;
 import com.demo.controller.msg.PageQueryResponse;
 import com.demo.controller.msg.QueryRoleMenuApiRequest;
 import com.demo.controller.msg.QueryRoleMenuApiResponse;
@@ -16,6 +14,8 @@ import com.demo.controller.msg.RolePageQueryResult;
 import com.demo.controller.msg.RoleQueryRequest;
 import com.demo.controller.msg.UpdateRoleRequest;
 import com.demo.framework.annotation.TradeService;
+import com.demo.framework.msg.BaseRequest;
+import com.demo.framework.msg.BaseResponse;
 import com.demo.mapper.MenuInfo;
 import com.demo.service.RoleService;
 import com.github.pagehelper.PageHelper;

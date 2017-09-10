@@ -4,6 +4,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.demo.framework.msg.BaseRequest;
+
 public class UpdateUserStatusRequest extends BaseRequest{
 
     @NotNull(message = "ID不能为空")

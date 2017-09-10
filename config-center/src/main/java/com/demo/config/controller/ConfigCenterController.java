@@ -54,6 +54,36 @@ public class ConfigCenterController {
 		return ret;
 	}
 	
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@ResponseBody
+	public String addConfigInfo(@RequestBody String data)  {
+		logger.info("新增配置数据[{}]",data);
+		String ret="";
+		try {
+			ConfigInfo configInfo=JSON.parseObject(data, ConfigInfo.class);
+			ret=configCenterService.addConfig(configInfo);
+		} catch (Exception e) {
+			logger.error("新增配置数据失败",e);
+			return "新增配置失败";
+		}
+		return ret;
+	}
+	
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@ResponseBody
+	public String deleteConfigInfo(@RequestBody String data)  {
+		logger.info("删除配置数据[{}]",data);
+		String ret="";
+		try {
+			ConfigInfo configInfo=JSON.parseObject(data, ConfigInfo.class);
+			ret=configCenterService.deleteConfig(configInfo);
+		} catch (Exception e) {
+			logger.error("删除配置数据失败",e);
+			return "删除配置失败";
+		}
+		return ret;
+	}
+	
 	@RequestMapping(value = "/syn/{group}", method = RequestMethod.GET)
 	@ResponseBody
 	public String synConfigInfo(@PathVariable("group") String group) throws Exception  {

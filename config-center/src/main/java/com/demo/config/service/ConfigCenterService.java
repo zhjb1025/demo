@@ -149,7 +149,10 @@ public class ConfigCenterService {
     	List<ConfigInfo> temp=new ArrayList<ConfigInfo>();
 		String[] group = groups.split(",");
 		for(String g:group ) {
-			temp.addAll(configGroupMap.get(g));
+			if(configGroupMap.get(g)!=null) {
+				temp.addAll(configGroupMap.get(g));
+			}
+			
 		}
     	return temp;
     }
@@ -166,37 +169,58 @@ public class ConfigCenterService {
     
     public String updateConfig(ConfigInfo configInfo) throws Exception{
     	configCenterDao.updateConfig(configInfo);
-    	String ret = notifyChange(configInfo.getGroup());
+    	String ret = notifyChange(configInfo);
+    	return ret;
+    }
+    
+    public String addConfig(ConfigInfo configInfo) throws Exception{
+    	configCenterDao.addConfig(configInfo);
+    	String ret = notifyChange(configInfo);
     	
-    	//修改zookeeper 时间戳 修改时间戳
-    	Stat stat = client.getCuratorFramework().checkExists().forPath(groupUrlPath+configInfo.getGroup());
-    	if(stat==null) {
-    		client.getCuratorFramework().create().creatingParentContainersIfNeeded().withMode(CreateMode.PERSISTENT).forPath(groupUrlPath+configInfo.getGroup(), (""+System.currentTimeMillis()).getBytes());
-    	}else {
-    		client.getCuratorFramework().setData().forPath(groupUrlPath+configInfo.getGroup(), (""+System.currentTimeMillis()).getBytes());
-    	}
+    	return ret;
+    }
+    
+    public String deleteConfig(ConfigInfo configInfo) throws Exception{
+    	configCenterDao.deleteConfig(configInfo.getGroup(), configInfo.getKey());
+    	String ret = notifyChange(configInfo);
     	return ret;
     }
     
     public void synConfig(String group) throws Exception{
     	List<ConfigInfo> list = configCenterDao.loadGroupConfig(group);
-    	configGroupMap.put(group, list);
+    	if(list==null) {
+    		configGroupMap.remove(group);
+    	}else {
+    		configGroupMap.put(group, list);
+    	}
+    	
     }
     
-    private String notifyChange(String group) throws Exception {
+    private String notifyChange(ConfigInfo configInfo) throws Exception {
     	StringBuilder sb= new StringBuilder();
+    	boolean flag=true;
     	List<String> list = client.getCuratorFramework().getChildren().forPath(serverUrlPath);
     	for(String s:list) {
     		String url=URLDecoder.decode(s, "UTF-8");
-    		logger.info("通知[{}]同步数据[{}]",url,group);
+    		logger.info("通知[{}]同步数据[{}]",url,configInfo.getGroup());
     		try {
-    			HttpUtils.get(url+"/syn/"+group);
-    			logger.info("通知[{}]同步数据[{}] 成功",url,group);
+    			HttpUtils.get(url+"/syn/"+configInfo.getGroup());
+    			logger.info("通知[{}]同步数据[{}] 成功",url,configInfo.getGroup());
     			sb.append(url).append("#").append("成功,");
 			} catch (Exception e) {
-				logger.info("通知[{}]同步数据[{}] 失败",url,group);
+				flag=false;
+				logger.info("通知[{}]同步数据[{}] 失败",url,configInfo.getGroup());
 				sb.append(url).append("#").append("失败,");
 			}
+    	}
+    	if(flag) {
+    		//修改zookeeper 时间戳 修改时间戳
+        	Stat stat = client.getCuratorFramework().checkExists().forPath(groupUrlPath+configInfo.getGroup());
+        	if(stat==null) {
+        		client.getCuratorFramework().create().creatingParentContainersIfNeeded().withMode(CreateMode.PERSISTENT).forPath(groupUrlPath+configInfo.getGroup(), (""+System.currentTimeMillis()).getBytes());
+        	}else {
+        		client.getCuratorFramework().setData().forPath(groupUrlPath+configInfo.getGroup(), (""+System.currentTimeMillis()).getBytes());
+        	}
     	}
     	return sb.toString();
     }

@@ -2,6 +2,8 @@ package com.demo.controller.msg;
 
 import javax.validation.constraints.NotNull;
 
+import com.demo.framework.msg.BaseRequest;
+
 public class PageQueryRequest extends BaseRequest{
 
     @NotNull(message = "开始页不能为空")

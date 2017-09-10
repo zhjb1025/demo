@@ -175,4 +175,52 @@ public class ConfigCenterClient {
 			logger.error("同步配置中心数据报错",e);
 		}
 	}
+	
+	
+	public static String addConfig(String group,String key,String value,String remark) throws Exception {
+		ConfigInfo configInfo = new ConfigInfo();
+		configInfo.setGroup(group);
+		configInfo.setKey(key);
+		configInfo.setRemark(remark);
+		configInfo.setValue(value);
+		boolean success=false;
+		String ret="";
+		for(String url:urlList) {
+			try {
+				ret = HttpUtils.post(url+"/add", JSON.toJSONString(configInfo));
+				success=true;
+				break;
+			} catch (Exception e) {
+				logger.error("无效的配置中心地址[{}]",url);
+				logger.error("",e);
+			}
+		}
+		if(!success) {
+			throw new Exception("无法访问中心地址:"+urlList.toString());
+		}
+		return ret;
+	}
+	
+	
+	public static String deleteConfig(String group,String key) throws Exception {
+		ConfigInfo configInfo = new ConfigInfo();
+		configInfo.setGroup(group);
+		configInfo.setKey(key);
+		boolean success=false;
+		String ret="";
+		for(String url:urlList) {
+			try {
+				ret = HttpUtils.post(url+"/delete", JSON.toJSONString(configInfo));
+				success=true;
+				break;
+			} catch (Exception e) {
+				logger.error("无效的配置中心地址[{}]",url);
+				logger.error("",e);
+			}
+		}
+		if(!success) {
+			throw new Exception("无法访问中心地址:"+urlList.toString());
+		}
+		return ret;
+	}
 }

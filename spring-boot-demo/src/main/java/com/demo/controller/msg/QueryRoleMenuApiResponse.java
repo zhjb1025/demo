@@ -2,6 +2,8 @@ package com.demo.controller.msg;
 
 import java.util.List;
 
+import com.demo.framework.msg.BaseResponse;
+
 /**
  * Created by Auser on 2017/7/15.
  */

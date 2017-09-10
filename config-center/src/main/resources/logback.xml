@@ -24,7 +24,8 @@
 
     <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
         <discardingThreshold>0</discardingThreshold>
-        <queueSize>10</queueSize>
+        <queueSize>256</queueSize>
+        <includeCallerData>true</includeCallerData>
         <appender-ref ref="FILE"/>
     </appender>
     <logger name="com.demo">

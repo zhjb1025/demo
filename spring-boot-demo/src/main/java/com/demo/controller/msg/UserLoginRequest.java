@@ -3,6 +3,8 @@ package com.demo.controller.msg;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.demo.framework.msg.BaseRequest;
+
 public class UserLoginRequest extends BaseRequest{
 	
 	@NotBlank(message="登录名不能为空")

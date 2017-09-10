@@ -1,7 +1,5 @@
 package com.demo.framework.exception;
 
-import com.demo.framework.enums.ErrorCodeEnum;
-
 public class CommException extends Exception {
 	
 	
@@ -11,15 +9,15 @@ public class CommException extends Exception {
 	private String errMsg = "";
 	
 	
-	public CommException(ErrorCodeEnum errorCodeEnum,Object... para){
-		super(getMsg(errorCodeEnum,para));
-		this.errCode = errorCodeEnum.getCode();
+	public CommException(ErrorCode errorCode,Object... para){
+		super(getMsg(errorCode,para));
+		this.errCode = errorCode.getCode();
 		this.errMsg = this.getMessage();
 	}
-	private static  String getMsg(ErrorCodeEnum errorCodeEnum,Object... para){
-		String msg=errorCodeEnum.getMsg();
+	private static  String getMsg(ErrorCode errorCode,Object... para){
+		String msg=errorCode.getMsg();
 		if (para!=null){
-			msg=String.format(errorCodeEnum.getMsg(),para);
+			msg=String.format(errorCode.getMsg(),para);
 		}
 		return msg;
 	}

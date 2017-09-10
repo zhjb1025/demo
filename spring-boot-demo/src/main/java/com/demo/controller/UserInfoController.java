@@ -10,11 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.demo.common.Constant;
+import com.demo.common.DemoErrorCode;
 import com.demo.common.enums.UserInfoStatusEnum;
 import com.demo.config.client.ConfigCenterClient;
 import com.demo.controller.msg.AddUserRequest;
-import com.demo.controller.msg.BaseRequest;
-import com.demo.controller.msg.BaseResponse;
 import com.demo.controller.msg.LoginUserInfo;
 import com.demo.controller.msg.ModifyPasswordRequest;
 import com.demo.controller.msg.PageQueryResponse;
@@ -26,8 +25,9 @@ import com.demo.controller.msg.UserLoginResponse;
 import com.demo.controller.msg.UserPageQueryResult;
 import com.demo.controller.msg.UserQueryRequest;
 import com.demo.framework.annotation.TradeService;
-import com.demo.framework.enums.ErrorCodeEnum;
 import com.demo.framework.exception.CommException;
+import com.demo.framework.msg.BaseRequest;
+import com.demo.framework.msg.BaseResponse;
 import com.demo.framework.security.DESede;
 import com.demo.framework.security.RSAUtil;
 import com.demo.framework.util.SpringContextUtil;
@@ -67,11 +67,11 @@ public class UserInfoController {
 		  // 检查密码
           String password=RSAUtil.decryptJSRsa(request.getPwd(),ConfigCenterClient.get("rsa.key.path"));
 		  if(!u.getPassword().equals(DESede.encrypt(password))){
-			  throw new CommException(ErrorCodeEnum.USER_LOGIN_ERROR);
+			  throw new CommException(DemoErrorCode.USER_LOGIN_ERROR);
 		  }
 		  //检查状态
 		  if(!UserInfoStatusEnum.NORMAL.getTradeStatus().equals(u.getStatus())){
-			  throw new CommException(ErrorCodeEnum.USER_STATUS_ERROR);
+			  throw new CommException(DemoErrorCode.USER_STATUS_ERROR);
 		  }
 
 		  response= new UserLoginResponse();
@@ -97,7 +97,7 @@ public class UserInfoController {
 		  update.setId(u.getId());
 		  userInfoService.updateUserInfo(update);
 	  }else{
-		  throw new CommException(ErrorCodeEnum.USER_LOGIN_ERROR);
+		  throw new CommException(DemoErrorCode.USER_LOGIN_ERROR);
 	  }
       return response;
   }
@@ -157,7 +157,7 @@ public class UserInfoController {
         query.setLoginName(request.getLoginName());
         List<UserInfo> list = userInfoService.getUserInfoList(query);
         if(list.size()>0){
-            throw new CommException(ErrorCodeEnum.USER_LOGIN_NAME_EXITS);
+            throw new CommException(DemoErrorCode.USER_LOGIN_NAME_EXITS);
         }
         userInfoService.addUser(request);
         return response;
@@ -168,13 +168,13 @@ public class UserInfoController {
         BaseResponse response= new BaseResponse();
         UserInfo user = userInfoService.getUserInfoById(request.getUserId());
         if(user==null){
-            throw new CommException(ErrorCodeEnum.USER_NOT_EXITS);
+            throw new CommException(DemoErrorCode.USER_NOT_EXITS);
         }
         // 检查原密码
         String password=RSAUtil.decryptJSRsa(request.getPassword(),ConfigCenterClient.get("rsa.key.path"));
         String newPassword=RSAUtil.decryptJSRsa(request.getNewPassword(),ConfigCenterClient.get("rsa.key.path"));
         if(!user.getPassword().equals(DESede.encrypt(password))){
-            throw new CommException(ErrorCodeEnum.USER_PASSWORD_ERROR);
+            throw new CommException(DemoErrorCode.USER_PASSWORD_ERROR);
         }
 
         UserInfo userInfo= new UserInfo();

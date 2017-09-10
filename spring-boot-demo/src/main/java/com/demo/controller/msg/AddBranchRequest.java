@@ -5,6 +5,8 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.demo.framework.msg.BaseRequest;
+
 public class AddBranchRequest extends BaseRequest{
 
     @NotNull(message = "父ID不能为空")

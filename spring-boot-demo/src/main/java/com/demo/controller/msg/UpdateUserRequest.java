@@ -1,10 +1,13 @@
 package com.demo.controller.msg;
 
+import java.util.List;
+
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
-import java.util.List;
+import com.demo.framework.msg.BaseRequest;
 
 public class UpdateUserRequest extends BaseRequest{
     @NotNull(message="用户ID不能为空")
