@@ -4,13 +4,7 @@
         "key": "spring.redis.timeout",
         "remark": "redis超时时间",
         "value": "5000"
-    },
-    {
-        "group": "redis",
-        "key": "spring.redis.password",
-        "remark": "redis密码",
-        "value": ""
-    },
+    }
     {
         "group": "redis",
         "key": "spring.redis.database",
@@ -51,6 +45,6 @@
         "group": "redis",
         "key": "spring.redis.host",
         "remark": "待补充",
-        "value": "192.168.105.28"
+        "value": "127.0.0.1"
     }
 ]

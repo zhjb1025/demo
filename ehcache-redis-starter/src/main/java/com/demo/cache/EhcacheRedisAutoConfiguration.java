@@ -1,13 +1,16 @@
-package com.demo.framework.cache;
+package com.demo.cache;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.Cache;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -16,8 +19,13 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 
 
 @Configuration
-public class RedisEhcacheConfig {
+@ConditionalOnProperty(prefix = "ehcache.redis", value = "enable", matchIfMissing = true)
+public class EhcacheRedisAutoConfiguration {
+//	@Value("${ehcache.config.file-name}")
+    private String ehcacheConfigFileName="ehcache.xml";
 	
+	@Autowired
+	private Environment env;
 	@Bean
     RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
@@ -41,12 +49,12 @@ public class RedisEhcacheConfig {
        SimpleCacheManager simpleCacheManager=new SimpleCacheManager();
        List<Cache> caches =new  ArrayList<Cache>();
        for(String name:cacheNames){
-    	   RedisEhcache redisEhcache = new RedisEhcache();
-           redisEhcache.setName(name);
-           redisEhcache.setStringRedisTemplate(stringRedisTemplate);
-           redisEhcache.setEhcache(bean.getObject().getCache(name));
-           caches.add(redisEhcache);
-           container.addMessageListener(redisEhcache, new ChannelTopic(redisEhcache.getChannel()));
+    	   EhcacheRedis ehcacheRedis = new EhcacheRedis();
+           ehcacheRedis.setName(name);
+           ehcacheRedis.setStringRedisTemplate(stringRedisTemplate);
+           ehcacheRedis.setEhcache(bean.getObject().getCache(name));
+           caches.add(ehcacheRedis);
+           container.addMessageListener(ehcacheRedis, new ChannelTopic(ehcacheRedis.getChannel()));
        }
        simpleCacheManager.setCaches(caches);
        return simpleCacheManager;  
@@ -60,8 +68,12 @@ public class RedisEhcacheConfig {
      */
      @Bean  
      public EhCacheManagerFactoryBean ehCacheManagerFactoryBean(){
-       EhCacheManagerFactoryBean cacheManagerFactoryBean = new EhCacheManagerFactoryBean ();  
-       cacheManagerFactoryBean.setConfigLocation (new ClassPathResource("ehcache.xml"));  
+       EhCacheManagerFactoryBean cacheManagerFactoryBean = new EhCacheManagerFactoryBean (); 
+       String ehcacheConfigFile = env.getProperty("ehcache.config.file-name");
+       if(ehcacheConfigFile==null) {
+    	   ehcacheConfigFile=ehcacheConfigFileName;
+       }
+       cacheManagerFactoryBean.setConfigLocation (new ClassPathResource(ehcacheConfigFile));  
        cacheManagerFactoryBean.setShared(true);
        return cacheManagerFactoryBean;  
      }

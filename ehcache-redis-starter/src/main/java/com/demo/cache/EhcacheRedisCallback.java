@@ -1,4 +1,4 @@
-package com.demo.framework.cache;
+package com.demo.cache;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
@@ -19,6 +20,7 @@ import com.demo.framework.util.SpringContextUtil;
 @ServletComponentScan
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @MapperScan("com.demo.mapper")
+@EnableCaching
 public class DemoApplication {
     private static Logger log = LoggerFactory.getLogger(DemoApplication.class);  
 	public static void main(String[] args) {
@@ -27,7 +29,7 @@ public class DemoApplication {
 	      
 //	      ConfigCenterClient.resetUrl(new String[] {"http://127.0.0.1:8080/config-center"});
 	      ConfigCenterClient.resetUrl(args[0].split(","));
-	      ConfigCenterClient.setGroups("logging,tomcat,datasource,mybatis,mongodb,actuator,zookeeper,demo");
+	      ConfigCenterClient.setGroups("logging,tomcat,datasource,mybatis,mongodb,actuator,zookeeper,redis,demo");
 	      Properties properties = ConfigCenterClient.loadConfig();
 	      SpringApplication springApplication = new SpringApplication(DemoApplication.class);
 	      springApplication.setDefaultProperties(properties);

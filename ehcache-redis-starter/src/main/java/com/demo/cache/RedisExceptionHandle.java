@@ -1,4 +1,4 @@
-package com.demo.framework.cache;
+package com.demo.cache;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -15,13 +15,13 @@ public class RedisExceptionHandle extends Thread {
 	private  Logger logger = LoggerFactory.getLogger(this.getClass());
 	private LinkedBlockingQueue<Object[]> queue= new LinkedBlockingQueue<Object[]>();
 	private StringRedisTemplate stringRedisTemplate;
-	private RedisEhcache redisEhcache;
+	private EhcacheRedis ehcacheRedis;
 	
-	public RedisExceptionHandle(RedisEhcache redisEhcache){
-		this.redisEhcache=redisEhcache;
+	public RedisExceptionHandle(EhcacheRedis ehcacheRedis){
+		this.ehcacheRedis=ehcacheRedis;
 	}
-	public void setRedisEhcache(RedisEhcache redisEhcache) {
-		this.redisEhcache = redisEhcache;
+	public void setRedisEhcache(EhcacheRedis ehcacheRedis) {
+		this.ehcacheRedis = ehcacheRedis;
 	}
 	
 	public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
@@ -52,9 +52,9 @@ public class RedisExceptionHandle extends Thread {
 					try {
 						logger.info("处理异常缓存数据,key={},value={},action={}",key,value,action);
 						if("put".equals(action)){
-							redisEhcache.put_(key, value);
+							ehcacheRedis.put_(key, value);
 						}else{
-							redisEhcache.evict(key);
+							ehcacheRedis.evict(key);
 						}
 						
 					} catch (Exception e) {

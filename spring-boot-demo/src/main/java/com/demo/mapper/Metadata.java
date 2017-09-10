@@ -1,10 +1,13 @@
 package com.demo.mapper;
 
+import java.io.Serializable;
+
 import com.demo.framework.msg.BaseObject;
 
-public class Metadata extends BaseObject {
-	
-    private Integer id;
+public class Metadata extends BaseObject implements Serializable {
+	private static final long serialVersionUID = 2060653314226258519L;
+
+	private Integer id;
 
     private String metaGroup;
 

@@ -1,4 +1,4 @@
-package com.demo.framework.cache;
+package com.demo.cache;
 
 import java.util.concurrent.Callable;
 
@@ -10,6 +10,7 @@ import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
+import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 
 
@@ -18,13 +19,13 @@ import net.sf.ehcache.Element;
  * @author 
  *
  */
-public class RedisEhcache implements Cache,MessageListener  {
+public class EhcacheRedis implements Cache,MessageListener  {
 	
 	private  Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private String name;
 
-    private net.sf.ehcache.Ehcache ehcache;
+    private Ehcache ehcache;
 
     private StringRedisTemplate stringRedisTemplate;
     
@@ -117,6 +118,9 @@ public class RedisEhcache implements Cache,MessageListener  {
 	public void put(Object key, Object value) {
 		logger.info("RedisEhcache.put,key={},value={}",key,value);
 		try {
+			if(value==null) {
+				return;
+			}
 			put_(key,value);
 		} catch (Exception e) {
 			redisExceptionHandle.add(key, value,"put");
@@ -137,6 +141,9 @@ public class RedisEhcache implements Cache,MessageListener  {
 	public ValueWrapper putIfAbsent(Object key, Object value) {
 		logger.info("RedisEhcache.putIfAbsent,key={},value={}",key,value);
 		try {
+			if(value==null) {
+				return new SimpleValueWrapper(value); 
+			}
 			put_(key,value);
 		} catch (Exception e) {
 			redisExceptionHandle.add(key, value,"put");
@@ -174,7 +181,7 @@ public class RedisEhcache implements Cache,MessageListener  {
 		this.name = name;
 	}
 
-	public void setEhcache(net.sf.ehcache.Ehcache ehcache) {
+	public void setEhcache(Ehcache ehcache) {
 		this.ehcache = ehcache;
 	}
 	

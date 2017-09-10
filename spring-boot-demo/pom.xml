@@ -39,6 +39,11 @@
         </dependency>
         <dependency>
             <groupId>com.demo</groupId>
+            <artifactId>ehcache-redis-starter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.demo</groupId>
             <artifactId>config-center-client</artifactId>
             <version>1.0.0</version>
         </dependency>
