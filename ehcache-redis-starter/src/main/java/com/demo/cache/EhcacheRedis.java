@@ -205,6 +205,9 @@ public class EhcacheRedis implements Cache,MessageListener  {
 				ehcache.remove(keys[0]);
 				
 			}else if(keys[1].equals("put")){
+				if(ehcache.get(keys[0])==null) {
+					return;
+				}
 				EhcacheRedisCallback callback= new EhcacheRedisCallback();
 				callback.setKey(keys[0].toString());
 				Object result = stringRedisTemplate.execute(callback);
