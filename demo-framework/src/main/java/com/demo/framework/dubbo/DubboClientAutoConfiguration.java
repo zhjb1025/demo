@@ -8,6 +8,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.demo.zookeeper.ZookeeperClient;
+
 @Configuration
 @EnableConfigurationProperties(value = DubboProperties.class)
 @ConditionalOnClass(DubboClient.class)
@@ -16,12 +18,17 @@ public class DubboClientAutoConfiguration {
 
     @Autowired
     private DubboProperties dubboProperties;
+    
+    @Autowired
+	private ZookeeperClient client;
+	
 
     @Bean
     @ConditionalOnMissingBean(DubboClient.class)
     public DubboClient dubboClient() {
-    	DubboClient client = new DubboClient();
-        client.setDubboProperties(dubboProperties);
-        return client;
+    	DubboClient dubboClient = new DubboClient();
+    	dubboClient.setDubboProperties(dubboProperties);
+    	dubboClient.setClient(client);
+        return dubboClient;
     }
 }

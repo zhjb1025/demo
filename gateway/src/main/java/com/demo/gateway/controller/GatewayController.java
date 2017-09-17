@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,13 +35,18 @@ import com.demo.framework.util.ThreadCacheUtil;
 public class GatewayController {
 
 	private  Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	private static final String P3P_HEADER = "CP=\"NOI CURa ADMa DEVa TAIa OUR BUS IND UNI COM NAV INT\"";
 	@Autowired
 	private DubboClient dubboClient;
+	
+	@Value("${gateway.session.enable}")
+	private boolean sessionEnable;
 	
 	@RequestMapping(value = "/gateway", method = { RequestMethod.POST,RequestMethod.GET })
 	@ResponseBody
 	public String gateway(HttpServletRequest request,HttpServletResponse response) throws CommException {
-		
+		response.setHeader("P3P",P3P_HEADER );//解决 ifame session 丢失的问题
 		long beginTime = System.currentTimeMillis();
         long endTime =beginTime;
         String seqNo=null;
@@ -57,6 +63,8 @@ public class GatewayController {
         ThreadCacheData threadCacheData= new ThreadCacheData();
 		threadCacheData.seqNo=seqNo;
 		threadCacheData.sessionId= request.getSession().getId();
+		
+		System.out.println(request.getSession().getId());
 		ThreadCacheUtil.setThreadLocalData(threadCacheData);
 		
         Thread.currentThread().setName(service+":"+version+":"+seqNo);
@@ -68,7 +76,7 @@ public class GatewayController {
 		logger.info("2.响应数据[{}毫秒][{}]",endTime-beginTime,result);
         return result;
 	}
-//
+	
     /**
      * 获取JSON格式的请求参数
      * @param request

@@ -1,27 +1,41 @@
 package com.demo.framework.dubbo;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.demo.framework.annotation.TradeService;
 import com.demo.framework.exception.CommException;
 import com.demo.framework.exception.FrameworkErrorCode;
+import com.demo.framework.msg.ApiServiceInfo;
 import com.demo.framework.msg.BaseRequest;
 import com.demo.framework.msg.BaseResponse;
+import com.demo.zookeeper.ZookeeperClient;
 @Service
 public class DubboServiceConfig implements ApplicationListener<ContextRefreshedEvent> {
 	private  Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	@Autowired
+	private ZookeeperClient client;
+	
+	@Autowired
+    private DubboProperties dubboProperties;
 	
 	/**
 	 * key=serviceNane_version
@@ -45,6 +59,13 @@ public class DubboServiceConfig implements ApplicationListener<ContextRefreshedE
 	 */
 	private Map<String, Class<?>> serviceParameter=  new ConcurrentHashMap<String, Class<?>>();
 	
+	private List<ApiServiceInfo> apiInfoList= new ArrayList<ApiServiceInfo>();
+	
+	
+	public List<ApiServiceInfo> getApiInfoList() {
+		return apiInfoList;
+	}
+
 	private void addServiceBean(String service,String version,Object bean){
 		String key=service+":"+version;
 		if(serviceBean.get(key)==null){
@@ -141,6 +162,14 @@ public class DubboServiceConfig implements ApplicationListener<ContextRefreshedE
 						
 						if(clazzParameter !=null && clazzParameter.length==1 && isParent(BaseRequest.class,clazzParameter[0])){
 							logger.info("服务映射关系:{}:{}={}",tradeService.value(),version,bean.getClass().getName()+"."+m.getName()+"("+clazzParameter[0].getName()+")");
+							ApiServiceInfo api= new ApiServiceInfo();
+							api.setService(tradeService.value());
+							api.setAuth(tradeService.isAuth());
+							api.setLog(tradeService.isLog());
+							api.setPublic(tradeService.isPublic());
+							api.setVersion(version);
+							apiInfoList.add(api);
+							
 							addServiceBean(tradeService.value(),version,bean);
 							addServiceMethod(tradeService.value(),version,m);
 							addServiceParameter(tradeService.value(),version,clazzParameter[0]);
@@ -153,11 +182,26 @@ public class DubboServiceConfig implements ApplicationListener<ContextRefreshedE
 					} catch (Exception e) {
 						logger.error(bean.getClass().getName()+"配置不正确", e);
 					}
-					
-					
 				}
 			}
 		}
+		
+		//把服务配置信息发布到zookeeper
+		try {
+			
+			String path="/root/api/"+dubboProperties.getServiceInterface();
+			Stat stat = client.getCuratorFramework().checkExists().forPath(path);
+			String aip=JSON.toJSONString(apiInfoList);
+			logger.info("API服务配置信息发布到zookeeper:{}",aip);
+	    	if(stat==null) {
+	    		client.getCuratorFramework().create().creatingParentContainersIfNeeded().withMode(CreateMode.PERSISTENT).forPath(path,aip.getBytes() );
+	    	}else {
+	    		client.getCuratorFramework().setData().forPath(path, aip.getBytes());
+	    	}
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		
 	}
 	
 }

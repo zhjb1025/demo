@@ -14,8 +14,38 @@ public class ApiServiceInfo extends BaseObject  implements Serializable {
     private String version;
 
     private String remark;
+    
+    private boolean isPublic;
+    private boolean isLog;
+    private boolean isAuth;
+    
+    
 
-    public String getRemark() {
+    public boolean isPublic() {
+		return isPublic;
+	}
+
+	public void setPublic(boolean isPublic) {
+		this.isPublic = isPublic;
+	}
+
+	public boolean isLog() {
+		return isLog;
+	}
+
+	public void setLog(boolean isLog) {
+		this.isLog = isLog;
+	}
+
+	public boolean isAuth() {
+		return isAuth;
+	}
+
+	public void setAuth(boolean isAuth) {
+		this.isAuth = isAuth;
+	}
+
+	public String getRemark() {
         return remark;
     }
 

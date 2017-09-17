@@ -30,9 +30,8 @@ public class DubboGenericService implements GenericService {
 	private DubboProperties dubboProperties;
 	
 	private ServiceConfig<GenericService> service =null;
-	
-	
-	
+
+
 	public void setDubboServiceConfig(DubboServiceConfig dubboServiceConfig) {
 		this.dubboServiceConfig = dubboServiceConfig;
 	}
@@ -143,8 +142,9 @@ public class DubboGenericService implements GenericService {
 		service.setRegistry(dubboProperties.getRegistry()); // 多个注册中心可以用setRegistries()
 		service.setProtocol(dubboProperties.getProtocol()); // 多个协议可以用setProtocols()
 		// 弱类型接口名 
-		service.setInterface("com.demo.DubboService");  
-		service.setVersion("1.0.0"); 
+		logger.info("注册Dubbo服务[{}]",dubboProperties.getServiceInterface());
+		service.setInterface(dubboProperties.getServiceInterface());  
+		service.setProvider(dubboProperties.getProvider());
 		// 指向一个通用服务实现 
 		service.setRef(this); 
 		// 暴露及注册服务 

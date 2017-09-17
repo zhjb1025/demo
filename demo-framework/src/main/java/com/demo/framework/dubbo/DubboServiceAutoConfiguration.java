@@ -26,17 +26,12 @@ public class DubboServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(DubboGenericService.class)
-    public DubboGenericService dubboGenericService() {
+    public DubboGenericService dubboGenericService() throws Exception {
     	DubboGenericService dubboGenericService = new DubboGenericService();
     	dubboGenericService.setDubboProperties(dubboProperties);
     	dubboGenericService.setDubboServiceConfig(dubboServiceConfig);
     	dubboGenericService.setValidatorService(validatorService);
-    	try {
-			dubboGenericService.init();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	dubboGenericService.init();
         return dubboGenericService;
     }
 }

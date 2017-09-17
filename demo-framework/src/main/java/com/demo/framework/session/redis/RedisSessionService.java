@@ -23,6 +23,7 @@ public class RedisSessionService {
 
 	public Object getSessionAttribute(String key) {
 		String sessionKey="spring:session:sessions:"+ThreadCacheUtil.getThreadLocalData().sessionId;
+		System.out.println(sessionKey);
 		Object value = redisTemplate.opsForHash().get(sessionKey, "sessionAttr:"+key);
 		if(value==null) {
 			return null;
