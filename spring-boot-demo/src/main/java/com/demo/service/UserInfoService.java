@@ -10,12 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.demo.common.Constant;
 import com.demo.common.enums.UserInfoStatusEnum;
 import com.demo.controller.msg.AddUserRequest;
-import com.demo.controller.msg.LoginUserInfo;
 import com.demo.controller.msg.UpdateUserRequest;
 import com.demo.controller.msg.UserPageQueryResult;
+import com.demo.framework.msg.ApiServiceInfo;
+import com.demo.framework.msg.LoginUserInfo;
 import com.demo.framework.security.DESede;
-import com.demo.framework.util.SpringContextUtil;
-import com.demo.mapper.ApiServiceInfo;
+import com.demo.framework.session.redis.RedisSessionService;
 import com.demo.mapper.Metadata;
 import com.demo.mapper.UserInfo;
 import com.demo.mapper.UserInfoMapper;
@@ -27,6 +27,9 @@ public class UserInfoService {
 
     @Autowired
     private MetadataService metadataService;
+    
+    @Autowired
+    private RedisSessionService redisSessionService;
     
     public UserInfo getUserInfoById(Integer id){
     	UserInfo record= new UserInfo();
@@ -50,8 +53,7 @@ public class UserInfoService {
 
     @Transactional(rollbackFor=Exception.class)
     public void updateUser(UpdateUserRequest request){
-        LoginUserInfo loginUser=(LoginUserInfo) SpringContextUtil.getThreadLocalData().
-                request.getSession().getAttribute(Constant.LOGIN_USER);
+        LoginUserInfo loginUser=(LoginUserInfo)redisSessionService.getSessionAttribute(Constant.LOGIN_USER);
         UserInfo record= new UserInfo();
         record.setId(request.getId());
         record.setUserName(request.getUserName());
@@ -70,8 +72,7 @@ public class UserInfoService {
     @Transactional(rollbackFor=Exception.class)
     public void addUser(AddUserRequest request) throws Exception {
 
-        LoginUserInfo loginUser=(LoginUserInfo) SpringContextUtil.getThreadLocalData().
-                request.getSession().getAttribute(Constant.LOGIN_USER);
+        LoginUserInfo loginUser=(LoginUserInfo) redisSessionService.getSessionAttribute(Constant.LOGIN_USER);
         UserInfo record= new UserInfo();
         record.setLoginName(request.getLoginName());
         record.setUserName(request.getUserName());

@@ -39,7 +39,7 @@
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
         <result column="parent_id" property="parentId" jdbcType="INTEGER" />
-        <collection property="apiServiceInfos" ofType="com.demo.mapper.ApiServiceInfo">
+        <collection property="apiServiceInfos" ofType="com.demo.framework.msg.ApiServiceInfo">
             <id column="api_id" property="id" jdbcType="INTEGER" />
             <result column="remark" property="remark" jdbcType="VARCHAR" />
         </collection>

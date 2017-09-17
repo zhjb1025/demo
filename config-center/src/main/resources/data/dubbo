@@ -1,0 +1,26 @@
+[
+	{
+        "group": "dubbo",
+        "key": "dubbo.application.name",
+        "remark": "dubbo应用名称",
+        "value": "gateway"
+    },
+    {
+        "group": "dubbo",
+        "key": "dubbo.registry.address",
+        "remark": "注册中心地址",
+        "value": "zookeeper://127.0.0.1:2181"
+    },
+    {
+        "group": "dubbo",
+        "key": "dubbo.protocol.name",
+        "remark": "协议",
+        "value": "dubbo"
+    },
+    {
+        "group": "dubbo",
+        "key": "dubbo.protocol.port",
+        "remark": "服务端口",
+        "value": "20881"
+    }
+]

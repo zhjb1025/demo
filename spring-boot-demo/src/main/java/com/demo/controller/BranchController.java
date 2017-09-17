@@ -8,14 +8,14 @@ import org.springframework.stereotype.Service;
 
 import com.demo.common.Constant;
 import com.demo.controller.msg.AddBranchRequest;
-import com.demo.controller.msg.LoginUserInfo;
 import com.demo.controller.msg.QueryAllBranchResponse;
 import com.demo.controller.msg.UpdateBranchRequest;
 import com.demo.framework.annotation.TradeService;
 import com.demo.framework.msg.BaseRequest;
 import com.demo.framework.msg.BaseResponse;
+import com.demo.framework.msg.LoginUserInfo;
+import com.demo.framework.session.redis.RedisSessionService;
 import com.demo.framework.util.CommUtil;
-import com.demo.framework.util.SpringContextUtil;
 import com.demo.mapper.BranchInfo;
 import com.demo.service.BranchService;
 
@@ -31,6 +31,9 @@ public class BranchController {
   
   @Autowired
   private BranchService branchService;
+  
+  @Autowired
+  private RedisSessionService redisSessionService;
     /**
      * 查询所有机构信息
      * @param request
@@ -52,8 +55,7 @@ public class BranchController {
         branchInfo.setBranchName(request.getBranchName());
         branchInfo.setRemark(request.getRemark());
         branchInfo.setUpdateTime(new Date());
-        LoginUserInfo loginUser=(LoginUserInfo) SpringContextUtil.getThreadLocalData().
-                request.getSession().getAttribute(Constant.LOGIN_USER);
+        LoginUserInfo loginUser=(LoginUserInfo) redisSessionService.getSessionAttribute(Constant.LOGIN_USER);
         branchInfo.setUpdateUserId(loginUser.getUserId());
         branchService.updateBranchInfo(branchInfo);
         return response;
@@ -68,8 +70,7 @@ public class BranchController {
         branchInfo.setRemark(request.getRemark());
         branchInfo.setUpdateTime(new Date());
         branchInfo.setCreateTime(new Date());
-        LoginUserInfo loginUser=(LoginUserInfo) SpringContextUtil.getThreadLocalData().
-                request.getSession().getAttribute(Constant.LOGIN_USER);
+        LoginUserInfo loginUser=(LoginUserInfo) redisSessionService.getSessionAttribute(Constant.LOGIN_USER);
         branchInfo.setUpdateUserId(loginUser.getUserId());
         branchInfo.setCreateUserId(loginUser.getUserId());
         BranchInfo parentBranch = branchService.getBranchInfo(request.getParentId());

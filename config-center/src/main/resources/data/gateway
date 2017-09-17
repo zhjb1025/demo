@@ -1,0 +1,8 @@
+[
+	{
+        "group": "gateway",
+        "key": "dubbo.client.enable",
+        "remark": "Dubbo客户端开关",
+        "value": "true"
+    }
+]

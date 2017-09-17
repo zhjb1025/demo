@@ -1,9 +1,15 @@
 package com.demo.mapper;
 
-import com.demo.controller.msg.UserPageQueryResult;
-import org.apache.ibatis.annotations.*;
-
 import java.util.List;
+
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import com.demo.controller.msg.UserPageQueryResult;
+import com.demo.framework.msg.ApiServiceInfo;
 
 @Mapper
 public interface UserInfoMapper {

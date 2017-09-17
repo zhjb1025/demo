@@ -72,6 +72,27 @@ public class ConfigCenterClient {
 		}
 		return value.toString();
 	}
+	public static String get(String key,String defaultValue) {
+		Object value = properties.get(key);
+		if(value==null) {
+			return defaultValue;
+		}
+		return value.toString();
+	}
+	public static Integer getInt(String key,int defaultValue) {
+		Object value = properties.get(key);
+		if(value==null) {
+			return defaultValue;
+		}
+		return Integer.parseInt(value.toString());
+	}
+	public static Integer getInt(String key) {
+		Object value = properties.get(key);
+		if(value==null) {
+			return null;
+		}
+		return Integer.parseInt(value.toString());
+	}
 	
 	public static List<String> queryAllGroup() throws Exception {
 		List<String> list= new ArrayList<String>();

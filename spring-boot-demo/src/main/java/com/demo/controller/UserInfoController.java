@@ -14,7 +14,6 @@ import com.demo.common.DemoErrorCode;
 import com.demo.common.enums.UserInfoStatusEnum;
 import com.demo.config.client.ConfigCenterClient;
 import com.demo.controller.msg.AddUserRequest;
-import com.demo.controller.msg.LoginUserInfo;
 import com.demo.controller.msg.ModifyPasswordRequest;
 import com.demo.controller.msg.PageQueryResponse;
 import com.demo.controller.msg.ResetPasswordRequest;
@@ -26,12 +25,14 @@ import com.demo.controller.msg.UserPageQueryResult;
 import com.demo.controller.msg.UserQueryRequest;
 import com.demo.framework.annotation.TradeService;
 import com.demo.framework.exception.CommException;
+import com.demo.framework.msg.ApiServiceInfo;
 import com.demo.framework.msg.BaseRequest;
 import com.demo.framework.msg.BaseResponse;
+import com.demo.framework.msg.LoginUserInfo;
 import com.demo.framework.security.DESede;
 import com.demo.framework.security.RSAUtil;
-import com.demo.framework.util.SpringContextUtil;
-import com.demo.mapper.ApiServiceInfo;
+import com.demo.framework.session.redis.RedisSessionService;
+import com.demo.framework.util.ThreadCacheUtil;
 import com.demo.mapper.Metadata;
 import com.demo.mapper.UserInfo;
 import com.demo.service.MetadataService;
@@ -55,6 +56,9 @@ public class UserInfoController {
   @Autowired
   private MetadataService metadataService;
   
+  @Autowired
+  private RedisSessionService redisSessionService;
+  
   @TradeService(value="user_login",isPublic = true)
   public BaseResponse login(UserLoginRequest request) throws Exception {
 	  logger .info("用户[{}]登录",request.getLoginName());
@@ -77,7 +81,7 @@ public class UserInfoController {
 		  response= new UserLoginResponse();
 		  response.setSeqNo(request.getSeqNo());
 		  response.setUserId(u.getId());
-		  response.setToken(SpringContextUtil.getThreadLocalData().request.getSession().getId());
+		  response.setToken(ThreadCacheUtil.getThreadLocalData().sessionId);
 		  response.setBranchId(u.getBranchId());
 		  response.setUserName(u.getUserName());
 
@@ -88,7 +92,7 @@ public class UserInfoController {
           for(ApiServiceInfo api:apiList){
               loginUserInfo.getApiServiceInfoMap().put(api.getService()+":"+api.getVersion(),api);
           }
-		  SpringContextUtil.getThreadLocalData().request.getSession().setAttribute(Constant.LOGIN_USER,loginUserInfo);
+          redisSessionService.setSessionAttribute(Constant.LOGIN_USER,loginUserInfo);
 
           logger .info("用户[{}]登录信息[{}]",request.getLoginName(), JSON.toJSONString(loginUserInfo));
 		  //更新登录时间
@@ -121,8 +125,7 @@ public class UserInfoController {
         userInfo.setId(request.getId());
         userInfo.setStatus(request.getStatus());
         userInfo.setUpdateTime(new Date());
-        LoginUserInfo loginUser=(LoginUserInfo) SpringContextUtil.getThreadLocalData().
-                request.getSession().getAttribute(Constant.LOGIN_USER);
+        LoginUserInfo loginUser=(LoginUserInfo) redisSessionService.getSessionAttribute(Constant.LOGIN_USER);
         userInfo.setUpdateUserId(loginUser.getUserId());
         userInfoService.updateUserInfo(userInfo);
         return response;
@@ -136,8 +139,7 @@ public class UserInfoController {
         Metadata defaultPassword = metadataService.queryMetaData("default_password");
         userInfo.setPassword(DESede.encrypt(defaultPassword.getMetaCode()));
         userInfo.setUpdateTime(new Date());
-        LoginUserInfo loginUser=(LoginUserInfo) SpringContextUtil.getThreadLocalData().
-                request.getSession().getAttribute(Constant.LOGIN_USER);
+        LoginUserInfo loginUser=(LoginUserInfo) redisSessionService.getSessionAttribute(Constant.LOGIN_USER);
         userInfo.setUpdateUserId(loginUser.getUserId());
         userInfoService.updateUserInfo(userInfo);
         return response;
@@ -188,7 +190,7 @@ public class UserInfoController {
     @TradeService(value="user_logout",isPublic = true)
     public BaseResponse userLogout(BaseRequest request) throws Exception {
         BaseResponse response= new BaseResponse();
-        SpringContextUtil.getThreadLocalData().request.getSession().removeAttribute(Constant.LOGIN_USER);
+        redisSessionService.removeSessionAttribute(Constant.LOGIN_USER);
         return response;
     }
 }

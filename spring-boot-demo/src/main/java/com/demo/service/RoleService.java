@@ -9,10 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.demo.common.Constant;
 import com.demo.controller.msg.AddRoleRequest;
-import com.demo.controller.msg.LoginUserInfo;
 import com.demo.controller.msg.RolePageQueryResult;
 import com.demo.controller.msg.UpdateRoleRequest;
-import com.demo.framework.util.SpringContextUtil;
+import com.demo.framework.msg.LoginUserInfo;
+import com.demo.framework.session.redis.RedisSessionService;
 import com.demo.mapper.MenuInfo;
 import com.demo.mapper.RoleInfo;
 import com.demo.mapper.RoleInfoMapper;
@@ -21,6 +21,9 @@ import com.demo.mapper.RoleInfoMapper;
 public class RoleService {
     @Autowired
     private RoleInfoMapper roleInfoMapper;
+    
+    @Autowired
+    private RedisSessionService redisSessionService;
 
     public List<RolePageQueryResult> queryRole( String roleName){
         return  roleInfoMapper.queryRole(roleName);
@@ -41,8 +44,7 @@ public class RoleService {
 
     @Transactional(rollbackFor=Exception.class)
     public void addRole(AddRoleRequest request){
-        LoginUserInfo loginUser=(LoginUserInfo) SpringContextUtil.getThreadLocalData().
-                request.getSession().getAttribute(Constant.LOGIN_USER);
+        LoginUserInfo loginUser=(LoginUserInfo)redisSessionService.getSessionAttribute(Constant.LOGIN_USER);
         RoleInfo roleInfo= new RoleInfo();
         roleInfo.setRoleName(request.getRoleName());
         roleInfo.setRemark(request.getRemark());
@@ -63,8 +65,7 @@ public class RoleService {
 
     @Transactional(rollbackFor=Exception.class)
     public void updateRole(UpdateRoleRequest request){
-        LoginUserInfo loginUser=(LoginUserInfo) SpringContextUtil.getThreadLocalData().
-                request.getSession().getAttribute(Constant.LOGIN_USER);
+        LoginUserInfo loginUser=(LoginUserInfo) redisSessionService.getSessionAttribute(Constant.LOGIN_USER);
         RoleInfo roleInfo= new RoleInfo();
         roleInfo.setId(request.getId());
         roleInfo.setRoleName(request.getRoleName());

@@ -30,7 +30,6 @@ import com.demo.framework.msg.BaseResponse;
 import com.demo.framework.util.CommUtil;
 
 @Service
-//@ThreadManager(name = "AccessLogService")
 @TradeService(version="1.0.0")
 public class AccessLogService extends Thread  {
 	private  Logger logger = LoggerFactory.getLogger(this.getClass());

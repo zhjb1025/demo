@@ -8,7 +8,7 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.support.SimpleValueWrapper;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
@@ -27,7 +27,7 @@ public class EhcacheRedis implements Cache,MessageListener  {
 
     private Ehcache ehcache;
 
-    private StringRedisTemplate stringRedisTemplate;
+    private RedisTemplate<Object,Object> redisTemplate;
     
     private RedisExceptionHandle redisExceptionHandle;
     
@@ -63,9 +63,7 @@ public class EhcacheRedis implements Cache,MessageListener  {
 			result=value.getObjectValue();
 		}else{
 			logger.info("Get value from Redis");
-			EhcacheRedisCallback callback= new EhcacheRedisCallback();
-			callback.setKey(key.toString());
-			result=stringRedisTemplate.execute(callback);
+			result=redisTemplate.opsForValue().get(key);
 			if(result!=null){
 				logger.info("修复本地缺失的数据key={},Value={}",key,result);
 				Element element= new Element(key, result);
@@ -129,11 +127,8 @@ public class EhcacheRedis implements Cache,MessageListener  {
 	}
 	
 	public void put_(Object key, Object value){
-		EhcacheRedisCallback callback= new EhcacheRedisCallback();
-		callback.setKey(key.toString());
-		callback.setValue(value);
-		stringRedisTemplate.execute(callback);
-		stringRedisTemplate.convertAndSend(getChannel(), key+":put");
+		redisTemplate.opsForValue().set(key,value);
+		redisTemplate.convertAndSend(getChannel(), key+":put");
 		Element element = new Element(key, value);
 		ehcache.put(element);
 	}
@@ -157,8 +152,8 @@ public class EhcacheRedis implements Cache,MessageListener  {
 		logger.info("RedisEhcache.evict,key={}",key);
 		try {
 			ehcache.remove(key);
-			stringRedisTemplate.delete(key.toString());
-			stringRedisTemplate.convertAndSend(getChannel(), key+":remove");
+			redisTemplate.delete(key);
+			redisTemplate.convertAndSend(getChannel(), key+":remove");
 		} catch (Exception e) {
 			redisExceptionHandle.add(key, null,"remove");
 			logger.error("删除 key 出错",e);
@@ -184,12 +179,6 @@ public class EhcacheRedis implements Cache,MessageListener  {
 	public void setEhcache(Ehcache ehcache) {
 		this.ehcache = ehcache;
 	}
-	
-
-	public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
-		this.stringRedisTemplate = stringRedisTemplate;
-	}
-	
 	public String getChannel(){
 		return "REDIS_EHCACHE:"+this.name;
 	}
@@ -208,9 +197,7 @@ public class EhcacheRedis implements Cache,MessageListener  {
 				if(ehcache.get(keys[0])==null) {
 					return;
 				}
-				EhcacheRedisCallback callback= new EhcacheRedisCallback();
-				callback.setKey(keys[0].toString());
-				Object result = stringRedisTemplate.execute(callback);
+				Object result = redisTemplate.opsForValue().get(keys[0]);
 				logger.info("更新数据,key={},value={}",keys[0],result);
 				Element element = new Element(keys[0], result);
 				ehcache.put(element);
@@ -223,6 +210,10 @@ public class EhcacheRedis implements Cache,MessageListener  {
 
 	public void setRedisExceptionHandle(RedisExceptionHandle redisExceptionHandle) {
 		this.redisExceptionHandle = redisExceptionHandle;
+	}
+
+	public void setRedisTemplate(RedisTemplate<Object, Object> redisTemplate) {
+		this.redisTemplate = redisTemplate;
 	}
 	
 }

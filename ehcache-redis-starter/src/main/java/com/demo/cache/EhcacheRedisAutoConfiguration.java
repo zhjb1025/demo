@@ -17,9 +17,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 
 @Configuration
@@ -50,19 +52,22 @@ public class EhcacheRedisAutoConfiguration {
     public SimpleCacheManager simpleCacheManager(
     		EhCacheManagerFactoryBean bean,
     		RedisConnectionFactory connectionFactory,
-    		StringRedisTemplate stringRedisTemplate,
+    		RedisTemplate<Object,Object> redisTemplate,
     		RedisMessageListenerContainer container){
+    	
+    	RedisSerializer<String> stringSerializer = new StringRedisSerializer();
+		redisTemplate.setHashKeySerializer(stringSerializer);
+		redisTemplate.setKeySerializer(stringSerializer);
+		
        String[] cacheNames = bean.getObject().getCacheNames();
        SimpleCacheManager simpleCacheManager=new SimpleCacheManager();
        List<Cache> caches =new  ArrayList<Cache>();
        for(String name:cacheNames){
-    	   System.out.println("注册bean");
     	   registerBean("ehcacheRedis_"+name,EhcacheRedis.class);
     	   registerBean("redisExceptionHandle_"+name,RedisExceptionHandle.class);
-//    	   EhcacheRedis ehcacheRedis = new EhcacheRedis();
     	   EhcacheRedis ehcacheRedis=(EhcacheRedis)applicationContext.getBean("ehcacheRedis_"+name);
            ehcacheRedis.setName(name);
-           ehcacheRedis.setStringRedisTemplate(stringRedisTemplate);
+           ehcacheRedis.setRedisTemplate(redisTemplate);
            ehcacheRedis.setEhcache(bean.getObject().getCache(name));
            caches.add(ehcacheRedis);
            
@@ -71,7 +76,7 @@ public class EhcacheRedisAutoConfiguration {
            
            ehcacheRedis.setRedisExceptionHandle(redisExceptionHandle);
            redisExceptionHandle.setRedisEhcache(ehcacheRedis);
-           redisExceptionHandle.setStringRedisTemplate(stringRedisTemplate);
+           redisExceptionHandle.setRedisTemplate(redisTemplate);
            
            container.addMessageListener(ehcacheRedis, new ChannelTopic(ehcacheRedis.getChannel()));
        }

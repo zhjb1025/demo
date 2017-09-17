@@ -2,6 +2,7 @@ package com.demo.mapper;
 
 import java.util.List;
 
+import com.demo.framework.msg.ApiServiceInfo;
 import com.demo.framework.msg.BaseObject;
 
 public class MenuInfo extends BaseObject{

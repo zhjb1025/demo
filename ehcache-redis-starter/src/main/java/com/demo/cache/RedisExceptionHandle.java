@@ -7,7 +7,7 @@ import javax.annotation.PreDestroy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * 
@@ -17,7 +17,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 public class RedisExceptionHandle extends Thread {
 	private  Logger logger = LoggerFactory.getLogger(this.getClass());
 	private LinkedBlockingQueue<Object[]> queue= new LinkedBlockingQueue<Object[]>();
-	private StringRedisTemplate stringRedisTemplate;
+	private RedisTemplate<Object,Object> redisTemplate;
 	private EhcacheRedis ehcacheRedis;
 	
 	public RedisExceptionHandle(EhcacheRedis ehcacheRedis){
@@ -27,8 +27,8 @@ public class RedisExceptionHandle extends Thread {
 		this.ehcacheRedis = ehcacheRedis;
 	}
 	
-	public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
-		this.stringRedisTemplate = stringRedisTemplate;
+	public void setRedisTemplate(RedisTemplate<Object,Object>  redisTemplate) {
+		this.redisTemplate = redisTemplate;
 	}
 
 	public void add(Object key,Object value,String action){
@@ -85,7 +85,7 @@ public class RedisExceptionHandle extends Thread {
 		logger.error("开始测试redis服务器是否可用.......");
 		while(true){
 			try {
-				stringRedisTemplate.opsForValue().get("test");
+				redisTemplate.opsForValue().get("test");
 				break;
 			} catch (Exception e) {
 				logger.error("连接redis失败 5000毫秒后重试.......");

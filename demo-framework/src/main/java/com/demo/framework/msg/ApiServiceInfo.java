@@ -1,10 +1,13 @@
-package com.demo.mapper;
+package com.demo.framework.msg;
+
+import java.io.Serializable;
 
 import com.demo.framework.msg.BaseObject;
 
-public class ApiServiceInfo extends BaseObject {
-	
-    private Integer id;
+public class ApiServiceInfo extends BaseObject  implements Serializable {
+	private static final long serialVersionUID = 6708089639643255787L;
+
+	private Integer id;
 
     private String service;
 

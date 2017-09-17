@@ -1,13 +1,12 @@
-package com.demo.controller.msg;
+package com.demo.framework.msg;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.demo.framework.msg.BaseObject;
-import com.demo.mapper.ApiServiceInfo;
-
-public class LoginUserInfo extends BaseObject {
-    private Integer userId;
+public class LoginUserInfo extends BaseObject  implements Serializable {
+	private static final long serialVersionUID = 1605578504372030891L;
+	private Integer userId;
     private String token;
     private Map<String ,ApiServiceInfo> apiServiceInfoMap=new HashMap<String ,ApiServiceInfo>();
 
