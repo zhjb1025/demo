@@ -7,13 +7,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.session.data.redis.RedisFlushMode;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 import com.demo.config.client.ConfigCenterClient;
 import com.demo.framework.util.SpringContextUtil;
 
 
 @SpringBootApplication
-//@EnableRedisHttpSession(maxInactiveIntervalInSeconds=10,redisFlushMode=RedisFlushMode.IMMEDIATE)
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds=600,redisFlushMode=RedisFlushMode.IMMEDIATE)
 public class GatewayApplication {
 	private static Logger logger = LoggerFactory.getLogger(GatewayApplication.class);  
 	

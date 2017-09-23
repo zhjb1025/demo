@@ -27,7 +27,6 @@ import com.demo.framework.exception.FrameworkErrorCode;
 import com.demo.framework.msg.ApiServiceInfo;
 import com.demo.framework.msg.BaseResponse;
 import com.demo.framework.msg.LoginUserInfo;
-import com.demo.framework.session.redis.RedisSessionService;
 import com.demo.framework.util.CommUtil;
 import com.demo.framework.util.ThreadCacheData;
 import com.demo.framework.util.ThreadCacheUtil;
@@ -44,12 +43,8 @@ public class GatewayController {
 
 	private  Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-//	private static final String P3P_HEADER = "\"IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT\"";
 	@Autowired
 	private DubboClient dubboClient;
-	
-	@Autowired
-	private RedisSessionService redisSessionService;
 	
 	@Value("${gateway.session.enable}")
 	private boolean sessionEnable;
@@ -57,7 +52,6 @@ public class GatewayController {
 	@RequestMapping(value = "/gateway", method = { RequestMethod.POST,RequestMethod.GET })
 	@ResponseBody
 	public String gateway(HttpServletRequest request,HttpServletResponse response) throws CommException {
-//		response.setHeader("P3P",P3P_HEADER );//解决 ifame session 丢失的问题
 		long beginTime = System.currentTimeMillis();
         long endTime =beginTime;
         String seqNo=null;
@@ -65,24 +59,25 @@ public class GatewayController {
         String version=null;
         String parameter=null;
         String result=null;
-        String token=null;
         
         // 1.获取请求参数
         parameter=getRequestParameter(request);
         seqNo=CommUtil.getJsonValue(parameter,"seqNo");
         service=CommUtil.getJsonValue(parameter,"service");
         version=CommUtil.getJsonValue(parameter,"version");
-        token = CommUtil.getJsonValue(parameter, "token");
         
         ThreadCacheData threadCacheData= new ThreadCacheData();
 		threadCacheData.seqNo=seqNo;
-		threadCacheData.sessionId=token;
+		if(sessionEnable) {
+			threadCacheData.sessionId=request.getSession().getId();
+		}
+		
 		ThreadCacheUtil.setThreadLocalData(threadCacheData);
 		
 		try {
 			Thread.currentThread().setName(service+":"+version+":"+seqNo);
 	        logger.info("1.接收到请求数据[{}]",parameter);
-	        accessControl(service,version,parameter,token);
+	        accessControl(service,version,parameter,request);
 	        result=dubboClient.send(parameter, seqNo, service, version);
 		} catch ( CommException e) {
 			BaseResponse rsp = makeErrorResponse(e.getErrCode(),e.getErrMsg());
@@ -164,10 +159,10 @@ public class GatewayController {
 	 * 访问控制
 	 * @param serviceName
 	 * @param version
-	 * @param request
+	 * @param parameter
 	 * @throws CommException 
 	 */
-	private void accessControl(String serviceName, String version, String request,String token) throws CommException {
+	private void accessControl(String serviceName, String version, String parameter,HttpServletRequest request) throws CommException {
 		 logger.info("2.进行API访问控制");
 		ApiServiceInfo apiServiceInfo = dubboClient.getApiServiceInfo(serviceName);
 		if (apiServiceInfo == null) {
@@ -179,8 +174,9 @@ public class GatewayController {
 		
 		if (sessionEnable) {
 			// 私有接口需要登录才能访问
-			String userId = CommUtil.getJsonValue(request, "userId");
-			LoginUserInfo loginUser = (LoginUserInfo) redisSessionService.getSessionAttribute(Constant.LOGIN_USER);
+			String userId = CommUtil.getJsonValue(parameter, "userId");
+			String token = CommUtil.getJsonValue(parameter, "token");
+			LoginUserInfo loginUser = (LoginUserInfo) request.getSession().getAttribute(Constant.LOGIN_USER);
 			if (loginUser == null) {
 				throw new CommException(GatewayErrorCode.GATEWAY_SESSION_TIMEOUT);
 			}

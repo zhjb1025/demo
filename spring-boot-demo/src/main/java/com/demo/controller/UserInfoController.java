@@ -33,7 +33,6 @@ import com.demo.framework.msg.LoginUserInfo;
 import com.demo.framework.security.DESede;
 import com.demo.framework.security.RSAUtil;
 import com.demo.framework.session.redis.RedisSessionService;
-import com.demo.framework.util.ThreadCacheUtil;
 import com.demo.mapper.Metadata;
 import com.demo.mapper.UserInfo;
 import com.demo.service.MetadataService;
@@ -83,7 +82,6 @@ public class UserInfoController {
 		  response.setSeqNo(request.getSeqNo());
 		  response.setUserId(u.getId());
 		  response.setToken(UUID.randomUUID().toString());
-		  ThreadCacheUtil.getThreadLocalData().sessionId=response.getToken();
 		  response.setBranchId(u.getBranchId());
 		  response.setUserName(u.getUserName());
 

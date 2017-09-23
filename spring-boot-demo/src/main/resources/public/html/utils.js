@@ -5,6 +5,10 @@
 var serviceVersion="1.0.0";
 var url="/gateway";
 //var url="http://127.0.0.1:8081/demo/gateway";
+function goto(url){
+	document.location=url;
+}
+
 function getSeqNo() {
     var  now = new Date().format("yyyyMMddhhmmss");
     var user=sessionStorage.getItem("LOGIN_USER");

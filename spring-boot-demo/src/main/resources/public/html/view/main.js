@@ -110,6 +110,20 @@ function queryMenuInfo() {
 
 
 function addTab(subtitle,url){
+	var tab = $('#tabs').tabs('tabs');  // get selected panel
+	if(tab.length==0){
+		 $('#tabs').tabs('add',{
+	            title:subtitle,
+	            content:createFrame(url),
+	            closable:false,
+	            width:$('#mainPanle').width()-10,
+	            height:$('#mainPanle').height()-100
+	        });
+	}else{
+	 	$(".tabs-title").text(subtitle);
+		window.frames["mainFrame"].window.goto(url);
+	}
+	/*
     if(!$('#tabs').tabs('exists',subtitle)){
         $('#tabs').tabs('add',{
             title:subtitle,
@@ -121,6 +135,7 @@ function addTab(subtitle,url){
     }else{
         $('#tabs').tabs('select',subtitle);
     }
+    */
 
 }
 
