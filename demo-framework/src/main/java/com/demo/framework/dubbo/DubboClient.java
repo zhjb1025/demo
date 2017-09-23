@@ -13,12 +13,10 @@ import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.alibaba.dubbo.rpc.service.GenericService;
 import com.alibaba.fastjson.JSON;
-import com.demo.framework.enums.TradeStatusEnum;
 import com.demo.framework.exception.CommException;
 import com.demo.framework.exception.FrameworkErrorCode;
 import com.demo.framework.msg.ApiServiceInfo;
 import com.demo.framework.msg.BaseRequest;
-import com.demo.framework.msg.BaseResponse;
 import com.demo.framework.util.ThreadCacheUtil;
 import com.demo.zookeeper.ZookeeperClient;
 
@@ -37,6 +35,11 @@ public class DubboClient {
 	 * key=serviceName
 	 */
 	private Map<String,ReferenceConfig<GenericService>> serviceMap = new ConcurrentHashMap<String,ReferenceConfig<GenericService>>();
+	
+	/**
+	 * key=serviceName
+	 */
+	private Map<String,ApiServiceInfo> apiMap = new ConcurrentHashMap<String,ApiServiceInfo>();
 	
 	
 	public void setClient(ZookeeperClient client) {
@@ -89,46 +92,51 @@ public class DubboClient {
 		
 		for(ApiServiceInfo apiServiceInfo:apiList) {
 			serviceMap.put(apiServiceInfo.getService(), reference);
+			apiMap.put(apiServiceInfo.getService(), apiServiceInfo);
 		}
 	}
-	public String send(String request,String seqNo,String serviceName,String version) {
+	
+	/**
+	 * 调用远程服务
+	 * @param request
+	 * @param seqNo
+	 * @param serviceName
+	 * @param version
+	 * @return
+	 * @throws CommException
+	 * @throws Exception
+	 */
+	public String send(String request,String seqNo,String serviceName,String version) throws CommException ,Exception{
 		
 		if(ThreadCacheUtil.getThreadLocalData()!=null && ThreadCacheUtil.getThreadLocalData().sessionId!=null) {
 			RpcContext.getContext().setAttachment("sessionId", ThreadCacheUtil.getThreadLocalData().sessionId);
 		}
-		String result=null;
-		
-		try {
-			ReferenceConfig<GenericService> reference = serviceMap.get(serviceName);
-			if(reference==null) {
-				throw new CommException(FrameworkErrorCode.SYSTEM_ERROR,"服务名错误");
-			}
-			GenericService dubboService = reference.get();
-			result=(String)dubboService.$invoke(serviceName, 
-					 new String[] { "java.lang.String", "java.lang.String","java.lang.String"},
-					 new String[] {version,seqNo,request});
-		} catch ( CommException e) {
-			BaseResponse rsp = makeErrorResponse(e.getErrCode(),e.getErrMsg());
-			result=JSON.toJSONString(rsp);
-		}catch ( Exception e) {
-			logger.error("",e);
-			BaseResponse rsp = makeErrorResponse(FrameworkErrorCode.SYSTEM_FAIL.getCode(),FrameworkErrorCode.SYSTEM_FAIL.getMsg());
-			result=JSON.toJSONString(rsp);
+		ReferenceConfig<GenericService> reference = serviceMap.get(serviceName);
+		if(reference==null) {
+			throw new CommException(FrameworkErrorCode.SYSTEM_ERROR,"服务名错误");
 		}
+		GenericService dubboService = reference.get();
+		String result =(String)dubboService.$invoke(serviceName, 
+				 new String[] { "java.lang.String", "java.lang.String","java.lang.String"},
+				 new String[] {version,seqNo,request});
 		
 		return result;
 	}
 	
-	public <T> T send(BaseRequest request ,Class<T> clazz) {
+	/**
+	 * 调用远程服务
+	 * @param request
+	 * @param clazz
+	 * @return
+	 * @throws Exception 
+	 * @throws CommException 
+	 */
+	public <T> T send(BaseRequest request ,Class<T> clazz) throws CommException, Exception {
 		String result=send(JSON.toJSONString(request),request.getSeqNo(),request.getService(),request.getVersion());
 		return JSON.parseObject(result, clazz);
+	}	
+	public ApiServiceInfo getApiServiceInfo(String serviceName) {
+		return apiMap.get(serviceName);
 	}
 	
-	private  BaseResponse  makeErrorResponse(String code,String msg){
-		BaseResponse baseResponse= new BaseResponse();
-		baseResponse.setRspCode(code);
-		baseResponse.setRspMsg(msg);
-		baseResponse.setTradeStatus(TradeStatusEnum.FAIL.getTradeStatus());
-		return baseResponse;
-	}
 }

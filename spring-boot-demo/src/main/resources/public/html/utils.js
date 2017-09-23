@@ -3,7 +3,8 @@
  */
 
 var serviceVersion="1.0.0";
-
+var url="/gateway";
+//var url="http://127.0.0.1:8081/demo/gateway";
 function getSeqNo() {
     var  now = new Date().format("yyyyMMddhhmmss");
     var user=sessionStorage.getItem("LOGIN_USER");
@@ -67,7 +68,7 @@ function ajaxPost(data,callBack){
         type: "POST",
         dataType:"json" ,
         contentType: "application/json",
-        url: "/gateway",
+        url: url,
         timeout: 30000, //超时时间：30秒
         data: jsonString,
         error:function(msg){
@@ -96,7 +97,7 @@ function ajaxPostSynch(data){
         async:false,
         timeout: 30000, //超时时间：30秒
         contentType: "application/json",
-        url: "/gateway",
+        url: url,
         data: jsonString,
         success: function(msg){
             rsp=msg;

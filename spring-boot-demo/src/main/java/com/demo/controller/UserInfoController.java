@@ -2,6 +2,7 @@ package com.demo.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
-import com.demo.common.Constant;
 import com.demo.common.DemoErrorCode;
 import com.demo.common.enums.UserInfoStatusEnum;
 import com.demo.config.client.ConfigCenterClient;
@@ -23,6 +23,7 @@ import com.demo.controller.msg.UserLoginRequest;
 import com.demo.controller.msg.UserLoginResponse;
 import com.demo.controller.msg.UserPageQueryResult;
 import com.demo.controller.msg.UserQueryRequest;
+import com.demo.framework.Constant;
 import com.demo.framework.annotation.TradeService;
 import com.demo.framework.exception.CommException;
 import com.demo.framework.msg.ApiServiceInfo;
@@ -81,7 +82,8 @@ public class UserInfoController {
 		  response= new UserLoginResponse();
 		  response.setSeqNo(request.getSeqNo());
 		  response.setUserId(u.getId());
-		  response.setToken(ThreadCacheUtil.getThreadLocalData().sessionId);
+		  response.setToken(UUID.randomUUID().toString());
+		  ThreadCacheUtil.getThreadLocalData().sessionId=response.getToken();
 		  response.setBranchId(u.getBranchId());
 		  response.setUserName(u.getUserName());
 

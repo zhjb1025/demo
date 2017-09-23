@@ -6,10 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.demo.common.Constant;
 import com.demo.controller.msg.AddBranchRequest;
 import com.demo.controller.msg.QueryAllBranchResponse;
 import com.demo.controller.msg.UpdateBranchRequest;
+import com.demo.framework.Constant;
 import com.demo.framework.annotation.TradeService;
 import com.demo.framework.msg.BaseRequest;
 import com.demo.framework.msg.BaseResponse;

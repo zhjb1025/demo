@@ -123,6 +123,9 @@ public class DubboServiceConfig implements ApplicationListener<ContextRefreshedE
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		ApplicationContext context = event.getApplicationContext();
+		if(context.getBeanNamesForType(DubboServiceAutoConfiguration.class).length==0) {
+			return;
+		}
 		String[] names=context.getBeanNamesForAnnotation(TradeService.class);
 		for(String name:names){
 			Object bean = context.getBean(name);

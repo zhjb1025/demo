@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.demo.common.Constant;
 import com.demo.controller.msg.AddRoleRequest;
 import com.demo.controller.msg.RolePageQueryResult;
 import com.demo.controller.msg.UpdateRoleRequest;
+import com.demo.framework.Constant;
 import com.demo.framework.msg.LoginUserInfo;
 import com.demo.framework.session.redis.RedisSessionService;
 import com.demo.mapper.MenuInfo;

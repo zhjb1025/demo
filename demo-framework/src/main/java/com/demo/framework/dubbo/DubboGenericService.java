@@ -112,7 +112,8 @@ public class DubboGenericService implements GenericService {
 		}
 		logger.info("2.1 服务[{}] 方法 [{}]",serviceBean.getClass().getName(),serviceMethod.getName());
 		//validate(service,version,parameter);
-
+		
+		logger.info("3.进行参数校验[{}]",serviceParameter.getName());
 		Object arg=null;
 		try {
 			arg = JSON.parseObject(parameter, serviceParameter);
@@ -120,10 +121,10 @@ public class DubboGenericService implements GenericService {
 			logger.info("JSON 转换报错",e);
 			throw new CommException(FrameworkErrorCode.SYSTEM_ERROR,"JSON 转换报错");
 		}
-		logger.info("3.进行参数校验[{}]",serviceParameter.getName());
+		
 		validatorService.validate(arg);
 
-		logger.info("4.调用业务方法进行处理",serviceParameter.getName());
+		logger.info("4.调用业务方法进行处理[{}]",serviceParameter.getName());
         BaseResponse baseResponse = (BaseResponse) serviceMethod.invoke(SpringContextUtil.getBean(serviceBean.getClass()), new Object[]{arg});
 		return baseResponse;
 	}

@@ -19,11 +19,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.demo.framework.Constant;
 import com.demo.framework.dubbo.DubboClient;
+import com.demo.framework.enums.TradeStatusEnum;
 import com.demo.framework.exception.CommException;
+import com.demo.framework.exception.FrameworkErrorCode;
+import com.demo.framework.msg.ApiServiceInfo;
+import com.demo.framework.msg.BaseResponse;
+import com.demo.framework.msg.LoginUserInfo;
+import com.demo.framework.session.redis.RedisSessionService;
 import com.demo.framework.util.CommUtil;
 import com.demo.framework.util.ThreadCacheData;
 import com.demo.framework.util.ThreadCacheUtil;
+import com.demo.gateway.GatewayErrorCode;
 
 /**
  * 网的Controller 处理所有http请求
@@ -36,9 +44,12 @@ public class GatewayController {
 
 	private  Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	private static final String P3P_HEADER = "CP=\"NOI CURa ADMa DEVa TAIa OUR BUS IND UNI COM NAV INT\"";
+//	private static final String P3P_HEADER = "\"IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT\"";
 	@Autowired
 	private DubboClient dubboClient;
+	
+	@Autowired
+	private RedisSessionService redisSessionService;
 	
 	@Value("${gateway.session.enable}")
 	private boolean sessionEnable;
@@ -46,34 +57,48 @@ public class GatewayController {
 	@RequestMapping(value = "/gateway", method = { RequestMethod.POST,RequestMethod.GET })
 	@ResponseBody
 	public String gateway(HttpServletRequest request,HttpServletResponse response) throws CommException {
-		response.setHeader("P3P",P3P_HEADER );//解决 ifame session 丢失的问题
+//		response.setHeader("P3P",P3P_HEADER );//解决 ifame session 丢失的问题
 		long beginTime = System.currentTimeMillis();
         long endTime =beginTime;
         String seqNo=null;
         String service=null;
         String version=null;
         String parameter=null;
+        String result=null;
+        String token=null;
         
         // 1.获取请求参数
         parameter=getRequestParameter(request);
         seqNo=CommUtil.getJsonValue(parameter,"seqNo");
         service=CommUtil.getJsonValue(parameter,"service");
         version=CommUtil.getJsonValue(parameter,"version");
+        token = CommUtil.getJsonValue(parameter, "token");
         
         ThreadCacheData threadCacheData= new ThreadCacheData();
 		threadCacheData.seqNo=seqNo;
-		threadCacheData.sessionId= request.getSession().getId();
-		
-		System.out.println(request.getSession().getId());
+		threadCacheData.sessionId=token;
 		ThreadCacheUtil.setThreadLocalData(threadCacheData);
 		
-        Thread.currentThread().setName(service+":"+version+":"+seqNo);
-        logger.info("1.接收到请求数据[{}]",parameter);
-        String result=dubboClient.send(parameter, seqNo, service, version);
+		try {
+			Thread.currentThread().setName(service+":"+version+":"+seqNo);
+	        logger.info("1.接收到请求数据[{}]",parameter);
+	        accessControl(service,version,parameter,token);
+	        result=dubboClient.send(parameter, seqNo, service, version);
+		} catch ( CommException e) {
+			BaseResponse rsp = makeErrorResponse(e.getErrCode(),e.getErrMsg());
+			result=JSON.toJSONString(rsp);
+		}catch ( Throwable e) {
+			logger.error("",e);
+			BaseResponse rsp = makeErrorResponse(FrameworkErrorCode.SYSTEM_FAIL.getCode(),FrameworkErrorCode.SYSTEM_FAIL.getMsg());
+			result=JSON.toJSONString(rsp);
+		}finally {
+			ThreadCacheUtil.cleanThreadCacheData();
+			endTime = System.currentTimeMillis();
+			logger.info("3.响应数据[{}毫秒][{}]",endTime-beginTime,result);
+		}
         
-        ThreadCacheUtil.cleanThreadCacheData();
-		endTime = System.currentTimeMillis();
-		logger.info("2.响应数据[{}毫秒][{}]",endTime-beginTime,result);
+        
+       
         return result;
 	}
 	
@@ -133,5 +158,52 @@ public class GatewayController {
 		byte[] bb = outputStream.toByteArray();
 		outputStream.close();
 		return new String(bb, "UTF-8");
+	}
+	
+	/**
+	 * 访问控制
+	 * @param serviceName
+	 * @param version
+	 * @param request
+	 * @throws CommException 
+	 */
+	private void accessControl(String serviceName, String version, String request,String token) throws CommException {
+		 logger.info("2.进行API访问控制");
+		ApiServiceInfo apiServiceInfo = dubboClient.getApiServiceInfo(serviceName);
+		if (apiServiceInfo == null) {
+			throw new CommException(GatewayErrorCode.GATEWAY_ERROR_SERVICE, serviceName);
+		}
+		if (apiServiceInfo.isPublic()) { // 公共开放接口 不进行访问控制
+			return;
+		}
+		
+		if (sessionEnable) {
+			// 私有接口需要登录才能访问
+			String userId = CommUtil.getJsonValue(request, "userId");
+			LoginUserInfo loginUser = (LoginUserInfo) redisSessionService.getSessionAttribute(Constant.LOGIN_USER);
+			if (loginUser == null) {
+				throw new CommException(GatewayErrorCode.GATEWAY_SESSION_TIMEOUT);
+			}
+			if (!loginUser.getToken().equals(token) || !loginUser.getUserId().toString().equals(userId)) {
+				throw new CommException(GatewayErrorCode.GATEWAY_ILLEGAL_ACCESS);
+			}
+			if (!apiServiceInfo.isAuth()) { // 不进行基于角色的权限访问控制(RBAC)的访问控制
+				return;
+			}
+			if (loginUser.getApiServiceInfoMap().get(serviceName + ":" + version) == null) {
+				throw new CommException(GatewayErrorCode.GATEWAY_NO_ACCESS);
+			}
+		}else {
+			//TODO :待实现
+		}
+      
+	}
+	
+	private  BaseResponse  makeErrorResponse(String code,String msg){
+		BaseResponse baseResponse= new BaseResponse();
+		baseResponse.setRspCode(code);
+		baseResponse.setRspMsg(msg);
+		baseResponse.setTradeStatus(TradeStatusEnum.FAIL.getTradeStatus());
+		return baseResponse;
 	}
 }

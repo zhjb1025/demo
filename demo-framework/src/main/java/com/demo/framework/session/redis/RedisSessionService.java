@@ -1,5 +1,7 @@
 package com.demo.framework.session.redis;
 
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -23,20 +25,22 @@ public class RedisSessionService {
 
 	public Object getSessionAttribute(String key) {
 		String sessionKey="spring:session:sessions:"+ThreadCacheUtil.getThreadLocalData().sessionId;
-		System.out.println(sessionKey);
 		Object value = redisTemplate.opsForHash().get(sessionKey, "sessionAttr:"+key);
 		if(value==null) {
 			return null;
 		}
+		redisTemplate.expire(sessionKey, 60*2, TimeUnit.SECONDS);
 		return  value;
 	}
 	
 	public void setSessionAttribute(String key,Object value) {
 		String sessionKey="spring:session:sessions:"+ThreadCacheUtil.getThreadLocalData().sessionId;
 		redisTemplate.opsForHash().put(sessionKey, "sessionAttr:"+key,value);
+		//redisTemplate.opsForValue().set(sessionKey, value);
+		redisTemplate.expire(sessionKey, 60*2, TimeUnit.SECONDS);
 	}
 	public void removeSessionAttribute(String key) {
 		String sessionKey="spring:session:sessions:"+ThreadCacheUtil.getThreadLocalData().sessionId;
-		redisTemplate.opsForHash().delete(sessionKey, "sessionAttr:"+key);
+		redisTemplate.delete(sessionKey);
 	}
 }

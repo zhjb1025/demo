@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.demo.common.Constant;
 import com.demo.common.enums.UserInfoStatusEnum;
 import com.demo.controller.msg.AddUserRequest;
 import com.demo.controller.msg.UpdateUserRequest;
 import com.demo.controller.msg.UserPageQueryResult;
+import com.demo.framework.Constant;
 import com.demo.framework.msg.ApiServiceInfo;
 import com.demo.framework.msg.LoginUserInfo;
 import com.demo.framework.security.DESede;
