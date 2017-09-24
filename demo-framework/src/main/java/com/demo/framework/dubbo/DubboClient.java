@@ -13,10 +13,13 @@ import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.alibaba.dubbo.rpc.service.GenericService;
 import com.alibaba.fastjson.JSON;
+import com.demo.framework.enums.TradeStatusEnum;
 import com.demo.framework.exception.CommException;
 import com.demo.framework.exception.FrameworkErrorCode;
 import com.demo.framework.msg.ApiServiceInfo;
 import com.demo.framework.msg.BaseRequest;
+import com.demo.framework.msg.BaseResponse;
+import com.demo.framework.util.CommUtil;
 import com.demo.framework.util.ThreadCacheUtil;
 import com.demo.zookeeper.ZookeeperClient;
 
@@ -25,6 +28,8 @@ public class DubboClient {
 	private DubboProperties dubboProperties;
 	
 	private ZookeeperClient client;
+	
+	private AccessLogService accessLogService;
 	
 	/**
 	 * key=Interface
@@ -44,6 +49,10 @@ public class DubboClient {
 	
 	public void setClient(ZookeeperClient client) {
 		this.client = client;
+	}
+	
+	public void setAccessLogService(AccessLogService accessLogService) {
+		this.accessLogService = accessLogService;
 	}
 
 	public void setDubboProperties(DubboProperties dubboProperties) {
@@ -107,18 +116,49 @@ public class DubboClient {
 	 * @throws Exception
 	 */
 	public String send(String request,String seqNo,String serviceName,String version) throws CommException ,Exception{
+		String result=null;
+		long beginTime = System.currentTimeMillis();
+        long endTime =beginTime;
+        logger.info("发送数据,请求参数 seqNo=[{]},serviceName=[{}],version=[{}],request=[{}]",seqNo,serviceName,version,request);
+		try {
+			if(ThreadCacheUtil.getThreadLocalData()!=null && ThreadCacheUtil.getThreadLocalData().sessionId!=null) {
+				RpcContext.getContext().setAttachment("sessionId", ThreadCacheUtil.getThreadLocalData().sessionId);
+			}
+			ReferenceConfig<GenericService> reference = serviceMap.get(serviceName);
+			if(reference==null) {
+				throw new CommException(FrameworkErrorCode.SYSTEM_ERROR,"服务名错误");
+			}
+			GenericService dubboService = reference.get();
+			result =(String)dubboService.$invoke(serviceName, 
+					 new String[] { "java.lang.String", "java.lang.String","java.lang.String"},
+					 new String[] {version,seqNo,request});
+		} catch (Exception e) {
+			BaseResponse baseResponse= new BaseResponse();
+			baseResponse.setSeqNo(seqNo);
+			baseResponse.setRspCode(FrameworkErrorCode.SYSTEM_FAIL.getCode());
+			baseResponse.setRspMsg(FrameworkErrorCode.SYSTEM_FAIL.getMsg());
+			baseResponse.setTradeStatus(TradeStatusEnum.FAIL.getTradeStatus());
+			result=JSON.toJSONString(baseResponse);
+			throw e;
+		}finally {
+			endTime = System.currentTimeMillis();
+			logger.info("结果耗时[{}]毫秒 result=[{}]",endTime-beginTime,result);
+			if(apiMap.get(serviceName)!=null && apiMap.get(serviceName).isLog()) {
+				AccessLog accessLog= new AccessLog();
+				accessLog.setDealTime(endTime-beginTime);
+				accessLog.setRequest(request);
+				accessLog.setResponse(result);
+				accessLog.setSeqNo(seqNo);
+				accessLog.setService(serviceName);
+				accessLog.setStartTimestamp(System.currentTimeMillis());
+				accessLog.setTradeDate(CommUtil.getDateYYYYMMDD());
+				accessLog.setVersion(version);
+				accessLogService.addLog(accessLog);
+			}
 		
-		if(ThreadCacheUtil.getThreadLocalData()!=null && ThreadCacheUtil.getThreadLocalData().sessionId!=null) {
-			RpcContext.getContext().setAttachment("sessionId", ThreadCacheUtil.getThreadLocalData().sessionId);
+			
 		}
-		ReferenceConfig<GenericService> reference = serviceMap.get(serviceName);
-		if(reference==null) {
-			throw new CommException(FrameworkErrorCode.SYSTEM_ERROR,"服务名错误");
-		}
-		GenericService dubboService = reference.get();
-		String result =(String)dubboService.$invoke(serviceName, 
-				 new String[] { "java.lang.String", "java.lang.String","java.lang.String"},
-				 new String[] {version,seqNo,request});
+		
 		
 		return result;
 	}

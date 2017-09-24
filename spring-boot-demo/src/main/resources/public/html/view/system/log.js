@@ -109,20 +109,22 @@ function viewLog(index){
     var row=$('#log').datagrid("getRows")[index];
     var data={};
     data.total=0;
-    data.rows= new Array()
-    for (x in row.request){
+    data.rows= new Array();
+    var request=JSON.parse(row.request);
+    for (x in request){
         var logRow={};
         logRow.name=x;
-        logRow.value=row.request[x];
+        logRow.value=request[x];
         logRow.group="请求参数";
         data.rows[data.rows.length]=logRow;
 
         //$('#pg').propertygrid('appendRow',logRow);
     }
-    for (x in row.response){
+    var response=JSON.parse(row.response);
+    for (x in response){
         var logRow={};
         logRow.name=x;
-        logRow.value=row.response[x];
+        logRow.value=response[x];
         logRow.group="响应参数";
         data.rows[data.rows.length]=logRow;
         // $('#pg').propertygrid('appendRow',logRow);

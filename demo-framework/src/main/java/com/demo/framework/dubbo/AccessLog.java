@@ -1,9 +1,8 @@
-package com.demo.controller.msg;
+package com.demo.framework.dubbo;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.demo.framework.msg.BaseObject;
-import com.demo.framework.msg.BaseResponse;
 
 @Document(collection="access_log")
 public class AccessLog extends BaseObject {
@@ -13,12 +12,12 @@ public class AccessLog extends BaseObject {
     private String userId;
     private String rspCode;
     private String rspMsg;
-    private Integer tradeStatus;
+    private String tradeStatus;
     private long startTimestamp;
     private long dealTime;
     private String tradeDate;
-    private Object request;
-    private BaseResponse  response;
+    private String request;
+    private String  response;
 
     public String getSeqNo() {
         return seqNo;
@@ -68,12 +67,12 @@ public class AccessLog extends BaseObject {
         this.rspMsg = rspMsg;
     }
 
-    public Integer getTradeStatus() {
+    public String getTradeStatus() {
         return tradeStatus;
     }
 
 
-    public void setTradeStatus(Integer tradeStatus) {
+    public void setTradeStatus(String tradeStatus) {
         this.tradeStatus = tradeStatus;
     }
 
@@ -101,19 +100,19 @@ public class AccessLog extends BaseObject {
         this.tradeDate = tradeDate;
     }
 
-    public Object getRequest() {
+    public String getRequest() {
         return request;
     }
 
-    public void setRequest(Object request) {
+    public void setRequest(String request) {
         this.request = request;
     }
 
-    public BaseResponse getResponse() {
+    public String getResponse() {
         return response;
     }
 
-    public void setResponse(BaseResponse response) {
+    public void setResponse(String response) {
         this.response = response;
     }
 }

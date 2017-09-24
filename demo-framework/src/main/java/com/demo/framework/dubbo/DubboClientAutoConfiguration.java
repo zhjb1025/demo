@@ -21,6 +21,9 @@ public class DubboClientAutoConfiguration {
     
     @Autowired
 	private ZookeeperClient client;
+    
+    @Autowired
+    private AccessLogService accessLogService;
 	
 
     @Bean
@@ -29,6 +32,7 @@ public class DubboClientAutoConfiguration {
     	DubboClient dubboClient = new DubboClient();
     	dubboClient.setDubboProperties(dubboProperties);
     	dubboClient.setClient(client);
+    	dubboClient.setAccessLogService(accessLogService);
         return dubboClient;
     }
 }

@@ -3,10 +3,8 @@ package com.demo.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
@@ -19,33 +17,20 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.demo.controller.msg.AccessLog;
 import com.demo.controller.msg.AccessLogPageQueryResult;
 import com.demo.controller.msg.AccessLogQueryRequest;
 import com.demo.controller.msg.PageQueryResponse;
 import com.demo.framework.annotation.TradeService;
+import com.demo.framework.dubbo.AccessLog;
 import com.demo.framework.msg.BaseResponse;
-import com.demo.framework.util.CommUtil;
 
 @Service
 @TradeService(version="1.0.0")
-public class AccessLogService extends Thread  {
+public class QueryAccessLogService extends Thread  {
 	private  Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private MongoTemplate mongoTemplate;
-
-    private LinkedBlockingQueue<AccessLog> logQueue= new LinkedBlockingQueue<AccessLog>(1024*100);
-
-    public void addLog(AccessLog accessLog){
-        try {
-            logQueue.put(accessLog);
-        } catch (InterruptedException e) {
-
-        }
-    }
-    @TradeService(value="page_query_access_log",isLog = false)
+    @TradeService(value="page_query_access_log",isLog = false,isAuth=true)
     public BaseResponse query(AccessLogQueryRequest request) throws Exception {
         PageQueryResponse<AccessLogPageQueryResult> response= new PageQueryResponse<AccessLogPageQueryResult>();
         Query query= new Query();
@@ -84,56 +69,5 @@ public class AccessLogService extends Thread  {
     @PostConstruct
     public void init(){
         this.start();
-    }
-    @PreDestroy
-    public void finish(){
-        try{
-            this.interrupt();
-        }catch (Exception e){
-            logger.error("",e);
-        }
-    }
-    @Override
-    public void run() {
-        logger.info("启动日志处理线程");
-        AccessLog accessLog=null;
-        while (true){
-            try {
-                accessLog=logQueue.take();
-                handle(accessLog);
-            }catch (InterruptedException e){
-                break;
-            }catch (Exception e){
-                logger.error("写日mongo志异常[{}]",accessLog);
-                logger.error("",e);
-            }
-        }
-        //程序退出时，把队列里面剩余的日志处理完
-        while(logQueue.size()>0){
-            accessLog=logQueue.poll();
-            handle(accessLog);
-        }
-        logger.info("停止日志处理线程");
-    }
-
-    private void handle(AccessLog accessLog){
-        if (accessLog==null){
-            return;
-        }
-        accessLog.setTradeDate(CommUtil.getDateYYYYMMDD());
-        BaseResponse response = accessLog.getResponse();
-        accessLog.setRspMsg(response.getRspMsg());
-        accessLog.setRspCode(response.getRspCode());
-        accessLog.setTradeStatus(response.getTradeStatus());
-        JSONObject req = JSON.parseObject(accessLog.getRequest().toString());
-        accessLog.setUserId(req.getString("userId"));
-        accessLog.setRequest(req);
-        if(accessLog.getUserId()==null){
-            Object userID=CommUtil.getFieldValue(accessLog.getResponse(),"userId");
-             if(userID!=null){
-                 accessLog.setUserId(userID.toString());
-             }
-        }
-        mongoTemplate.save(accessLog);
     }
 }
