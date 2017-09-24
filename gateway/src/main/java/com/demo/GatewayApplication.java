@@ -24,7 +24,7 @@ public class GatewayApplication {
 	      logger.info("开始启动Gateway...................");
 	      
 	      ConfigCenterClient.resetUrl(args[0].split(","));
-	      ConfigCenterClient.setGroups("logging,tomcat,zookeeper,redis,dubbo,gateway");
+	      ConfigCenterClient.setGroups("logging,tomcat,zookeeper,redis,dubbo,mongodb,gateway");
 	      Properties properties = ConfigCenterClient.loadConfig();
 	      SpringApplication springApplication = new SpringApplication(GatewayApplication.class);
 	      springApplication.setDefaultProperties(properties);

@@ -119,7 +119,7 @@ public class DubboClient {
 		String result=null;
 		long beginTime = System.currentTimeMillis();
         long endTime =beginTime;
-        logger.info("发送数据,请求参数 seqNo=[{]},serviceName=[{}],version=[{}],request=[{}]",seqNo,serviceName,version,request);
+        logger.info("发送数据,请求参数 seqNo=[{}],serviceName=[{}],version=[{}],request=[{}]",seqNo,serviceName,version,request);
 		try {
 			if(ThreadCacheUtil.getThreadLocalData()!=null && ThreadCacheUtil.getThreadLocalData().sessionId!=null) {
 				RpcContext.getContext().setAttachment("sessionId", ThreadCacheUtil.getThreadLocalData().sessionId);

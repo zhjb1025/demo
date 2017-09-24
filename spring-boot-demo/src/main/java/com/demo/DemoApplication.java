@@ -27,7 +27,7 @@ public class DemoApplication {
 	      
 //	      ConfigCenterClient.resetUrl(new String[] {"http://127.0.0.1:8080/config-center"});
 	      ConfigCenterClient.resetUrl(args[0].split(","));
-	      ConfigCenterClient.setGroups("logging,datasource,mybatis,zookeeper,redis,dubbo,demo");
+	      ConfigCenterClient.setGroups("logging,datasource,mybatis,zookeeper,redis,dubbo,mongodb,demo");
 	      Properties properties = ConfigCenterClient.loadConfig();
 	      SpringApplication springApplication = new SpringApplication(DemoApplication.class);
 	      springApplication.setDefaultProperties(properties);
