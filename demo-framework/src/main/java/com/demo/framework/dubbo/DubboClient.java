@@ -6,6 +6,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.recipes.cache.TreeCache;
+import org.apache.curator.framework.recipes.cache.TreeCacheEvent;
+import org.apache.curator.framework.recipes.cache.TreeCacheListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,13 +27,15 @@ import com.demo.framework.util.CommUtil;
 import com.demo.framework.util.ThreadCacheUtil;
 import com.demo.zookeeper.ZookeeperClient;
 
-public class DubboClient {
+public class DubboClient implements TreeCacheListener{
 	private  Logger logger = LoggerFactory.getLogger(this.getClass());
 	private DubboProperties dubboProperties;
 	
 	private ZookeeperClient client;
 	
 	private AccessLogService accessLogService;
+	
+	private  TreeCache treeCache;
 	
 	/**
 	 * key=Interface
@@ -62,47 +68,59 @@ public class DubboClient {
 	@PostConstruct
     public void init() throws Exception{
 		logger.info("连接后台Dubbo服务.........");
-		String [] interfaces=dubboProperties.getRefInterfaces().split(",");
+		String [] interfaces=new String [] {}  ;
+		if("*".equals(dubboProperties.getRefInterfaces())) {
+			logger.info("网关服务,从zookeeper 获取接口列表");
+			treeCache = new TreeCache(client.getCuratorFramework(), "/root/api");
+			treeCache.getListenable().addListener(this);
+			treeCache.start();
+			return;
+		}else {
+			interfaces=dubboProperties.getRefInterfaces().split(",");
+		}
+		
 		for(String Interface:interfaces) {
-			if("*".equals(Interface)) {
-				logger.info("网关服务,从zookeeper 获取接口列表");
-				continue;
-			}
 			if(referenceMap.get(Interface)!=null) {
 				continue;
 			}
-			ReferenceConfig<GenericService> reference = new ReferenceConfig<GenericService>(); // 此实例很重，封装了与注册中心的连接以及与提供者的连接，请自行缓存，否则可能造成内存和连接泄漏
-			reference.setApplication(dubboProperties.getApplication());
-			reference.setRegistry(dubboProperties.getRegistry());
-			reference.setConsumer(dubboProperties.getConsumer());
-			// 弱类型接口名 
-			reference.setInterface(Interface);
-			reference.setGeneric(true);
-			try {
-				logger.info("开始连接[{}] 服务........",Interface);
-				reference.get();
-				referenceMap.put(Interface, reference);
-				getAipInfo(Interface,reference);
-				logger.info("连接[{}] 服务成功",Interface);
-			} catch (Exception e) {
-				logger.info("连接[{}] 服务失败",Interface);
-				logger.error("",e);
-			}
+			getAipInfo(Interface);
 			
 		}
+		if("*".equals(dubboProperties.getRefInterfaces())) {
+			
+		}
+		
 		logger.info("连接后台Dubbo服务成功");
 	}
-	private void getAipInfo(String Interface,ReferenceConfig<GenericService> reference) throws Exception {
-		String path="/root/api/"+Interface;
-		byte[] data = client.getCuratorFramework().getData().forPath(path);
-		String api= new String(data,"UTF-8");
-		logger.info("获取接口[{}]API 信息:{}",Interface,api);
-		List<ApiServiceInfo> apiList = JSON.parseArray(api, ApiServiceInfo.class);
-		
-		for(ApiServiceInfo apiServiceInfo:apiList) {
-			serviceMap.put(apiServiceInfo.getService(), reference);
-			apiMap.put(apiServiceInfo.getService(), apiServiceInfo);
+	private void getAipInfo(String Interface) throws Exception {
+		ReferenceConfig<GenericService> reference = new ReferenceConfig<GenericService>(); // 此实例很重，封装了与注册中心的连接以及与提供者的连接，请自行缓存，否则可能造成内存和连接泄漏
+		reference.setApplication(dubboProperties.getApplication());
+		reference.setRegistry(dubboProperties.getRegistry());
+		reference.setConsumer(dubboProperties.getConsumer());
+		// 弱类型接口名 
+		reference.setInterface(Interface);
+		reference.setGeneric(true);
+		try {
+			logger.info("开始连接[{}] 服务........",Interface);
+			reference.get();
+			referenceMap.put(Interface, reference);
+			
+			String path="/root/api/"+Interface;
+			byte[] data = client.getCuratorFramework().getData().forPath(path);
+			String api= new String(data,"UTF-8");
+			logger.info("获取接口[{}]API 信息:{}",Interface,api);
+			List<ApiServiceInfo> apiList = JSON.parseArray(api, ApiServiceInfo.class);
+			for(ApiServiceInfo apiServiceInfo:apiList) {
+				serviceMap.put(apiServiceInfo.getService(), reference);
+				apiMap.put(apiServiceInfo.getService(), apiServiceInfo);
+			}
+			
+			logger.info("连接[{}] 服务成功",Interface);
+		} catch (Exception e) {
+			logger.info("连接[{}] 服务失败",Interface);
+			logger.error("",e);
 		}
+		
 	}
 	
 	/**
@@ -177,6 +195,63 @@ public class DubboClient {
 	}	
 	public ApiServiceInfo getApiServiceInfo(String serviceName) {
 		return apiMap.get(serviceName);
+	}
+
+	@Override
+	public void childEvent(CuratorFramework client, TreeCacheEvent event) throws Exception {
+		String path=event.getData().getPath();
+		logger.info("event:{},path:{}",event.getType().name(),path);
+    	switch (event.getType()) {
+    	 	case NODE_ADDED:  
+    	 		handleAddEvent(event);
+                break;  
+            case NODE_UPDATED:  
+            	handleUpdateEvent(event);
+                break;  
+            default:  
+                break;
+        }  
+		
+	}
+	
+	
+	private void handleUpdateEvent(TreeCacheEvent event) {
+		String path=event.getData().getPath();
+		String Interface = path.substring("/root/api/".length());
+		ReferenceConfig<GenericService> reference = referenceMap.get(Interface);
+		try {
+			if(reference==null) {
+				getAipInfo(Interface);
+			}else {
+				byte[] data = client.getCuratorFramework().getData().forPath(path);
+				String api= new String(data,"UTF-8");
+				logger.info("获取接口[{}]API 信息:{}",Interface,api);
+				List<ApiServiceInfo> apiList = JSON.parseArray(api, ApiServiceInfo.class);
+				//TODO 暂时不处理删除的服务
+				for(ApiServiceInfo apiServiceInfo:apiList) {
+					if(serviceMap.get(apiServiceInfo.getService())==null) {
+						serviceMap.put(apiServiceInfo.getService(), reference);
+						logger.info("新增接口服务[{}]",apiServiceInfo);
+					}
+					if(!apiServiceInfo.equals(apiMap.get(apiServiceInfo.getService()))) {
+						logger.info("修改API服务配置新接口:[{}] ,旧接口:[{}]",apiServiceInfo,apiMap.get(apiServiceInfo.getService()));
+						apiMap.put(apiServiceInfo.getService(), apiServiceInfo);
+					}
+					
+				}
+			}
+		} catch (Exception e) {
+			logger.error("",e);
+		}
+	}
+	private void handleAddEvent(TreeCacheEvent event) {
+		String path=event.getData().getPath();
+		String Interface = path.substring("/root/api/".length());
+		try {
+			getAipInfo(Interface);
+		} catch (Exception e) {
+			logger.error("",e);
+		}
 	}
 	
 }

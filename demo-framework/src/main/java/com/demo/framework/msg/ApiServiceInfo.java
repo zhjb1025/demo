@@ -77,4 +77,44 @@ public class ApiServiceInfo extends BaseObject  implements Serializable {
         this.version = version;
     }
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (isAuth ? 1231 : 1237);
+		result = prime * result + (isLog ? 1231 : 1237);
+		result = prime * result + (isPublic ? 1231 : 1237);
+		result = prime * result + ((service == null) ? 0 : service.hashCode());
+		result = prime * result + ((version == null) ? 0 : version.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ApiServiceInfo other = (ApiServiceInfo) obj;
+		if (isAuth != other.isAuth)
+			return false;
+		if (isLog != other.isLog)
+			return false;
+		if (isPublic != other.isPublic)
+			return false;
+		if (service == null) {
+			if (other.service != null)
+				return false;
+		} else if (!service.equals(other.service))
+			return false;
+		if (version == null) {
+			if (other.version != null)
+				return false;
+		} else if (!version.equals(other.version))
+			return false;
+		return true;
+	}
+
 }

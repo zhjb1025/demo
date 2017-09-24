@@ -2,6 +2,7 @@ package com.demo.framework.dubbo;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -195,16 +196,43 @@ public class DubboServiceConfig implements ApplicationListener<ContextRefreshedE
 			String path="/root/api/"+dubboProperties.getServiceInterface();
 			Stat stat = client.getCuratorFramework().checkExists().forPath(path);
 			String aip=JSON.toJSONString(apiInfoList);
-			logger.info("API服务配置信息发布到zookeeper:{}",aip);
+			
 	    	if(stat==null) {
-	    		client.getCuratorFramework().create().creatingParentContainersIfNeeded().withMode(CreateMode.PERSISTENT).forPath(path,aip.getBytes() );
-	    	}else {
+	    		logger.info("API服务配置信息发布到zookeeper:{}",aip);
+	    		client.getCuratorFramework().create().creatingParentContainersIfNeeded().withMode(CreateMode.PERSISTENT).forPath(path,aip.getBytes());
+	    	}else if(!compare(path)) {
+	    		logger.info("API服务配置信息发布到zookeeper:{}",aip);
 	    		client.getCuratorFramework().setData().forPath(path, aip.getBytes());
 	    	}
 		} catch (Exception e) {
 			logger.error("", e);
 		}
-		
+	}
+	
+	/**
+	 * 比较本地与zookeeper api信息
+	 * @param path
+	 * @return true  表示信息一致
+	 * @throws Exception
+	 */
+	private boolean  compare(String path) throws Exception {
+		byte[] data = client.getCuratorFramework().getData().forPath(path);
+		String api= new String(data,"UTF-8");
+		List<ApiServiceInfo> apiList = JSON.parseArray(api, ApiServiceInfo.class);
+		if(apiInfoList.size()!=apiList.size()) {
+			return false;
+		}
+		Map<String,ApiServiceInfo> map= new HashMap<String,ApiServiceInfo>();
+		for(ApiServiceInfo a:apiInfoList) {
+			map.put(a.getService()+":"+a.getVersion(), a);
+		}
+		for(ApiServiceInfo a:apiList) {
+			if(!a.equals(map.get(a.getService()+":"+a.getVersion()))){
+				return false;
+			}
+		}
+		logger.info("本地API配置信息与zookeeper服务上的信息一致");
+		return true;
 	}
 	
 }

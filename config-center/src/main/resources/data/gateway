@@ -9,7 +9,7 @@
         "group": "gateway",
         "key": "dubbo.refInterfaces",
         "remark": "调用的接口服务列表，多个逗号分隔",
-        "value": "com.demo.DemoDubboService"
+        "value": "*"
     },
     {
         "group": "gateway",
