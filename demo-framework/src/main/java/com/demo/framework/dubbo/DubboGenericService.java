@@ -59,10 +59,11 @@ public class DubboGenericService implements GenericService {
 		String request=(String)args[2];
 		
 		ThreadCacheData threadCacheData= new ThreadCacheData();
-		threadCacheData.seqNo=seqNo;
+		
 		threadCacheData.sessionId= RpcContext.getContext().getAttachment("sessionId");
+		threadCacheData.traceId= RpcContext.getContext().getAttachment("traceId");
 		ThreadCacheUtil.setThreadLocalData(threadCacheData);
-		Thread.currentThread().setName(serviceName+":"+version+":"+seqNo);
+		//Thread.currentThread().setName(serviceName+":"+version+":"+threadCacheData.traceId);
 		logger.info("1.接收到请求数据[{}]",request);
 		try {
 	      // 1.获取请求参数

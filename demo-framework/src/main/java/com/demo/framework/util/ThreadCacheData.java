@@ -5,7 +5,7 @@ package com.demo.framework.util;
  */
 public class ThreadCacheData {
 
-    public String seqNo;
+    public String traceId;
     
     public String sessionId;
 }

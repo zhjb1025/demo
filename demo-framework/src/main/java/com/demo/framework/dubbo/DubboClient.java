@@ -142,6 +142,9 @@ public class DubboClient implements TreeCacheListener{
 			if(ThreadCacheUtil.getThreadLocalData()!=null && ThreadCacheUtil.getThreadLocalData().sessionId!=null) {
 				RpcContext.getContext().setAttachment("sessionId", ThreadCacheUtil.getThreadLocalData().sessionId);
 			}
+			if(ThreadCacheUtil.getThreadLocalData()!=null && ThreadCacheUtil.getThreadLocalData().traceId!=null) {
+				RpcContext.getContext().setAttachment("traceId", ThreadCacheUtil.getThreadLocalData().traceId);
+			}
 			ReferenceConfig<GenericService> reference = serviceMap.get(serviceName);
 			if(reference==null) {
 				throw new CommException(FrameworkErrorCode.SYSTEM_ERROR,"服务名错误");

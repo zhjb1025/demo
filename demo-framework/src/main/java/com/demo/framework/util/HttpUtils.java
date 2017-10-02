@@ -124,7 +124,9 @@ public class HttpUtils {
 			EntityUtils.consume(entity);
 			response.close();
 		} finally{
-			httpClient.close();
+			if(httpClient!=null) {
+				httpClient.close();
+			}
 		}
 		return rspMsg;
 	}
@@ -214,7 +216,10 @@ public class HttpUtils {
 			EntityUtils.consume(entity);
 			response.close();
 		} finally{
-			httpClient.close();
+			if(httpClient!=null) {
+				httpClient.close();
+			}
+			
 		}
 		return rspMsg;
 	}

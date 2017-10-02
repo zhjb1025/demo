@@ -67,7 +67,7 @@ public class GatewayController {
         version=CommUtil.getJsonValue(parameter,"version");
         
         ThreadCacheData threadCacheData= new ThreadCacheData();
-		threadCacheData.seqNo=seqNo;
+		threadCacheData.traceId=seqNo;
 		if(sessionEnable) {
 			threadCacheData.sessionId=request.getSession().getId();
 		}
@@ -75,7 +75,7 @@ public class GatewayController {
 		ThreadCacheUtil.setThreadLocalData(threadCacheData);
 		
 		try {
-			Thread.currentThread().setName(service+":"+version+":"+seqNo);
+			//Thread.currentThread().setName(service+":"+version+":"+seqNo);
 	        logger.info("1.接收到请求数据[{}]",parameter);
 	        accessControl(service,version,parameter,request);
 	        result=dubboClient.send(parameter, seqNo, service, version);
@@ -87,9 +87,9 @@ public class GatewayController {
 			BaseResponse rsp = makeErrorResponse(FrameworkErrorCode.SYSTEM_FAIL.getCode(),FrameworkErrorCode.SYSTEM_FAIL.getMsg());
 			result=JSON.toJSONString(rsp);
 		}finally {
-			ThreadCacheUtil.cleanThreadCacheData();
 			endTime = System.currentTimeMillis();
 			logger.info("3.响应数据[{}毫秒][{}]",endTime-beginTime,result);
+			ThreadCacheUtil.cleanThreadCacheData();
 		}
         
         
