@@ -13,7 +13,6 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 import com.demo.config.client.ConfigCenterClient;
 import com.demo.framework.util.SpringContextUtil;
 
-
 @SpringBootApplication
 @EnableRedisHttpSession(maxInactiveIntervalInSeconds=600,redisFlushMode=RedisFlushMode.IMMEDIATE)
 public class GatewayApplication {

@@ -16,7 +16,6 @@ import com.demo.framework.util.SpringContextUtil;
 
 
 @SpringBootApplication
-@EnableAspectJAutoProxy(proxyTargetClass = true)
 @MapperScan("com.demo.mapper")
 @EnableCaching
 public class DemoApplication {
