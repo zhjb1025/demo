@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.zookeeper.CreateMode;
@@ -194,6 +195,7 @@ public class DubboServiceConfig implements ApplicationListener<ContextRefreshedE
 		//把服务配置信息发布到zookeeper
 		try {
 			
+			client.lock(dubboProperties.getServiceInterface(), 10, TimeUnit.SECONDS);
 			String path="/root/api/"+dubboProperties.getServiceInterface();
 			Stat stat = client.getCuratorFramework().checkExists().forPath(path);
 			String aip=JSON.toJSONString(apiInfoList);
@@ -208,6 +210,7 @@ public class DubboServiceConfig implements ApplicationListener<ContextRefreshedE
 		} catch (Exception e) {
 			logger.error("", e);
 		}
+		client.unlock(dubboProperties.getServiceInterface());
 	}
 	
 	/**
