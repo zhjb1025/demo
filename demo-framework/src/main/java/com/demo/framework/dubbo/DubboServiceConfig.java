@@ -35,7 +35,7 @@ public class DubboServiceConfig implements ApplicationListener<ContextRefreshedE
 	@Autowired
 	private ZookeeperClient client;
 	
-	@Autowired
+	//@Autowired
     private DubboProperties dubboProperties;
 	
 	/**
@@ -127,6 +127,7 @@ public class DubboServiceConfig implements ApplicationListener<ContextRefreshedE
 		if(context.getBeanNamesForType(DubboServiceAutoConfiguration.class).length==0) {
 			return;
 		}
+		dubboProperties=context.getBean(DubboProperties.class);
 		String[] names=context.getBeanNamesForAnnotation(TradeService.class);
 		for(String name:names){
 			Object bean = context.getBean(name);
