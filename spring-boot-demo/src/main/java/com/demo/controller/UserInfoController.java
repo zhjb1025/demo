@@ -7,12 +7,12 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.demo.common.DemoErrorCode;
 import com.demo.common.enums.UserInfoStatusEnum;
-import com.demo.config.client.ConfigCenterClient;
 import com.demo.controller.msg.AddUserRequest;
 import com.demo.controller.msg.ModifyPasswordRequest;
 import com.demo.controller.msg.PageQueryResponse;
@@ -59,6 +59,9 @@ public class UserInfoController {
   @Autowired
   private RedisSessionService redisSessionService;
   
+  @Value("${rsa.key.path}")
+  private String rsaKeyPath;
+  
   @TradeService(value="user_login",isPublic = true)
   public BaseResponse login(UserLoginRequest request) throws Exception {
 	  logger .info("用户[{}]登录",request.getLoginName());
@@ -69,7 +72,7 @@ public class UserInfoController {
 	  if(list.size()>0){
 		  UserInfo u=list.get(0);
 		  // 检查密码
-          String password=RSAUtil.decryptJSRsa(request.getPwd(),ConfigCenterClient.get("rsa.key.path"));
+          String password=RSAUtil.decryptJSRsa(request.getPwd(),rsaKeyPath);
 		  if(!u.getPassword().equals(DESede.encrypt(password))){
 			  throw new CommException(DemoErrorCode.USER_LOGIN_ERROR);
 		  }
@@ -173,8 +176,8 @@ public class UserInfoController {
             throw new CommException(DemoErrorCode.USER_NOT_EXITS);
         }
         // 检查原密码
-        String password=RSAUtil.decryptJSRsa(request.getPassword(),ConfigCenterClient.get("rsa.key.path"));
-        String newPassword=RSAUtil.decryptJSRsa(request.getNewPassword(),ConfigCenterClient.get("rsa.key.path"));
+        String password=RSAUtil.decryptJSRsa(request.getPassword(),rsaKeyPath);
+        String newPassword=RSAUtil.decryptJSRsa(request.getNewPassword(),rsaKeyPath);
         if(!user.getPassword().equals(DESede.encrypt(password))){
             throw new CommException(DemoErrorCode.USER_PASSWORD_ERROR);
         }

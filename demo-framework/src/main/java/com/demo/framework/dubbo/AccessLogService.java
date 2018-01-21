@@ -7,8 +7,6 @@ import javax.annotation.PreDestroy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import com.demo.framework.util.CommUtil;
@@ -16,8 +14,8 @@ import com.demo.framework.util.CommUtil;
 @Service
 public class AccessLogService extends Thread  {
 	private  Logger logger = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    private MongoTemplate mongoTemplate;
+//    @Autowired
+//    private MongoTemplate mongoTemplate;
 
     private LinkedBlockingQueue<AccessLog> logQueue= new LinkedBlockingQueue<AccessLog>(1024*100);
 
@@ -84,6 +82,6 @@ public class AccessLogService extends Thread  {
         if(tradeStatus!=null){
             accessLog.setTradeStatus(tradeStatus.toString());
         }
-        mongoTemplate.save(accessLog);
+//        mongoTemplate.save(accessLog);
     }
 }

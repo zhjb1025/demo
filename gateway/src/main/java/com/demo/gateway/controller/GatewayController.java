@@ -163,7 +163,10 @@ public class GatewayController {
 	 * @throws CommException 
 	 */
 	private void accessControl(String serviceName, String version, String parameter,HttpServletRequest request) throws CommException {
-		 logger.info("2.进行API访问控制");
+		logger.info("2.进行API访问控制");
+		if (serviceName == null) {
+			throw new CommException(GatewayErrorCode.GATEWAY_ILLEGAL_ACCESS);
+		}
 		ApiServiceInfo apiServiceInfo = dubboClient.getApiServiceInfo(serviceName);
 		if (apiServiceInfo == null) {
 			throw new CommException(GatewayErrorCode.GATEWAY_ERROR_SERVICE, serviceName);

@@ -79,7 +79,7 @@ public class ZookeeperClient {
 			}
     	}
     	
-    	lock = new InterProcessMutex(curatorFramework, key);
+    	lock = new InterProcessMutex(curatorFramework, rootLockPath+key);
     	try {
 			boolean ret = lock.acquire(time, unit);
 			if(ret){
