@@ -10,10 +10,10 @@ if [ $# -lt 1 ]; then
     usage
 fi
 ##########################################################################################
-FUNSERVER_GC_LOG="/root/logs/demo/gc.log"
+FUNSERVER_GC_LOG="/root/logs/config-center/gc.log"
 FUNSERVER_HOME="/root/app"
-FUNSERVER_LOG="/root/logs/demo/nohup.out"
-FUNSERVER_JAR="spring-demo.jar"
+FUNSERVER_LOG="/root/logs/config-center/nohup.out"
+FUNSERVER_JAR="config-center.jar"
 ##########################################################################################
 
 
@@ -38,7 +38,7 @@ start()
 stop()
 {
 	echo "Stopping ..."
-	curl  -X POST http://127.0.0.1:9091/manage/shutdown
+	curl  -X POST http://127.0.0.1:9093/manage/shutdown
 	tail -f $FUNSERVER_LOG
 }
 case "$ACTION" in
