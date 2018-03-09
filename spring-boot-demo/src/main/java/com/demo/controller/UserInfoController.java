@@ -91,6 +91,9 @@ public class UserInfoController {
           LoginUserInfo loginUserInfo= new LoginUserInfo();
           loginUserInfo.setUserId(response.getUserId());
           loginUserInfo.setToken(response.getToken());
+          loginUserInfo.setBranchId(u.getBranchId());
+          loginUserInfo.setLoginName(u.getLoginName());
+          loginUserInfo.setUserName(u.getUserName());
           List<ApiServiceInfo> apiList = userInfoService.queryUserApiService(response.getUserId());
           for(ApiServiceInfo api:apiList){
               loginUserInfo.getApiServiceInfoMap().put(api.getService()+":"+api.getVersion(),api);

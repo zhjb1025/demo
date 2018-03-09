@@ -8,6 +8,13 @@ public class LoginUserInfo extends BaseObject  implements Serializable {
 	private static final long serialVersionUID = 1605578504372030891L;
 	private Integer userId;
     private String token;
+    
+    private String loginName;
+
+    private String userName;
+
+    private Integer branchId;
+    
     private Map<String ,ApiServiceInfo> apiServiceInfoMap=new HashMap<String ,ApiServiceInfo>();
 
     public Integer getUserId() {
@@ -25,8 +32,34 @@ public class LoginUserInfo extends BaseObject  implements Serializable {
     public void setToken(String token) {
         this.token = token;
     }
+    
+    
 
-    public Map<String, ApiServiceInfo> getApiServiceInfoMap() {
+    public String getLoginName() {
+		return loginName;
+	}
+
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public Integer getBranchId() {
+		return branchId;
+	}
+
+	public void setBranchId(Integer branchId) {
+		this.branchId = branchId;
+	}
+
+	public Map<String, ApiServiceInfo> getApiServiceInfoMap() {
         return apiServiceInfoMap;
     }
 
