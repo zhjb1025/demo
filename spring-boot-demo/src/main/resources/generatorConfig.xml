@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">  
-    <generatorConfiguration>  
+    
+    <!--命令执行：mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate-->
+    
+    <generatorConfiguration> 
         <!-- 数据库驱动包位置 -->  
         <classPathEntry location="G:\Maven_Repository\Central\mysql\mysql-connector-java\5.1.43\mysql-connector-java-5.1.43.jar" />   
         <!-- <classPathEntry location="C:\oracle\product\10.2.0\db_1\jdbc\lib\ojdbc14.jar" />-->  
