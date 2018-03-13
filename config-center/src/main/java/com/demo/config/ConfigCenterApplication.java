@@ -1,16 +1,16 @@
 package com.demo.config;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 
 import com.demo.framework.util.SpringContextUtil;
 
 @SpringBootApplication
-@EnableCaching
+@MapperScan("com.demo.config.service.mapper")
 public class ConfigCenterApplication {
 	private static Logger log = LoggerFactory.getLogger(ConfigCenterApplication.class);  
     public static void main(String[] args) {

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.demo.config.service.mapper.ConfigApplyMapper" >
+  <resultMap id="BaseResultMap" type="com.demo.config.service.mapper.ConfigApply" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="config_info_id" property="configInfoId" jdbcType="INTEGER" />
+    <result column="system_code" property="systemCode" jdbcType="VARCHAR" />
+    <result column="config_type" property="configType" jdbcType="VARCHAR" />
+    <result column="config_code" property="configCode" jdbcType="VARCHAR" />
+    <result column="config_value" property="configValue" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="apply_user_id" property="applyUserId" jdbcType="INTEGER" />
+    <result column="apply_user_name" property="applyUserName" jdbcType="VARCHAR" />
+    <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
+    <result column="audit_user_id" property="auditUserId" jdbcType="INTEGER" />
+    <result column="audit_user_name" property="auditUserName" jdbcType="VARCHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="audit_status" property="auditStatus" jdbcType="VARCHAR" />
+    <result column="audit_remark" property="auditRemark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, config_info_id, system_code, config_type, config_code, config_value, remark, 
+    apply_user_id, apply_user_name, apply_time, audit_user_id, audit_user_name, audit_time, 
+    audit_status, audit_remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from config_apply
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from config_apply
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.demo.config.service.mapper.ConfigApply" >
+    insert into config_apply (id, config_info_id, system_code, 
+      config_type, config_code, config_value, 
+      remark, apply_user_id, apply_user_name, 
+      apply_time, audit_user_id, audit_user_name, 
+      audit_time, audit_status, audit_remark
+      )
+    values (#{id,jdbcType=INTEGER}, #{configInfoId,jdbcType=INTEGER}, #{systemCode,jdbcType=VARCHAR}, 
+      #{configType,jdbcType=VARCHAR}, #{configCode,jdbcType=VARCHAR}, #{configValue,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{applyUserId,jdbcType=INTEGER}, #{applyUserName,jdbcType=VARCHAR}, 
+      #{applyTime,jdbcType=TIMESTAMP}, #{auditUserId,jdbcType=INTEGER}, #{auditUserName,jdbcType=VARCHAR}, 
+      #{auditTime,jdbcType=TIMESTAMP}, #{auditStatus,jdbcType=VARCHAR}, #{auditRemark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.demo.config.service.mapper.ConfigApply" >
+    insert into config_apply
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="configInfoId != null" >
+        config_info_id,
+      </if>
+      <if test="systemCode != null" >
+        system_code,
+      </if>
+      <if test="configType != null" >
+        config_type,
+      </if>
+      <if test="configCode != null" >
+        config_code,
+      </if>
+      <if test="configValue != null" >
+        config_value,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="applyUserId != null" >
+        apply_user_id,
+      </if>
+      <if test="applyUserName != null" >
+        apply_user_name,
+      </if>
+      <if test="applyTime != null" >
+        apply_time,
+      </if>
+      <if test="auditUserId != null" >
+        audit_user_id,
+      </if>
+      <if test="auditUserName != null" >
+        audit_user_name,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="auditStatus != null" >
+        audit_status,
+      </if>
+      <if test="auditRemark != null" >
+        audit_remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="configInfoId != null" >
+        #{configInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="systemCode != null" >
+        #{systemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="configType != null" >
+        #{configType,jdbcType=VARCHAR},
+      </if>
+      <if test="configCode != null" >
+        #{configCode,jdbcType=VARCHAR},
+      </if>
+      <if test="configValue != null" >
+        #{configValue,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="applyUserId != null" >
+        #{applyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="applyUserName != null" >
+        #{applyUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null" >
+        #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditUserId != null" >
+        #{auditUserId,jdbcType=INTEGER},
+      </if>
+      <if test="auditUserName != null" >
+        #{auditUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditStatus != null" >
+        #{auditStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="auditRemark != null" >
+        #{auditRemark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.demo.config.service.mapper.ConfigApply" >
+    update config_apply
+    <set >
+      <if test="configInfoId != null" >
+        config_info_id = #{configInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="systemCode != null" >
+        system_code = #{systemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="configType != null" >
+        config_type = #{configType,jdbcType=VARCHAR},
+      </if>
+      <if test="configCode != null" >
+        config_code = #{configCode,jdbcType=VARCHAR},
+      </if>
+      <if test="configValue != null" >
+        config_value = #{configValue,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="applyUserId != null" >
+        apply_user_id = #{applyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="applyUserName != null" >
+        apply_user_name = #{applyUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null" >
+        apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditUserId != null" >
+        audit_user_id = #{auditUserId,jdbcType=INTEGER},
+      </if>
+      <if test="auditUserName != null" >
+        audit_user_name = #{auditUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditStatus != null" >
+        audit_status = #{auditStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="auditRemark != null" >
+        audit_remark = #{auditRemark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.demo.config.service.mapper.ConfigApply" >
+    update config_apply
+    set config_info_id = #{configInfoId,jdbcType=INTEGER},
+      system_code = #{systemCode,jdbcType=VARCHAR},
+      config_type = #{configType,jdbcType=VARCHAR},
+      config_code = #{configCode,jdbcType=VARCHAR},
+      config_value = #{configValue,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      apply_user_id = #{applyUserId,jdbcType=INTEGER},
+      apply_user_name = #{applyUserName,jdbcType=VARCHAR},
+      apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      audit_user_id = #{auditUserId,jdbcType=INTEGER},
+      audit_user_name = #{auditUserName,jdbcType=VARCHAR},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      audit_status = #{auditStatus,jdbcType=VARCHAR},
+      audit_remark = #{auditRemark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
