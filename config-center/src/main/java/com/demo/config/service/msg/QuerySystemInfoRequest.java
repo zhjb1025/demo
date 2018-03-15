@@ -20,7 +20,7 @@ public class QuerySystemInfoRequest extends PageQueryRequest {
 		if(StringUtils.isBlank(systemName)){
             return null;
         }
-		return systemName;
+		return "%"+systemName+"%";
 	}
 
 	public void setSystemName(String systemName) {

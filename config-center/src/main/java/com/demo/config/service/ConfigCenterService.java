@@ -66,5 +66,20 @@ public class ConfigCenterService {
         systemInfoMapper.updateByPrimaryKey(record);
         return response;
 	}
+	
+	
+	@TradeService(value="page_query_conifg_apply",isLog = false)
+	public BaseResponse queryConifgApply(QuerySystemInfoRequest request){
+		PageQueryResponse<SystemInfo> response= new PageQueryResponse<SystemInfo>();
+        PageHelper.startPage(request.getPageNumber(), request.getPageSize());
+        SystemInfo record= new SystemInfo();
+        record.setSystemCode(request.getSystemCode());
+        record.setSystemName(request.getSystemName());
+        List<SystemInfo> list = systemInfoMapper.selectByColumn(record);
+        PageInfo<SystemInfo> page=new PageInfo<SystemInfo>(list);
+        response.setTotal(page.getTotal());
+        response.setRows(list);
+        return response;
+	}
    
 }

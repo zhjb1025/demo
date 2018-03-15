@@ -56,7 +56,7 @@ function querySystemInfo(pageNumber,pageSize) {
 	request.pageSize=pageSize;
     request.service ="page_query_system_info";
     request.systemCode=$("#systemCode").textbox("getValue");;
-    request.systemName=$("#systemCode").textbox("getValue");;
+    request.systemName=$("#systemName").textbox("getValue");;
     var rsp=ajaxPostSynch(request);
     if(rsp.tradeStatus!=1){
         $.messager.alert('错误提示信息',rsp.rspMsg,'error');
