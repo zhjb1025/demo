@@ -1,6 +1,6 @@
 package com.demo.config.service.mapper;
 
-import com.demo.config.service.mapper.SystemInfo;
+import java.util.List;
 
 public interface SystemInfoMapper {
     int deleteByPrimaryKey(String systemCode);
@@ -9,7 +9,7 @@ public interface SystemInfoMapper {
 
     int insertSelective(SystemInfo record);
 
-    SystemInfo selectByPrimaryKey(String systemCode);
+    List<SystemInfo> selectByColumn(SystemInfo record);
 
     int updateByPrimaryKeySelective(SystemInfo record);
 

@@ -129,7 +129,7 @@ function saveUser() {
 function queryUser(pageNumber,pageSize) {
     if(typeof(pageSize) == 'undefined' ){
         pageNumber=1;
-        pageSize=pageSize=$('#user').datagrid('getPager').pagination("options").pageSize;
+        pageSize=$('#user').datagrid('getPager').pagination("options").pageSize;
     }
 
     var request={};

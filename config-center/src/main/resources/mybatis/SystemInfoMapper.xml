@@ -8,11 +8,17 @@
   <sql id="Base_Column_List" >
     system_code, system_name
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectByColumn" resultMap="BaseResultMap" parameterType="com.demo.config.service.mapper.SystemInfo" >
     select 
     <include refid="Base_Column_List" />
     from system_info
-    where system_code = #{systemCode,jdbcType=VARCHAR}
+    where 1=1
+    <if test="systemCode != null" >
+     and system_code = #{systemCode,jdbcType=VARCHAR}
+     </if>
+     <if test="systemName != null" >
+     and system_name = #{systemName,jdbcType=VARCHAR}
+     </if>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from system_info

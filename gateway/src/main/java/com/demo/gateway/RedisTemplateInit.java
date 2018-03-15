@@ -13,6 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.session.data.redis.RedisOperationsSessionRepository;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -30,6 +31,9 @@ public class RedisTemplateInit {
 	@Qualifier("sessionRedisTemplate")
 	private  RedisTemplate<Object, Object> sessionRedisTemplate;
 	
+	@Autowired
+	private RedisOperationsSessionRepository redisOperationsSessionRepository;
+	
 	@PostConstruct
 	public void init(){
 		logger.info("初始化sessionRedisTemplate的序列化类" );
@@ -43,8 +47,11 @@ public class RedisTemplateInit {
         RedisSerializer<String> stringSerializer = new StringRedisSerializer();
         // 设置value的序列化规则和 key的序列化规则
         sessionRedisTemplate.setKeySerializer(stringSerializer);
+        sessionRedisTemplate.setDefaultSerializer(jackson2JsonRedisSerializer);
         sessionRedisTemplate.setHashKeySerializer(stringSerializer);
         sessionRedisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
         sessionRedisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+        
+        redisOperationsSessionRepository.setDefaultSerializer(jackson2JsonRedisSerializer);
 	}
 }

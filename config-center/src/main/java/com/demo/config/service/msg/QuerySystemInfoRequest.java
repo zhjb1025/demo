@@ -1,25 +1,36 @@
 package com.demo.config.service.msg;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.validator.constraints.NotBlank;
 
-import com.demo.framework.msg.BaseRequest;
 
-public class QuerySystemInfoRequest extends BaseRequest {
+public class QuerySystemInfoRequest extends PageQueryRequest {
 	
-	@NotBlank(message="group:不能为空")
-	private String group;
+	private String systemCode;
+	
+	private String systemName;
 
-	public String getGroup() {
-		if(StringUtils.isBlank(group)){
+	public String getSystemCode() {
+		if(StringUtils.isBlank(systemCode)){
             return null;
         }
-        return group;
+        return systemCode;
 	}
 
-	public void setGroup(String group) {
-		this.group = group;
+	public String getSystemName() {
+		if(StringUtils.isBlank(systemName)){
+            return null;
+        }
+		return systemName;
 	}
+
+	public void setSystemName(String systemName) {
+		this.systemName = systemName;
+	}
+
+	public void setSystemCode(String systemCode) {
+		this.systemCode = systemCode;
+	}
+	
 	
     
 }

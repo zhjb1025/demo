@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.rpc.RpcContext;
+import com.alibaba.dubbo.rpc.RpcException;
 import com.alibaba.dubbo.rpc.service.GenericService;
 import com.alibaba.fastjson.JSON;
 import com.demo.framework.enums.TradeStatusEnum;
@@ -153,7 +154,16 @@ public class DubboClient implements TreeCacheListener{
 			result =(String)dubboService.$invoke(serviceName, 
 					 new String[] { "java.lang.String", "java.lang.String","java.lang.String"},
 					 new String[] {version,seqNo,request});
-		} catch (Exception e) {
+		} catch (RpcException e){
+			BaseResponse baseResponse= new BaseResponse();
+			baseResponse.setSeqNo(seqNo);
+			CommException commException=new CommException(FrameworkErrorCode.RPC_ERROR, serviceName);
+			baseResponse.setRspCode(commException.getErrCode());
+			baseResponse.setRspMsg(commException.getErrMsg());
+			baseResponse.setTradeStatus(TradeStatusEnum.FAIL.getTradeStatus());
+			result=JSON.toJSONString(baseResponse);
+			throw commException;
+		}catch (Exception e) {
 			BaseResponse baseResponse= new BaseResponse();
 			baseResponse.setSeqNo(seqNo);
 			baseResponse.setRspCode(FrameworkErrorCode.SYSTEM_FAIL.getCode());
