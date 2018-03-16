@@ -6,11 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.demo.config.ConfigErrorCode;
+import com.demo.config.service.mapper.ConfigInfoMapper;
 import com.demo.config.service.mapper.SystemInfo;
 import com.demo.config.service.mapper.SystemInfoMapper;
-import com.demo.config.service.msg.SystemInfoRequest;
 import com.demo.config.service.msg.PageQueryResponse;
+import com.demo.config.service.msg.QueryConfigInfoRequest;
+import com.demo.config.service.msg.QueryConfigInfoResult;
 import com.demo.config.service.msg.QuerySystemInfoRequest;
+import com.demo.config.service.msg.SystemInfoRequest;
 import com.demo.framework.annotation.TradeService;
 import com.demo.framework.exception.CommException;
 import com.demo.framework.msg.BaseResponse;
@@ -24,6 +27,9 @@ public class ConfigCenterService {
 	
 	@Autowired
 	private SystemInfoMapper systemInfoMapper;
+	
+	@Autowired
+	private ConfigInfoMapper configInfoMapper;
 	
 	@TradeService(value="page_query_system_info",isLog = false)
 	public BaseResponse querySystemInfo(QuerySystemInfoRequest request){
@@ -68,15 +74,12 @@ public class ConfigCenterService {
 	}
 	
 	
-	@TradeService(value="page_query_conifg_apply",isLog = false)
-	public BaseResponse queryConifgApply(QuerySystemInfoRequest request){
-		PageQueryResponse<SystemInfo> response= new PageQueryResponse<SystemInfo>();
+	@TradeService(value="page_query_conifg_info",isLog = false)
+	public BaseResponse queryConifgApply(QueryConfigInfoRequest request){
+		PageQueryResponse<QueryConfigInfoResult> response= new PageQueryResponse<QueryConfigInfoResult>();
         PageHelper.startPage(request.getPageNumber(), request.getPageSize());
-        SystemInfo record= new SystemInfo();
-        record.setSystemCode(request.getSystemCode());
-        record.setSystemName(request.getSystemName());
-        List<SystemInfo> list = systemInfoMapper.selectByColumn(record);
-        PageInfo<SystemInfo> page=new PageInfo<SystemInfo>(list);
+        List<QueryConfigInfoResult> list = configInfoMapper.selectByColumn(request);
+        PageInfo<QueryConfigInfoResult> page=new PageInfo<QueryConfigInfoResult>(list);
         response.setTotal(page.getTotal());
         response.setRows(list);
         return response;

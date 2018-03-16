@@ -1,6 +1,9 @@
 package com.demo.config.service.mapper;
 
-import com.demo.config.service.mapper.ConfigInfo;
+import java.util.List;
+
+import com.demo.config.service.msg.QueryConfigInfoRequest;
+import com.demo.config.service.msg.QueryConfigInfoResult;
 
 public interface ConfigInfoMapper {
     int deleteByPrimaryKey(Integer id);
@@ -9,7 +12,7 @@ public interface ConfigInfoMapper {
 
     int insertSelective(ConfigInfo record);
 
-    ConfigInfo selectByPrimaryKey(Integer id);
+    List<QueryConfigInfoResult> selectByColumn(QueryConfigInfoRequest record);
 
     int updateByPrimaryKeySelective(ConfigInfo record);
 

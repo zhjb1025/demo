@@ -12,12 +12,22 @@
   <sql id="Base_Column_List" >
     id, system_code, config_type, config_code, config_value, remark
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByColumn" resultType="com.demo.config.service.msg.QueryConfigInfoResult" parameterType="com.demo.config.service.msg.QueryConfigInfoRequest" >
     select 
-    <include refid="Base_Column_List" />
-    from config_info
-    where id = #{id,jdbcType=INTEGER}
+    	id, c.system_code as systemCode, config_type as configType, config_code as configCode, config_value as configValue, remark, system_name as systemName
+    from config_info c left join system_info s on c.system_code=s.system_code
+    where 1=1
+     <if test="systemCode != null" >
+      	and c.system_code = #{systemCode,jdbcType=VARCHAR}
+     </if>
+     <if test="configType != null" >
+      	and config_type = #{configType,jdbcType=VARCHAR}
+     </if>
+     <if test="configCode != null" >
+      	and config_code = #{configCode,jdbcType=VARCHAR}
+     </if>
   </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from config_info
     where id = #{id,jdbcType=INTEGER}
