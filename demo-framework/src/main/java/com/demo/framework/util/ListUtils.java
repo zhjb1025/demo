@@ -1,7 +1,5 @@
 package com.demo.framework.util;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Comparator;
@@ -114,8 +112,8 @@ public class ListUtils {
      */  
     private static <E> int compareObject(final String sortname, final boolean isAsc, E a, E b) throws Exception {  
         int ret;  
-        Object value1 = ListUtils.getFieldValue(a, sortname);  
-        Object value2 = ListUtils.getFieldValue(b, sortname);  
+        Object value1 = CommUtil.getFieldValue(a, sortname);  
+        Object value2 = CommUtil.getFieldValue(b, sortname);  
         String str1 = value1.toString();  
         String str2 = value2.toString();  
         if (value1 instanceof Number && value2 instanceof Number) {  
@@ -158,65 +156,4 @@ public class ListUtils {
         nf.setMinimumIntegerDigits(length);  
         return nf.format(numObj);  
     }  
-  
-	/**
-	 * 循环向上转型, 获取对象的DeclaredField.
-	 * 
-	 * 如向上转型到Object仍无法找到, 返回null.
-	 * @throws SecurityException 
-	 * @throws NoSuchFieldException 
-	 */
-	public static Field getDeclaredField(final Object object, final String fieldName) throws NoSuchFieldException, SecurityException {
-		for (Class<?> superClass = object.getClass(); superClass != Object.class; superClass = superClass
-				.getSuperclass()) {
-			try {
-				return superClass.getDeclaredField(fieldName);
-			} catch (NoSuchFieldException e) {// NOSONAR
-				// Field不在当前类定义,继续向上转型
-			}
-		}
-		return null;
-	}
-	/**
-	 * 直接读取对象属性值, 无视private/protected修饰符, 不经过getter函数.
-	 * 
-	 * @param object
-	 * @param field
-	 * @return
-	 * @throws IllegalAccessException 
-	 * @throws IllegalArgumentException 
-	 */
-	public static Object getFieldValue(final Object object, Field field) throws IllegalArgumentException, IllegalAccessException {
-		makeAccessible(field);
-		return field.get(object);
-	}
-	
-	/**
-	 * 强行设置Field可访问.
-	 */
-	public static void makeAccessible(final Field field) {
-		if (!Modifier.isPublic(field.getModifiers()) || !Modifier.isPublic(field.getDeclaringClass().getModifiers())) {
-			field.setAccessible(true);
-		}
-	}
-	
-
-	/**
-	 * 直接读取对象属性值, 无视private/protected修饰符, 不经过getter函数.
-	 * 
-	 * @param object
-	 * @param fieldName
-	 * @return
-	 * @throws IllegalAccessException 
-	 * @throws IllegalArgumentException 
-	 * @throws SecurityException 
-	 * @throws NoSuchFieldException 
-	 */
-	public static Object getFieldValue(final Object object, String fieldName) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		Field field = getDeclaredField(object, fieldName);
-		if (field == null) {
-			return null;
-		}
-		return getFieldValue(object, field);
-	}
 }  
