@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.demo.eoms.mapper.SystemInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.demo.eoms.mapper.SystemInfo" >
+    <id column="system_code" property="systemCode" jdbcType="VARCHAR" />
+    <result column="system_name" property="systemName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    system_code, system_name
+  </sql>
+  <select id="selectByColumn" resultMap="BaseResultMap" parameterType="com.demo.eoms.mapper.SystemInfo" >
+    select 
+    <include refid="Base_Column_List" />
+    from system_info
+    where 1=1
+    <if test="systemCode != null" >
+     and system_code = #{systemCode,jdbcType=VARCHAR}
+     </if>
+     <if test="systemName != null" >
+     and system_name like #{systemName,jdbcType=VARCHAR}
+     </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from system_info
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.demo.eoms.mapper.SystemInfo" >
+    insert into system_info (system_code, system_name)
+    values (#{systemCode,jdbcType=VARCHAR}, #{systemName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.demo.eoms.mapper.SystemInfo" >
+    insert into system_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="systemCode != null" >
+        system_code,
+      </if>
+      <if test="systemName != null" >
+        system_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="systemCode != null" >
+        #{systemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="systemName != null" >
+        #{systemName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.demo.eoms.mapper.SystemInfo" >
+    update system_info
+    <set >
+      <if test="systemName != null" >
+        system_name = #{systemName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.demo.eoms.mapper.SystemInfo" >
+    update system_info
+    set system_name = #{systemName,jdbcType=VARCHAR}
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

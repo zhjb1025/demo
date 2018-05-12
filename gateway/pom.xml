@@ -26,7 +26,7 @@
         
         <dependency>
             <groupId>com.demo</groupId>
-            <artifactId>demo-framework</artifactId>
+            <artifactId>framework</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>

@@ -49,7 +49,7 @@ public class GatewayController {
 	@Value("${gateway.session.enable}")
 	private boolean sessionEnable;
 	
-	@RequestMapping(value = "/gateway", method = { RequestMethod.POST,RequestMethod.GET })
+	@RequestMapping(value = "/trade", method = { RequestMethod.POST,RequestMethod.GET })
 	@ResponseBody
 	public String gateway(HttpServletRequest request,HttpServletResponse response) throws CommException {
 		long beginTime = System.currentTimeMillis();
