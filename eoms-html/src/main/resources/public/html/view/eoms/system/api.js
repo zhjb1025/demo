@@ -49,7 +49,7 @@ function query(pageNumber,pageSize) {
 	var request={};
 	request.pageNumber=pageNumber;
 	request.pageSize=pageSize;
-    request.service ="eoms_page_query_conifg_info";
+    request.service ="eoms_page_query_api_info";
     request.systemCode=$("#systemCode").combobox("getValue");
     request.configType=$("#configType").combobox("getValue");
     request.configCode=$("#configCode").textbox("getValue");
