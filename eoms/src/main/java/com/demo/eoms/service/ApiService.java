@@ -8,13 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.demo.eoms.common.EomsErrorCode;
+import com.demo.eoms.controller.msg.ApiAddRequest;
+import com.demo.eoms.controller.msg.ApiQueryRequest;
+import com.demo.eoms.controller.msg.ApiUpdateRequest;
 import com.demo.eoms.controller.msg.PageQueryResponse;
-import com.demo.eoms.controller.msg.QueryConfigInfoRequest;
-import com.demo.eoms.controller.msg.QueryConfigInfoResult;
-import com.demo.eoms.controller.msg.QuerySystemInfoRequest;
-import com.demo.eoms.controller.msg.SystemInfoRequest;
+import com.demo.eoms.mapper.ApiServiceInfo;
 import com.demo.eoms.mapper.ApiServiceInfoMapper;
-import com.demo.eoms.mapper.SystemInfo;
 import com.demo.framework.annotation.TradeService;
 import com.demo.framework.exception.CommException;
 import com.demo.framework.msg.BaseResponse;
@@ -30,57 +29,55 @@ public class ApiService {
 	private ApiServiceInfoMapper apiServiceInfoMapper;
 	
 	
-	@TradeService(value=API_PREFIX+"page_query_system_info",isLog = false)
-	public BaseResponse querySystemInfo(QuerySystemInfoRequest request){
-		PageQueryResponse<SystemInfo> response= new PageQueryResponse<SystemInfo>();
-//        PageHelper.startPage(request.getPageNumber(), request.getPageSize());
-//        SystemInfo record= new SystemInfo();
-//        record.setSystemCode(request.getSystemCode());
-//        record.setSystemName(request.getSystemName());
-//        List<SystemInfo> list = systemInfoMapper.selectByColumn(record);
-//        PageInfo<SystemInfo> page=new PageInfo<SystemInfo>(list);
-//        response.setTotal(page.getTotal());
-//        response.setRows(list);
+	@TradeService(value=API_PREFIX+"page_query_api_info",isLog = false)
+	public BaseResponse query(ApiQueryRequest request){
+		PageQueryResponse<ApiServiceInfo> response= new PageQueryResponse<ApiServiceInfo>();
+        
+        ApiServiceInfo record= new ApiServiceInfo();
+        record.setService(request.getApiCode());
+        record.setRemark(request.getApiName());
+        PageHelper.startPage(request.getPageNumber(), request.getPageSize());
+        List<ApiServiceInfo> list = apiServiceInfoMapper.selectByColumn(record);
+        PageInfo<ApiServiceInfo> page=new PageInfo<ApiServiceInfo>(list);
+        response.setTotal(page.getTotal());
+        response.setRows(list);
         return response;
 	}
 	
-	@TradeService(value=API_PREFIX+"add_system_info",isLog = true)
-	public BaseResponse addSystemInfo(SystemInfoRequest request) throws  Exception{
+	@TradeService(value=API_PREFIX+"add_api_info",isLog = true)
+	public BaseResponse add(ApiAddRequest request) throws  Exception{
 		BaseResponse response= new BaseResponse();
-//        SystemInfo record= new SystemInfo();
-//        record.setSystemCode(request.getSystemCode());
-//        List<SystemInfo> list = systemInfoMapper.selectByColumn(record);
-//        if(list!=null && list.size()>0){
-//        	throw new CommException(DemoErrorCode.SYSTEM_CODE_EXITS,request.getSystemCode());
-//        }
-//        record.setSystemName(request.getSystemName());
-//        systemInfoMapper.insert(record);
+      
+		ApiServiceInfo apiServiceInfo = apiServiceInfoMapper.queryApiServiceInfo(request.getApiCode());
+        if(apiServiceInfo!=null){
+        	throw new CommException(EomsErrorCode.API_CODE_EXITS,request.getApiCode());
+        }
+        apiServiceInfo= new ApiServiceInfo();
+        apiServiceInfo.setService(request.getApiCode());
+        apiServiceInfo.setRemark(request.getApiName());
+        apiServiceInfo.setVersion(request.getApiVersion());
+        apiServiceInfoMapper.insert(apiServiceInfo);
         return response;
 	}
 	
-	@TradeService(value=API_PREFIX+"update_system_info",isLog = true)
-	public BaseResponse updateSystemInfo(SystemInfoRequest request) throws  Exception{
+	@TradeService(value=API_PREFIX+"update_api_info",isLog = true)
+	public BaseResponse update(ApiUpdateRequest request) throws  Exception{
 		BaseResponse response= new BaseResponse();
-//        SystemInfo record= new SystemInfo();
-//        record.setSystemCode(request.getSystemCode());
-//        List<SystemInfo> list = systemInfoMapper.selectByColumn(record);
-//        if(list==null || list.size()==0){
-//        	throw new CommException(DemoErrorCode.SYSTEM_CODE_EXITS,request.getSystemCode());
-//        }
-//        record.setSystemName(request.getSystemName());
-//        systemInfoMapper.updateByPrimaryKey(record);
-        return response;
-	}
-	
-	
-	@TradeService(value=API_PREFIX+"page_query_conifg_info",isLog = false)
-	public BaseResponse queryConifgApply(QueryConfigInfoRequest request){
-		PageQueryResponse<QueryConfigInfoResult> response= new PageQueryResponse<QueryConfigInfoResult>();
-//        PageHelper.startPage(request.getPageNumber(), request.getPageSize());
-//        List<QueryConfigInfoResult> list = configInfoMapper.selectByColumn(request);
-//        PageInfo<QueryConfigInfoResult> page=new PageInfo<QueryConfigInfoResult>(list);
-//        response.setTotal(page.getTotal());
-//        response.setRows(list);
+		ApiServiceInfo apiServiceInfo = apiServiceInfoMapper.selectByPrimaryKey(request.getId());
+		if(apiServiceInfo==null) {
+			throw new CommException(EomsErrorCode.API_ID_ERROR);
+		}
+		//如果接口编码不一致，检查接口编码是否重复
+		if(!apiServiceInfo.getService().equals(request.getApiCode())) {
+			ApiServiceInfo temp = apiServiceInfoMapper.queryApiServiceInfo(request.getApiCode());
+			if(temp!=null) {
+				throw new CommException(EomsErrorCode.API_CODE_EXITS,request.getApiCode());
+			}
+		}
+		apiServiceInfo.setService(request.getApiCode());
+        apiServiceInfo.setRemark(request.getApiName());
+        apiServiceInfo.setVersion(request.getApiVersion());
+		apiServiceInfoMapper.updateByPrimaryKey(apiServiceInfo);
         return response;
 	}
    

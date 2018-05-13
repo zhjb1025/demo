@@ -12,7 +12,7 @@
   <sql id="Base_Column_List" >
     id, system_code, config_type, config_code, config_value, remark
   </sql>
-  <select id="selectByColumn" resultType="com.demo.eoms.controller.msg.QueryConfigInfoResult" parameterType="com.demo.eoms.controller.msg.QueryConfigInfoRequest" >
+  <select id="selectByColumn" resultType="com.demo.eoms.controller.msg.ConfigInfoQueryResult" parameterType="com.demo.eoms.controller.msg.ConfigInfoQueryRequest" >
     select 
     	id, c.system_code as systemCode, config_type as configType, config_code as configCode, config_value as configValue, remark, system_name as systemName
     from config_info c left join system_info s on c.system_code=s.system_code

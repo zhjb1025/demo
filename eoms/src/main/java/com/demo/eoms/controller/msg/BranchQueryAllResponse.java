@@ -8,7 +8,7 @@ import com.demo.framework.msg.BaseResponse;
 /**
  *
  */
-public class QueryAllBranchResponse extends BaseResponse {
+public class BranchQueryAllResponse extends BaseResponse {
 
     private  List<BranchInfo> branchList;
 

@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import com.demo.framework.msg.BaseRequest;
 
-public class UpdateUserStatusRequest extends BaseRequest{
+public class UserStatusUpdateRequest extends BaseRequest{
 
     @NotNull(message = "ID不能为空")
     private Integer id;

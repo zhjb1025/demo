@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import com.demo.framework.msg.BaseRequest;
 
-public class UpdateBranchRequest extends BaseRequest{
+public class BranchUpdateRequest extends BaseRequest{
 
     @NotNull(message = "ID不能为空")
     private Integer id;

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.demo.eoms.common.EomsErrorCode;
 import com.demo.eoms.controller.msg.PageQueryResponse;
-import com.demo.eoms.controller.msg.QueryConfigInfoRequest;
-import com.demo.eoms.controller.msg.QueryConfigInfoResult;
+import com.demo.eoms.controller.msg.ConfigInfoQueryRequest;
+import com.demo.eoms.controller.msg.ConfigInfoQueryResult;
 import com.demo.eoms.controller.msg.QuerySystemInfoRequest;
 import com.demo.eoms.controller.msg.SystemInfoRequest;
 import com.demo.eoms.mapper.ConfigInfoMapper;
@@ -77,11 +77,11 @@ public class ConfigCenterService {
 	
 	
 	@TradeService(value=API_PREFIX+"page_query_conifg_info",isLog = false)
-	public BaseResponse queryConifgApply(QueryConfigInfoRequest request){
-		PageQueryResponse<QueryConfigInfoResult> response= new PageQueryResponse<QueryConfigInfoResult>();
+	public BaseResponse queryConifgApply(ConfigInfoQueryRequest request){
+		PageQueryResponse<ConfigInfoQueryResult> response= new PageQueryResponse<ConfigInfoQueryResult>();
         PageHelper.startPage(request.getPageNumber(), request.getPageSize());
-        List<QueryConfigInfoResult> list = configInfoMapper.selectByColumn(request);
-        PageInfo<QueryConfigInfoResult> page=new PageInfo<QueryConfigInfoResult>(list);
+        List<ConfigInfoQueryResult> list = configInfoMapper.selectByColumn(request);
+        PageInfo<ConfigInfoQueryResult> page=new PageInfo<ConfigInfoQueryResult>(list);
         response.setTotal(page.getTotal());
         response.setRows(list);
         return response;

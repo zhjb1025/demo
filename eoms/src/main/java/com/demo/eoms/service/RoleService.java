@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.demo.eoms.controller.msg.AddRoleRequest;
+import com.demo.eoms.controller.msg.RoleAddRequest;
 import com.demo.eoms.controller.msg.RolePageQueryResult;
-import com.demo.eoms.controller.msg.UpdateRoleRequest;
+import com.demo.eoms.controller.msg.RoleUpdateRequest;
 import com.demo.eoms.mapper.MenuInfo;
 import com.demo.eoms.mapper.RoleInfo;
 import com.demo.eoms.mapper.RoleInfoMapper;
@@ -43,7 +43,7 @@ public class RoleService {
 
 
     @Transactional(rollbackFor=Exception.class)
-    public void addRole(AddRoleRequest request){
+    public void addRole(RoleAddRequest request){
         LoginUserInfo loginUser=(LoginUserInfo)redisSessionService.getSessionAttribute(Constant.LOGIN_USER);
         RoleInfo roleInfo= new RoleInfo();
         roleInfo.setRoleName(request.getRoleName());
@@ -64,7 +64,7 @@ public class RoleService {
 
 
     @Transactional(rollbackFor=Exception.class)
-    public void updateRole(UpdateRoleRequest request){
+    public void updateRole(RoleUpdateRequest request){
         LoginUserInfo loginUser=(LoginUserInfo) redisSessionService.getSessionAttribute(Constant.LOGIN_USER);
         RoleInfo roleInfo= new RoleInfo();
         roleInfo.setId(request.getId());

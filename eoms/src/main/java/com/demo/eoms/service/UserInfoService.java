@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.demo.eoms.common.enums.UserInfoStatusEnum;
-import com.demo.eoms.controller.msg.AddUserRequest;
-import com.demo.eoms.controller.msg.UpdateUserRequest;
+import com.demo.eoms.controller.msg.UserAddRequest;
+import com.demo.eoms.controller.msg.UserUpdateRequest;
 import com.demo.eoms.controller.msg.UserPageQueryResult;
 import com.demo.eoms.mapper.Metadata;
 import com.demo.eoms.mapper.UserInfo;
@@ -52,7 +52,7 @@ public class UserInfoService {
 
 
     @Transactional(rollbackFor=Exception.class)
-    public void updateUser(UpdateUserRequest request){
+    public void updateUser(UserUpdateRequest request){
         LoginUserInfo loginUser=(LoginUserInfo)redisSessionService.getSessionAttribute(Constant.LOGIN_USER);
         UserInfo record= new UserInfo();
         record.setId(request.getId());
@@ -70,7 +70,7 @@ public class UserInfoService {
     }
 
     @Transactional(rollbackFor=Exception.class)
-    public void addUser(AddUserRequest request) throws Exception {
+    public void addUser(UserAddRequest request) throws Exception {
 
         LoginUserInfo loginUser=(LoginUserInfo) redisSessionService.getSessionAttribute(Constant.LOGIN_USER);
         UserInfo record= new UserInfo();

@@ -15,12 +15,12 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.demo.eoms.common.EomsErrorCode;
 import com.demo.eoms.common.enums.UserInfoStatusEnum;
-import com.demo.eoms.controller.msg.AddUserRequest;
+import com.demo.eoms.controller.msg.UserAddRequest;
 import com.demo.eoms.controller.msg.ModifyPasswordRequest;
 import com.demo.eoms.controller.msg.PageQueryResponse;
 import com.demo.eoms.controller.msg.ResetPasswordRequest;
-import com.demo.eoms.controller.msg.UpdateUserRequest;
-import com.demo.eoms.controller.msg.UpdateUserStatusRequest;
+import com.demo.eoms.controller.msg.UserUpdateRequest;
+import com.demo.eoms.controller.msg.UserStatusUpdateRequest;
 import com.demo.eoms.controller.msg.UserLoginRequest;
 import com.demo.eoms.controller.msg.UserLoginResponse;
 import com.demo.eoms.controller.msg.UserPageQueryResult;
@@ -127,7 +127,7 @@ public class UserInfoController {
     }
 
     @TradeService(value=API_PREFIX+"update_user_status")
-    public BaseResponse updateUserStatus(UpdateUserStatusRequest request) throws Exception {
+    public BaseResponse updateUserStatus(UserStatusUpdateRequest request) throws Exception {
         BaseResponse response= new BaseResponse();
         UserInfo userInfo= new UserInfo();
         userInfo.setId(request.getId());
@@ -154,14 +154,14 @@ public class UserInfoController {
     }
 
     @TradeService(value=API_PREFIX+"update_user")
-    public BaseResponse updateUser(UpdateUserRequest request) throws Exception {
+    public BaseResponse updateUser(UserUpdateRequest request) throws Exception {
         BaseResponse response= new BaseResponse();
         userInfoService.updateUser(request);
         return response;
     }
 
     @TradeService(value=API_PREFIX+"add_user")
-    public BaseResponse addUser(AddUserRequest request) throws Exception {
+    public BaseResponse addUser(UserAddRequest request) throws Exception {
         BaseResponse response= new BaseResponse();
         UserInfo query= new UserInfo();
         query.setLoginName(request.getLoginName());

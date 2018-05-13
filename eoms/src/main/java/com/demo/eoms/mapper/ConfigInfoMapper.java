@@ -2,8 +2,8 @@ package com.demo.eoms.mapper;
 
 import java.util.List;
 
-import com.demo.eoms.controller.msg.QueryConfigInfoRequest;
-import com.demo.eoms.controller.msg.QueryConfigInfoResult;
+import com.demo.eoms.controller.msg.ConfigInfoQueryRequest;
+import com.demo.eoms.controller.msg.ConfigInfoQueryResult;
 
 public interface ConfigInfoMapper {
     int deleteByPrimaryKey(Integer id);
@@ -12,7 +12,7 @@ public interface ConfigInfoMapper {
 
     int insertSelective(ConfigInfo record);
 
-    List<QueryConfigInfoResult> selectByColumn(QueryConfigInfoRequest record);
+    List<ConfigInfoQueryResult> selectByColumn(ConfigInfoQueryRequest record);
 
     int updateByPrimaryKeySelective(ConfigInfo record);
 

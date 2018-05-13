@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.demo.framework.msg.BaseResponse;
 
-public class QueryAllGroupResponse extends BaseResponse {
+public class GroupQueryAllResponse extends BaseResponse {
 	
     private List<String> groupList;
 

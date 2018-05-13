@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import com.demo.framework.msg.BaseRequest;
 
-public class AddBranchRequest extends BaseRequest{
+public class BranchAddRequest extends BaseRequest{
 
     @NotNull(message = "父ID不能为空")
     private Integer parentId;

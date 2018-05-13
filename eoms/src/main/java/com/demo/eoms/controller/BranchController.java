@@ -8,9 +8,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.demo.eoms.controller.msg.AddBranchRequest;
-import com.demo.eoms.controller.msg.QueryAllBranchResponse;
-import com.demo.eoms.controller.msg.UpdateBranchRequest;
+import com.demo.eoms.controller.msg.BranchAddRequest;
+import com.demo.eoms.controller.msg.BranchQueryAllResponse;
+import com.demo.eoms.controller.msg.BranchUpdateRequest;
 import com.demo.eoms.mapper.BranchInfo;
 import com.demo.eoms.service.BranchService;
 import com.demo.framework.Constant;
@@ -44,13 +44,13 @@ public class BranchController {
      */
   @TradeService(value=API_PREFIX+"query_all_branch",isLog = false)
   public BaseResponse queryAllBranch(BaseRequest request) throws Exception {
-      QueryAllBranchResponse response = new QueryAllBranchResponse();
+      BranchQueryAllResponse response = new BranchQueryAllResponse();
       List<BranchInfo> list = branchService.getAll();
       response.setBranchList(list);
       return response;
   }
     @TradeService(value=API_PREFIX+"update_branch")
-    public BaseResponse updateBranch(UpdateBranchRequest request) throws Exception {
+    public BaseResponse updateBranch(BranchUpdateRequest request) throws Exception {
         BaseResponse response=new BaseResponse();
         BranchInfo branchInfo = new BranchInfo();
         branchInfo.setId(request.getId());
@@ -64,7 +64,7 @@ public class BranchController {
     }
 
     @TradeService(value=API_PREFIX+"add_branch")
-    public BaseResponse addBranch(AddBranchRequest request) throws Exception {
+    public BaseResponse addBranch(BranchAddRequest request) throws Exception {
         BaseResponse response=new BaseResponse();
         BranchInfo branchInfo = new BranchInfo();
         branchInfo.setParentId(request.getParentId());

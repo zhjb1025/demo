@@ -16,6 +16,20 @@
     from api_service_info
     where id = #{id,jdbcType=INTEGER}
   </select>
+  
+  <select id="selectByColumn" resultType="com.demo.eoms.mapper.ApiServiceInfo" parameterType="com.demo.eoms.mapper.ApiServiceInfo"  >
+    select 
+    	<include refid="Base_Column_List" />
+    from api_service_info
+    where 1=1
+     <if test="service != null" >
+      	and service like #{service,jdbcType=VARCHAR}
+     </if>
+     <if test="remark != null" >
+     	and remark like #{remark,jdbcType=VARCHAR}
+     </if>
+     order by id desc
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from api_service_info
     where id = #{id,jdbcType=INTEGER}

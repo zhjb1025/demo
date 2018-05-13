@@ -3,7 +3,7 @@ package com.demo.eoms.controller.msg;
 import com.demo.eoms.common.enums.ConfigTypeEnum;
 import com.demo.eoms.mapper.ConfigInfo;
 
-public class QueryConfigInfoResult extends ConfigInfo{
+public class ConfigInfoQueryResult extends ConfigInfo{
 	private String systemName;
 	
 

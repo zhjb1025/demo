@@ -8,7 +8,7 @@ import com.demo.framework.msg.BaseResponse;
 /**
  * Created by Auser on 2017/7/15.
  */
-public class AllMenuApiResponse extends BaseResponse {
+public class MenuApiAllResponse extends BaseResponse {
     private List<MenuInfo> menuInfoList;
 
     public List<MenuInfo> getMenuInfoList() {

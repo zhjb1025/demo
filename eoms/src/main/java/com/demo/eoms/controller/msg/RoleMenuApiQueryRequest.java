@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 import com.demo.framework.msg.BaseRequest;
 
-public class QueryRoleMenuApiRequest extends BaseRequest{
+public class RoleMenuApiQueryRequest extends BaseRequest{
 
     @NotNull(message = "角色ID不能为空")
     private Integer roleID;

@@ -7,14 +7,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.demo.eoms.controller.msg.AddRoleRequest;
-import com.demo.eoms.controller.msg.AllMenuApiResponse;
+import com.demo.eoms.controller.msg.RoleAddRequest;
+import com.demo.eoms.controller.msg.MenuApiAllResponse;
 import com.demo.eoms.controller.msg.PageQueryResponse;
-import com.demo.eoms.controller.msg.QueryRoleMenuApiRequest;
+import com.demo.eoms.controller.msg.RoleMenuApiQueryRequest;
 import com.demo.eoms.controller.msg.QueryRoleMenuApiResponse;
 import com.demo.eoms.controller.msg.RolePageQueryResult;
 import com.demo.eoms.controller.msg.RoleQueryRequest;
-import com.demo.eoms.controller.msg.UpdateRoleRequest;
+import com.demo.eoms.controller.msg.RoleUpdateRequest;
 import com.demo.eoms.mapper.MenuInfo;
 import com.demo.eoms.service.RoleService;
 import com.demo.framework.annotation.TradeService;
@@ -49,14 +49,14 @@ public class RoleController {
 
     @TradeService(value=API_PREFIX+"query_all_menu_api",isLog = false)
     public BaseResponse queryAllMenuApi(BaseRequest request) throws Exception {
-        AllMenuApiResponse response= new AllMenuApiResponse();
+        MenuApiAllResponse response= new MenuApiAllResponse();
         List<MenuInfo> list = roleService.queryAllMenuApi();
         response.setMenuInfoList(list);
         return response;
     }
 
     @TradeService(value=API_PREFIX+"query_role_menu_api",isLog = false)
-    public BaseResponse queryRoleMenuApi(QueryRoleMenuApiRequest request) throws Exception {
+    public BaseResponse queryRoleMenuApi(RoleMenuApiQueryRequest request) throws Exception {
         QueryRoleMenuApiResponse response= new QueryRoleMenuApiResponse();
         response.setApiIDs(roleService.queryRoleAipIDs(request.getRoleID()));
         response.setMenuIDs(roleService.queryRoleMenuIDs(request.getRoleID()));
@@ -64,14 +64,14 @@ public class RoleController {
     }
 
     @TradeService(value=API_PREFIX+"add_role")
-    public BaseResponse queryRoleMenuApi(AddRoleRequest request) throws Exception {
+    public BaseResponse queryRoleMenuApi(RoleAddRequest request) throws Exception {
         BaseResponse response= new BaseResponse();
         roleService.addRole(request);
         return response;
     }
 
     @TradeService(value=API_PREFIX+"update_role")
-    public BaseResponse queryRoleMenuApi(UpdateRoleRequest request) throws Exception {
+    public BaseResponse queryRoleMenuApi(RoleUpdateRequest request) throws Exception {
         BaseResponse response= new BaseResponse();
         roleService.updateRole(request);
         return response;

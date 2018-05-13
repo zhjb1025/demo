@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import com.demo.framework.msg.BaseRequest;
 
-public class UpdateUserRequest extends BaseRequest{
+public class UserUpdateRequest extends BaseRequest{
     @NotNull(message="用户ID不能为空")
     private Integer id;
 	@NotBlank(message="用户名不能为空")

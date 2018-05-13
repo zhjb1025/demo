@@ -26,6 +26,12 @@ public class EomsErrorCode extends FrameworkErrorCode {
 	public static ErrorCode CONFIG_ACCESS_ERROR=new ErrorCode(" 00020200","访问配置中心失败");
 	
 	/*
+     * 接口维护相关模块   000203 开头
+     */
+	public static ErrorCode API_CODE_EXITS=new ErrorCode(" 00020300","接口编码[%s]已经存在");
+	public static ErrorCode API_ID_ERROR=new ErrorCode(" 00020301","ID错误");
+	
+	/*
      * 系统管理模块错误码   000300 开头
      */
 	public static ErrorCode SYSTEM_CODE_EXITS=new ErrorCode(" 00030001","系统编码[%s]已经存在");

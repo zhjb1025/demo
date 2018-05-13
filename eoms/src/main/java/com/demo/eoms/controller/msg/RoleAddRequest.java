@@ -9,10 +9,8 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import com.demo.framework.msg.BaseRequest;
 
-public class UpdateRoleRequest extends BaseRequest{
+public class RoleAddRequest extends BaseRequest{
 
-    @NotNull(message = "ID不能为空")
-    private Integer id;
 
 	@NotBlank(message="角色名称不能为空")
 	@Length(min=2,max=32 ,message="角色名称长度不能小于{min} 不能大于{max}")
@@ -27,14 +25,6 @@ public class UpdateRoleRequest extends BaseRequest{
 
     @NotNull(message = "菜单ID集合不能为空")
     private List<Integer>  menuIDs;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getRoleName() {
         return roleName;
