@@ -21,7 +21,7 @@ public class RoleAddRequest extends BaseRequest{
     private String remark;
 
 	@NotNull(message = "接口ID集合不能为空")
-    private List<Integer>  apiIDs;
+    private List<String>  apiIDs;
 
     @NotNull(message = "菜单ID集合不能为空")
     private List<Integer>  menuIDs;
@@ -34,11 +34,11 @@ public class RoleAddRequest extends BaseRequest{
         this.roleName = roleName;
     }
 
-    public List<Integer> getApiIDs() {
+    public List<String> getApiIDs() {
         return apiIDs;
     }
 
-    public void setApiIDs(List<Integer> apiIDs) {
+    public void setApiIDs(List<String> apiIDs) {
         this.apiIDs = apiIDs;
     }
 

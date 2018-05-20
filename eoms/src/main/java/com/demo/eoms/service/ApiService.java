@@ -9,11 +9,14 @@ import org.springframework.stereotype.Service;
 
 import com.demo.eoms.common.EomsErrorCode;
 import com.demo.eoms.controller.msg.ApiAddRequest;
+import com.demo.eoms.controller.msg.ApiDeleteRequest;
 import com.demo.eoms.controller.msg.ApiQueryRequest;
 import com.demo.eoms.controller.msg.ApiUpdateRequest;
 import com.demo.eoms.controller.msg.PageQueryResponse;
 import com.demo.eoms.mapper.ApiServiceInfo;
 import com.demo.eoms.mapper.ApiServiceInfoMapper;
+import com.demo.eoms.mapper.MenuInfoMapper;
+import com.demo.eoms.mapper.RoleInfoMapper;
 import com.demo.framework.annotation.TradeService;
 import com.demo.framework.exception.CommException;
 import com.demo.framework.msg.BaseResponse;
@@ -28,7 +31,11 @@ public class ApiService {
 	@Autowired
 	private ApiServiceInfoMapper apiServiceInfoMapper;
 	
+	@Autowired
+	private MenuInfoMapper menuInfoMapper;
 	
+	@Autowired
+	private RoleInfoMapper roleInfoMapper;
 	@TradeService(value=API_PREFIX+"page_query_api_info",isLog = false)
 	public BaseResponse query(ApiQueryRequest request){
 		PageQueryResponse<ApiServiceInfo> response= new PageQueryResponse<ApiServiceInfo>();
@@ -80,5 +87,19 @@ public class ApiService {
 		apiServiceInfoMapper.updateByPrimaryKey(apiServiceInfo);
         return response;
 	}
-   
+	
+	@TradeService(value=API_PREFIX+"delete_api_info",isLog = true)
+	public BaseResponse delete(ApiDeleteRequest request) throws  Exception{
+		BaseResponse response= new BaseResponse();
+		/**
+		 * 删除角色对应的接口关系
+		 */
+		roleInfoMapper.deleteMenuAipByApiId(request.getId());
+		/**
+		 * 删除菜单对应的接口关系
+		 */
+		menuInfoMapper.deleteMenuApiByApiId(request.getId());
+        apiServiceInfoMapper.deleteByPrimaryKey(request.getId());
+        return response;
+	}
 }

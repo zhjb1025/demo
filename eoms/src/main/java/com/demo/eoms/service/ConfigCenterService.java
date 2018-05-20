@@ -11,7 +11,7 @@ import com.demo.eoms.common.EomsErrorCode;
 import com.demo.eoms.controller.msg.PageQueryResponse;
 import com.demo.eoms.controller.msg.ConfigInfoQueryRequest;
 import com.demo.eoms.controller.msg.ConfigInfoQueryResult;
-import com.demo.eoms.controller.msg.QuerySystemInfoRequest;
+import com.demo.eoms.controller.msg.SystemInfoQueryRequest;
 import com.demo.eoms.controller.msg.SystemInfoRequest;
 import com.demo.eoms.mapper.ConfigInfoMapper;
 import com.demo.eoms.mapper.SystemInfo;
@@ -34,7 +34,7 @@ public class ConfigCenterService {
 	private ConfigInfoMapper configInfoMapper;
 	
 	@TradeService(value=API_PREFIX+"page_query_system_info",isLog = false)
-	public BaseResponse querySystemInfo(QuerySystemInfoRequest request){
+	public BaseResponse querySystemInfo(SystemInfoQueryRequest request){
 		PageQueryResponse<SystemInfo> response= new PageQueryResponse<SystemInfo>();
         PageHelper.startPage(request.getPageNumber(), request.getPageSize());
         SystemInfo record= new SystemInfo();

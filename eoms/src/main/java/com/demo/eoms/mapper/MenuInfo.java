@@ -15,6 +15,7 @@ public class MenuInfo extends BaseObject{
     private Integer parentId;
 
     private String url;
+    
 
     private List<ApiServiceInfo> apiServiceInfos;
 

@@ -3,7 +3,7 @@ package com.demo.eoms.controller.msg;
 import org.apache.commons.lang.StringUtils;
 
 
-public class QuerySystemInfoRequest extends PageQueryRequest {
+public class SystemInfoQueryRequest extends PageQueryRequest {
 	
 	private String systemCode;
 	

@@ -132,7 +132,6 @@ public class DubboServiceConfig implements ApplicationListener<ContextRefreshedE
 		String[] names=context.getBeanNamesForAnnotation(TradeService.class);
 		for(String name:names){
 			Object bean = context.getBean(name);
-			
 			String beanVersion=bean.getClass().getAnnotation(TradeService.class).version();
 			Method[] methods = bean.getClass().getDeclaredMethods();
 			for(Method m: methods){

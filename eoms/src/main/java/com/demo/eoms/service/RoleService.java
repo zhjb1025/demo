@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.demo.eoms.controller.msg.RoleAddRequest;
+import com.demo.eoms.controller.msg.RoleMenuApiResult;
 import com.demo.eoms.controller.msg.RolePageQueryResult;
 import com.demo.eoms.controller.msg.RoleUpdateRequest;
 import com.demo.eoms.mapper.MenuInfo;
@@ -32,13 +33,13 @@ public class RoleService {
     public List<MenuInfo>  queryAllMenuApi(){
         return  roleInfoMapper.queryAllMenuApi();
     }
-    public  List<Integer> queryRoleAipIDs(Integer roleID){
-        return roleInfoMapper.queryRoleAipIDs(roleID);
-    }
+//    public  List<Integer> queryRoleAipIDs(Integer roleID){
+//        return roleInfoMapper.queryRoleAipIDs(roleID);
+//    }
 
 
-    public List<Integer> queryRoleMenuIDs( Integer roleID){
-        return roleInfoMapper.queryRoleMenuIDs(roleID);
+    public List<RoleMenuApiResult> queryRoleMenuIDApiID( Integer roleID){
+        return roleInfoMapper.queryRoleMenuIDApiID(roleID);
     }
 
 
@@ -57,8 +58,10 @@ public class RoleService {
         for (Integer menuID:request.getMenuIDs()){
             roleInfoMapper.insertRoleMenu(roleInfo.getId(),menuID);
         }
-        for (Integer apiID:request.getApiIDs()){
-            roleInfoMapper.insertRoleAip(roleInfo.getId(),apiID);
+        //apiId#menuId
+        for (String apiID:request.getApiIDs()){
+        	String [] temp=apiID.split("#");
+            roleInfoMapper.insertRoleAip(roleInfo.getId(),Integer.parseInt(temp[0]),Integer.parseInt(temp[1]));
         }
     }
 
@@ -79,8 +82,9 @@ public class RoleService {
         for (Integer menuID:request.getMenuIDs()){
             roleInfoMapper.insertRoleMenu(roleInfo.getId(),menuID);
         }
-        for (Integer apiID:request.getApiIDs()){
-            roleInfoMapper.insertRoleAip(roleInfo.getId(),apiID);
+        for (String apiID:request.getApiIDs()){
+        	String [] temp=apiID.split("#");
+            roleInfoMapper.insertRoleAip(roleInfo.getId(),Integer.parseInt(temp[0]),Integer.parseInt(temp[1]));
         }
     }
 

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<title>企业运营管理系统平台</title>
+	<link rel="stylesheet" type="text/css" href="/html/jquery-easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="/html/jquery-easyui/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="/html/css/demo.css">
+	<script type="text/javascript" src="/html/jquery-easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="/html/jquery-easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="/html/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="/html/js/utils.js" ></script>
+    <script type="text/javascript" src="menu.js"></script>
+</head>
+<body>
+<body class="easyui-layout">
+<div data-options="region:'north',border:false" style="height:5px;"></div>
+<div id="menu" data-options="region:'west',split:true,collapsible:false,title:'菜单'" style="width:300px;">
+    <div id="menuTree" class="easyui-tree"></div>
+</div>
+
+<div id="mainPanle"  data-options="region:'center'">
+    <div id="tt" class="easyui-layout" data-options="fit:true">
+        <div data-options="region:'north',border:false" style="height:10px"></div>
+        <div data-options="region:'west',border:false"  style="width:100px;"></div>
+        <div data-options="region:'center',border:false">
+            <div class="easyui-panel" style="width:100%;max-width:700px;padding:30px 60px;">
+                <form id="ff" class="easyui-form">
+                    <input type="hidden" id="id" >
+                    <input type="hidden" id="parentId" >
+                    <div style="margin-bottom:5px">
+                        <input id="parentName" name="parentName" class="easyui-textbox"  data-options="
+                                                        disabled:true" label="父菜单名称" labelPosition="top" style="width:80%">
+                        <a href="#" id="cancelParent" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">清除父菜单</a>
+                    </div>
+                    <div style="margin-bottom:5px">
+                        <input id="menuName"  class="easyui-textbox"  data-options="
+													validateOnCreate:false,
+													required:true,
+													validType:['length[2,32]']"
+                               label="菜单名称" labelPosition="top" style="width:100%">
+                    </div>
+                    <div style="margin-bottom:5px">
+                        <input id=menuCode  class="easyui-textbox"
+                               label="菜单编码(每级两位,排序使用)"   data-options="
+                               	validateOnCreate:false,
+								required:true
+								"
+                                labelPosition="top" style="width:100%">
+                    </div>
+                    <div style="margin-bottom:5px">
+                        <input id="url" class="easyui-textbox"
+                               label="URL" labelPosition="top" style="width:100%">
+                    </div>
+                     <div style="margin-bottom:5px">
+                        <input id="api" class="easyui-tagbox" label="接口权限"   labelPosition="top" style="width:100%" data-options="
+									valueField: 'id',
+									textField: 'remark'
+									">
+                    </div>
+                    <div style="text-align:center;padding:5px 0">
+                        <a id="saveButton" href="javascript:void(0)" class="easyui-linkbutton"   style="width:80px">保&nbsp;&nbsp;存</a>
+                    </div>
+                    <table id="table_api" required=true class="easyui-datagrid"></table>
+                    <div id="tb" style="padding:2px 5px;">
+					                    接口编码: <input id="apiCode" class="easyui-textbox"  style="width:150px" >&nbsp;&nbsp;
+					                   接口名称: <input id="apiName" class="easyui-textbox"  style="width:150px" >&nbsp;&nbsp;      
+					               <a id="queryButton" href="#" class="easyui-linkbutton" iconCls="icon-search">查询</a>&nbsp;&nbsp;&nbsp;&nbsp;
+    				</div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="mm" class="easyui-menu" style="width:120px;">
+    <div id="addButton" data-options="iconCls:'icon-add'">新增</div>
+    <div id="deleteButton" data-options="iconCls:'icon-cancel'">删除</div>
+</div>
+</body>
+</body>
+</html>

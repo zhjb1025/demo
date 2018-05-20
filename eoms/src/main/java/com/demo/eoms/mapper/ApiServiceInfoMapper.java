@@ -23,7 +23,7 @@ public interface ApiServiceInfoMapper {
     List<ApiServiceInfo> selectByColumn(ApiServiceInfo record);
     
     @Select("select id, service, remark, version from api_service_info " +
-            "where service=#{service,jdbcType=VARCHAR}")
+            "where service=#{service,jdbcType=VARCHAR}"   )
     ApiServiceInfo queryApiServiceInfo(@Param("service") String  service);
     
     

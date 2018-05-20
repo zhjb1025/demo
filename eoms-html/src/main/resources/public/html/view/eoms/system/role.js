@@ -128,15 +128,21 @@ function viewRole(index){
         $.messager.alert('错误提示信息',rsp.rspMsg,'error');
         return ;
     }
-
-    for(var i=0;i<rsp.menuIDs.length;i++){
-        var node = $('#tree').tree('find', rsp.menuIDs[i]);
+    for(var i=0;i<rsp.rows.length;i++){
+        var node = $('#tree').tree('find', rsp.rows[i].menuId);
+        if($('#tree').tree('isLeaf',node.target)){
+            $('#tree').tree('check',node.target);
+        }
+        node = $('#tree').tree('find', "api"+rsp.rows[i].apiId+"#"+rsp.rows[i].menuId);
+        if(node==null || typeof(node) == 'undefined'  ){
+        	continue
+        }
         if($('#tree').tree('isLeaf',node.target)){
             $('#tree').tree('check',node.target);
         }
     }
-    var apiIDMap={};
-    for(var j=0;j<rsp.apiIDs.length;j++){
+    /*
+    for(var j=0;j<rsp.rows.length;j++){
         //var node = $('#tree').tree('find', "api"+rsp.apiIDs[j]);
         //$('#tree').tree('check',node.target);
         apiIDMap["api"+rsp.apiIDs[j]]=rsp.apiIDs[j];
@@ -150,7 +156,7 @@ function viewRole(index){
                 $('#tree').tree('check',children[j].target);
             }
         }
-    }
+    }*/
     $('#w').window('open');
 }
 
@@ -189,7 +195,7 @@ function queryAllMenuApi() {
             if(rsp.menuInfoList[i].apiServiceInfos.length>0){
                 for(var j=0;j<rsp.menuInfoList[i].apiServiceInfos.length;j++){
                     var n={};
-                    n.id="api"+rsp.menuInfoList[i].apiServiceInfos[j].id;
+                    n.id="api"+rsp.menuInfoList[i].apiServiceInfos[j].id+"#"+rsp.menuInfoList[i].id;
                     n.text=rsp.menuInfoList[i].apiServiceInfos[j].remark;
                     n.attributes='api';
                     node.children[node.children.length]=n;

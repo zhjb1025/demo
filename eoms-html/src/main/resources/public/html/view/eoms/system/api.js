@@ -8,7 +8,7 @@ $(document).ready(function(){
         rownumbers:true,
         toolbar:'#tb',
         singleSelect:true,
-        title:"配置参数",
+        title:"接口信息",
         pagination:true,
         nowrap:false,
         columns:[[
@@ -17,7 +17,7 @@ $(document).ready(function(){
             {field:'remark',title:'接口名称',width:'35%'},
             {field:'version',title:'接口版本号',width:'20%'},
             {field:'opt',title:'操作',width:'15%',formatter:function (value,row,index) {
-                return  "<a href=# onclick=view("+index+")>修改</a> ";
+                return  "<a href=# onclick=view("+index+")>修改</a> | <a href=# onclick=deleteApi("+index+")>删除</a>";
             }}
         ]]
     });
@@ -41,7 +41,25 @@ $(document).ready(function(){
     query(1,pager.pagination("options").pageSize);
     
 });
-
+function deleteApi(index){
+	var row=$('#table_template').datagrid("getRows")[index];
+	var request={};
+	request.id=row.id;
+	request.service ="eoms_delete_api_info";
+	var rsp=ajaxPostSynch(request);
+    if(rsp.tradeStatus!=1){
+        $.messager.alert('错误提示信息',rsp.rspMsg,'error');
+        return ;
+    }else{
+        $.messager.alert('提示信息',rsp.rspMsg,'info');
+    }
+    var pageSize=$('#table_template').datagrid('getPager').pagination("options").pageSize;
+    var pageNumber=$('#table_template').datagrid('getPager').pagination("options").pageNumber;
+    if(index==null || index==""){
+        pageNumber=1;
+    }
+    query(pageNumber,pageSize);
+}
 function query(pageNumber,pageSize) {
 	if(typeof(pageSize) == 'undefined' ){
         pageNumber=1;

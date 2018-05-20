@@ -8,7 +8,7 @@ import com.demo.framework.msg.BaseResponse;
 /**
  *
  */
-public class QueryUserMenuResponse extends BaseResponse {
+public class UserMenuQueryResponse extends BaseResponse {
 
     private  List<MenuInfo> menuInfoList;
 

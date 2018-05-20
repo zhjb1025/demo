@@ -7,11 +7,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.demo.eoms.controller.msg.RoleAddRequest;
+import com.demo.eoms.controller.msg.ListQueryResponse;
 import com.demo.eoms.controller.msg.MenuApiAllResponse;
 import com.demo.eoms.controller.msg.PageQueryResponse;
+import com.demo.eoms.controller.msg.RoleAddRequest;
 import com.demo.eoms.controller.msg.RoleMenuApiQueryRequest;
-import com.demo.eoms.controller.msg.QueryRoleMenuApiResponse;
+import com.demo.eoms.controller.msg.RoleMenuApiResult;
 import com.demo.eoms.controller.msg.RolePageQueryResult;
 import com.demo.eoms.controller.msg.RoleQueryRequest;
 import com.demo.eoms.controller.msg.RoleUpdateRequest;
@@ -57,14 +58,13 @@ public class RoleController {
 
     @TradeService(value=API_PREFIX+"query_role_menu_api",isLog = false)
     public BaseResponse queryRoleMenuApi(RoleMenuApiQueryRequest request) throws Exception {
-        QueryRoleMenuApiResponse response= new QueryRoleMenuApiResponse();
-        response.setApiIDs(roleService.queryRoleAipIDs(request.getRoleID()));
-        response.setMenuIDs(roleService.queryRoleMenuIDs(request.getRoleID()));
+    	ListQueryResponse<RoleMenuApiResult> response= new ListQueryResponse<RoleMenuApiResult>(); 
+    	response.setRows(roleService.queryRoleMenuIDApiID(request.getRoleID()));
         return response;
     }
 
     @TradeService(value=API_PREFIX+"add_role")
-    public BaseResponse queryRoleMenuApi(RoleAddRequest request) throws Exception {
+    public BaseResponse addRole(RoleAddRequest request) throws Exception {
         BaseResponse response= new BaseResponse();
         roleService.addRole(request);
         return response;
