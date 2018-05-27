@@ -1,31 +1,31 @@
 package com.demo.eoms.service;
 
-import static com.demo.eoms.common.Constant.API_PREFIX;
-
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.demo.eoms.common.EomsErrorCode;
-import com.demo.eoms.controller.msg.PageQueryResponse;
 import com.demo.eoms.controller.msg.ConfigInfoQueryRequest;
 import com.demo.eoms.controller.msg.ConfigInfoQueryResult;
-import com.demo.eoms.controller.msg.SystemInfoQueryRequest;
-import com.demo.eoms.controller.msg.SystemInfoRequest;
+import com.demo.eoms.mapper.ConfigInfo;
 import com.demo.eoms.mapper.ConfigInfoMapper;
 import com.demo.eoms.mapper.SystemInfo;
 import com.demo.eoms.mapper.SystemInfoMapper;
-import com.demo.framework.annotation.TradeService;
-import com.demo.framework.exception.CommException;
-import com.demo.framework.msg.BaseResponse;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
-@TradeService(version="1.0.0")
+
 public class ConfigCenterService {
-//	private  Logger logger = LoggerFactory.getLogger(this.getClass());
+	private  Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private SystemInfoMapper systemInfoMapper;
@@ -33,58 +33,69 @@ public class ConfigCenterService {
 	@Autowired
 	private ConfigInfoMapper configInfoMapper;
 	
-	@TradeService(value=API_PREFIX+"page_query_system_info",isLog = false)
-	public BaseResponse querySystemInfo(SystemInfoQueryRequest request){
-		PageQueryResponse<SystemInfo> response= new PageQueryResponse<SystemInfo>();
-        PageHelper.startPage(request.getPageNumber(), request.getPageSize());
-        SystemInfo record= new SystemInfo();
-        record.setSystemCode(request.getSystemCode());
-        record.setSystemName(request.getSystemName());
-        List<SystemInfo> list = systemInfoMapper.selectByColumn(record);
-        PageInfo<SystemInfo> page=new PageInfo<SystemInfo>(list);
-        response.setTotal(page.getTotal());
-        response.setRows(list);
-        return response;
+	private RedisTemplate<Object,Object> redisTemplate;;
+	
+	public List<SystemInfo> querySystemInfo(SystemInfo record){
+        return systemInfoMapper.selectByColumn(record);
 	}
 	
-	@TradeService(value=API_PREFIX+"add_system_info",isLog = true)
-	public BaseResponse addSystemInfo(SystemInfoRequest request) throws  Exception{
-		BaseResponse response= new BaseResponse();
-        SystemInfo record= new SystemInfo();
-        record.setSystemCode(request.getSystemCode());
-        List<SystemInfo> list = systemInfoMapper.selectByColumn(record);
-        if(list!=null && list.size()>0){
-        	throw new CommException(EomsErrorCode.SYSTEM_CODE_EXITS,request.getSystemCode());
-        }
-        record.setSystemName(request.getSystemName());
+	@Transactional(rollbackFor=Exception.class)
+	public void addSystemInfo(SystemInfo record) throws  Exception{
         systemInfoMapper.insert(record);
-        return response;
 	}
 	
-	@TradeService(value=API_PREFIX+"update_system_info",isLog = true)
-	public BaseResponse updateSystemInfo(SystemInfoRequest request) throws  Exception{
-		BaseResponse response= new BaseResponse();
-        SystemInfo record= new SystemInfo();
-        record.setSystemCode(request.getSystemCode());
-        List<SystemInfo> list = systemInfoMapper.selectByColumn(record);
-        if(list==null || list.size()==0){
-        	throw new CommException(EomsErrorCode.SYSTEM_CODE_EXITS,request.getSystemCode());
-        }
-        record.setSystemName(request.getSystemName());
+	@Transactional(rollbackFor=Exception.class)
+	public void updateSystemInfo(SystemInfo record) throws  Exception{
         systemInfoMapper.updateByPrimaryKey(record);
-        return response;
 	}
 	
 	
-	@TradeService(value=API_PREFIX+"page_query_conifg_info",isLog = false)
-	public BaseResponse queryConifgApply(ConfigInfoQueryRequest request){
-		PageQueryResponse<ConfigInfoQueryResult> response= new PageQueryResponse<ConfigInfoQueryResult>();
-        PageHelper.startPage(request.getPageNumber(), request.getPageSize());
-        List<ConfigInfoQueryResult> list = configInfoMapper.selectByColumn(request);
-        PageInfo<ConfigInfoQueryResult> page=new PageInfo<ConfigInfoQueryResult>(list);
-        response.setTotal(page.getTotal());
-        response.setRows(list);
-        return response;
+	public List<ConfigInfoQueryResult> queryConifg(ConfigInfoQueryRequest request){
+        return configInfoMapper.selectByColumn(request);
+	}
+	
+	@Transactional(rollbackFor=Exception.class)
+	public void addConfigInfo(ConfigInfo record) throws  Exception{
+		configInfoMapper.insert(record);
+		redisTemplate.opsForValue().set(record.getSystemCode()+":"+record.getConfigCode(),record.getConfigValue());
+	}
+	@Transactional(rollbackFor=Exception.class)
+	public void updateConfigInfo(ConfigInfo record,String oldCode) throws  Exception{
+		configInfoMapper.updateByPrimaryKeySelective(record);
+		if(!record.getConfigCode().equals(oldCode)){
+			logger.info("编码发生变化旧编码为[{}],新编码为[{}]",oldCode,record.getConfigCode());
+			//如果编码变化，删除原来的值
+			redisTemplate.delete(record.getSystemCode()+":"+oldCode);
+			logger.info("删除redis上旧KEY[{}]",record.getSystemCode()+":"+oldCode);
+			redisTemplate.convertAndSend(record.getSystemCode(), "delete#"+oldCode);
+			logger.info("发出通知[channel={},message={}]",record.getSystemCode(),"delete#"+oldCode);
+		}
+		
+		redisTemplate.opsForValue().set(record.getSystemCode()+":"+record.getConfigCode(),record.getConfigValue());
+		logger.info("更新redis[key={},value={}]",record.getSystemCode()+":"+record.getConfigCode(),record.getConfigValue());
+		//发送消息通知
+		redisTemplate.convertAndSend(record.getSystemCode(), "put#"+record.getConfigCode());
+		logger.info("发出通知[channel={},message={}]",record.getSystemCode(),"put#"+record.getConfigCode());
+		
+	}
+	
+	@Autowired
+	public void setRedisTemplate(RedisTemplate<Object, Object> redisTemplate) {
+		RedisSerializer<String> stringSerializer = new StringRedisSerializer();
+        // 使用Jackson2JsonRedisSerialize 替换默认序列化
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<Object>(Object.class);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
+
+        // 设置value的序列化规则和 key的序列化规则
+		redisTemplate.setKeySerializer(stringSerializer);
+		redisTemplate.setHashKeySerializer(stringSerializer);
+		redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+		redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+		this.redisTemplate = redisTemplate;
 	}
    
 }

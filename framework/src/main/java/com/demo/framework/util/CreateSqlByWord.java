@@ -29,7 +29,7 @@ public class CreateSqlByWord{
 //		if(args[0].equals("createTableSql")){
 //			temp.createTableSql(path, table_name);
 //		}
-		temp.createTableSql("G:/git/demo/doc/数据库设计.docx");
+		temp.createTableSql("D:\\dev\\src\\demo\\doc\\数据库设计.docx");
 		
 	}
 	

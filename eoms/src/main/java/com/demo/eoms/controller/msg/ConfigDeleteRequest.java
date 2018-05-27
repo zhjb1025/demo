@@ -1,31 +1,18 @@
 package com.demo.eoms.controller.msg;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.demo.framework.msg.BaseRequest;
 
 public class ConfigDeleteRequest extends BaseRequest{
+	@NotNull(message = "ID不能为空")
+    private Integer id;
 
-	@NotBlank(message = "分组不能为空")
-    private String group;
-
-	@NotBlank(message = "KEY不能为空")
-    private String key;
-	
-	public String getGroup() {
-		return group;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setGroup(String group) {
-		this.group = group;
+	public void setId(Integer id) {
+		this.id = id;
 	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
 }

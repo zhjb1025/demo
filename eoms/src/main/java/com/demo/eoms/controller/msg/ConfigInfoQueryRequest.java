@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 
 
 public class ConfigInfoQueryRequest extends PageQueryRequest {
+	private Integer id;
 	
 	private String systemCode;
 	
@@ -37,6 +38,12 @@ public class ConfigInfoQueryRequest extends PageQueryRequest {
 	}
 	public void setConfigCode(String configCode) {
 		this.configCode = configCode;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
 	

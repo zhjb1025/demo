@@ -1,7 +1,7 @@
 package com.demo.eoms.common.enums;
 
 public enum ConfigTypeEnum {
-	SYSTEM("00","系统参数"),
+	SYSTEM("00","技术参数"),
 	BUSINESS("01","业务参数");
 	
 	private String type;

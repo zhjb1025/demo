@@ -32,9 +32,12 @@ public class EomsErrorCode extends FrameworkErrorCode {
 	public static ErrorCode API_ID_ERROR=new ErrorCode(" 00020301","ID错误");
 	
 	/*
-     * 系统管理模块错误码   000300 开头
+     * 配置中心模块错误码   000204 开头
      */
-	public static ErrorCode SYSTEM_CODE_EXITS=new ErrorCode(" 00030001","系统编码[%s]已经存在");
-	public static ErrorCode SYSTEM_CODE_NOT_EXITS=new ErrorCode(" 00030002","系统编码[%s]不存在");
+	public static ErrorCode SYSTEM_CODE_EXITS=new ErrorCode(" 00020401","系统编码[%s]已经存在");
+	public static ErrorCode SYSTEM_CODE_NOT_EXITS=new ErrorCode(" 00020402","系统编码[%s]不存在");
+	public static ErrorCode CONFIG_CODE_EXITS=new ErrorCode(" 00020403","配置参数编码[%s]已经存在");
+	public static ErrorCode CONFIG_CODE_NOT_EXITS=new ErrorCode(" 00020404","配置参数编码[%s]不存在");
+	public static ErrorCode CONFIG_ID_ERROR=new ErrorCode(" 00020405","配置ID错误");
     
 }

@@ -2,22 +2,23 @@
  * Created by Auser on 2017/7/15.
  */
 
-
+var configType_;
 $(document).ready(function(){
+	configType_=getUrlParam("configType");
     $('#config_info').datagrid({
         rownumbers:true,
         toolbar:'#tb',
         singleSelect:true,
-        title:"配置参数",
+        title:"参数配置",
         pagination:true,
         nowrap:false,
         columns:[[
             {field:'systemCode',title:'系统编码',width:'10%'},
             {field:'systemName',title:'系统名称',width:'10%'},
-            {field:'configTypeLable',title:'类型',width:'5%'},
+            {field:'configTypeLable',title:'类型',width:'10%'},
             {field:'configCode',title:'编码',width:'20%'},
             {field:'configValue',title:'值',width:'20%'},
-            {field:'remark',title:'说明',width:'25%'},
+            {field:'remark',title:'说明',width:'20%'},
             {field:'opt',title:'操作',width:'10%',formatter:function (value,row,index) {
                 return  "<a href=# onclick=viewConfigInfo("+index+")>修改</a> | <a href=# onclick=viewSystemInfo("+index+")>删除</a>";
             }}
@@ -37,17 +38,30 @@ $(document).ready(function(){
 	   	 valueField:'id',
 	   	 textField:'text'
     });
+    $("#system_code").combobox({
+	   	 valueField:'id',
+	   	 textField:'text'
+   });
     
     $("#queryButton").click(queryConfigInfo);
     $("#closeButton").click(function () {
         $('#w').window('close');
     });
-    $("#saveButton").click(saveSystemInfo);
+    $("#saveButton").click(save);
     $("#addButton").click(addConfigInfo);
     querySystemInfo(1,10000);
     queryConfigInfo(1,pager.pagination("options").pageSize);
 });
 
+function getUrlParam(name){  
+	//构造一个含有目标参数的正则表达式对象  
+	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");  
+	//匹配目标参数  
+	var r = window.location.search.substr(1).match(reg);  
+	//返回参数值  
+	if (r!=null) return unescape(r[2]);  
+	return null;  
+}  
 function queryConfigInfo(pageNumber,pageSize) {
 	if(typeof(pageSize) == 'undefined' ){
         pageNumber=1;
@@ -58,7 +72,7 @@ function queryConfigInfo(pageNumber,pageSize) {
 	request.pageSize=pageSize;
     request.service ="eoms_page_query_conifg_info";
     request.systemCode=$("#systemCode").combobox("getValue");
-    request.configType=$("#configType").combobox("getValue");
+    request.configType=configType_;
     request.configCode=$("#configCode").textbox("getValue");
     var rsp=ajaxPostSynch(request);
     if(rsp.tradeStatus!=1){
@@ -74,19 +88,13 @@ function addConfigInfo(){
     $('#system_code').combobox('enable');
     $("#system_code").combobox("resetValidation");
     
-    $("#config_type").combobox("setValue","");
-    $('#config_type').combobox('enable');
-    $("#config_type").combobox("resetValidation");
-    
     $('#config_code').textbox("setValue","");
     $('#config_code').textbox('enable');
     $("#config_code").textbox("resetValidation");
     
     $('#config_value').textbox("setValue","");
     $("#config_value").textbox("resetValidation");
-    
     $('#remark').textbox("setValue","");
-    
     $('#w').window('open');
 }
 
@@ -123,9 +131,7 @@ function viewConfigInfo(index){
     
     $("#system_code").combobox("setValue",row.systemCode);
     $('#system_code').combobox('disable');
-    
-    $("#config_type").combobox("setValue",row.configType);
-    $('#config_type').combobox('disable');
+ 
     
     $('#config_code').textbox("setValue",row.configCode);
     $('#config_type').textbox('disable');
@@ -137,20 +143,25 @@ function viewConfigInfo(index){
     $('#w').window('open');
 }
 
-function saveSystemInfo(){
+function save(){
 	if( ! $('#ff').form('enableValidation').form('validate') ){
 	        return ;
 	}
 	var request={};
 	var index= $("#rowIndex").val();
 	if(index==null || index==""){
-		request.service ="eoms_add_system_info";
+		request.service ="eoms_add_config_info";
 		
 	}else{
-		request.service ="eoms_update_system_info";
+		var row=$('#config_info').datagrid("getRows")[index];
+		request.id=row.id;
+		request.service ="eoms_update_config_info";
 	}
-	request.systemCode=$("#system_code").textbox("getValue");
-	request.systemName=$("#system_name").textbox("getValue");
+	request.configType=configType_;
+	request.systemCode=$("#system_code").combobox("getValue");
+	request.configCode=$("#config_code").textbox("getValue");
+	request.configValue=$("#config_value").textbox("getValue");
+	request.remark=$("#remark").textbox("getValue");
    
 	var rsp=ajaxPostSynch(request);
     if(rsp.tradeStatus!=1){
@@ -159,13 +170,12 @@ function saveSystemInfo(){
     }else{
         $.messager.alert('提示信息',rsp.rspMsg,'info');
     }
-    var pageSize=$('#system_info').datagrid('getPager').pagination("options").pageSize;
-    var pageNumber=$('#system_info').datagrid('getPager').pagination("options").pageNumber;
+    var pageSize=$('#config_info').datagrid('getPager').pagination("options").pageSize;
+    var pageNumber=$('#config_info').datagrid('getPager').pagination("options").pageNumber;
     if(index==null || index==""){
         pageNumber=1;
     }
-    querySystemInfo(pageNumber,pageSize);
-
+    queryConfigInfo(pageNumber,pageSize);
     $('#w').window('close');
 }
 

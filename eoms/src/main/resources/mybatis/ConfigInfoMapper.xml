@@ -26,6 +26,9 @@
      <if test="configCode != null" >
       	and config_code = #{configCode,jdbcType=VARCHAR}
      </if>
+     <if test="id != null" >
+      	and c.id = #{id,jdbcType=INTEGER}
+     </if>
   </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

@@ -22,13 +22,7 @@
     </div>
 
     <div id="tb" style="padding:2px 5px;">
-                    
                     系统名称:  <select  id="systemCode" class="easyui-combobox" style="width:200px" ></select>&nbsp;&nbsp;
-                    类型: <select  id="configType" class="easyui-combobox"  style="width:200px" >
-                    <option value="">全部</option>
-                    <option value="00">系统参数</option>
-                    <option value="02">业务参数</option>
-             </select>&nbsp;&nbsp;
                     编码: <input id="configCode" class="easyui-textbox"  style="width:200px" >&nbsp;&nbsp;
                <a id="queryButton" href="#" class="easyui-linkbutton" iconCls="icon-search">查询</a>&nbsp;&nbsp;&nbsp;&nbsp;
                <a id="addButton" href="#" class="easyui-linkbutton" iconCls="icon-add">增加</a>
@@ -44,16 +38,7 @@
                     <input id="system_code" class="easyui-combobox"  data-options="
 													validateOnCreate:false,
 													required:true"
-                           label="接入系统" labelPosition="top" style="width:90%">
-                </div>
-                <div style="margin-bottom:20px">
-                    <select id="config_type" class="easyui-combobox"  data-options="
-													validateOnCreate:false,
-													required:true"
-                           label="类型" labelPosition="top" style="width:90%">
-			                    <option value="00">系统参数</option>
-			                    <option value="02">业务参数</option>
-                     </select>
+                           label="业务系统" labelPosition="top" style="width:90%">
                 </div>
                 <div style="margin-bottom:20px">
                     <input id="config_code" class="easyui-textbox"  data-options="
