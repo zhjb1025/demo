@@ -12,7 +12,7 @@
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 		    <!-- rollover daily -->
-			<FileNamePattern>/root/logs/demo/%d{yyyy-MM-dd,aux}/demo_%d{yyyy-MM-dd_HH}_%i.log</FileNamePattern>
+			<FileNamePattern>/root/logs/eoms/%d{yyyy-MM-dd,aux}/demo_%d{yyyy-MM-dd_HH}_%i.log</FileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<maxFileSize>100MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>

@@ -79,7 +79,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>spring-demo</finalName>
+		<finalName>eoms</finalName>
 		<pluginManagement>
 			<plugins>
 				<plugin>
