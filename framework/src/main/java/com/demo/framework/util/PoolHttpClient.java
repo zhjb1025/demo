@@ -186,7 +186,19 @@ public class PoolHttpClient {
 	public static String get(String url, int timeout) throws SocketTimeoutException, ConnectTimeoutException,Exception {
 		return get(url, new HashMap<String, String>(), timeout, CHARSET);
 	}
-
+	/**
+	 * GET 调用
+	 * @param url
+	 * @param header
+	 * @param timeout
+	 * @return
+	 * @throws SocketTimeoutException
+	 * @throws ConnectTimeoutException
+	 * @throws Exception
+	 */
+	public static String get(String url, Map<String, String> header,int timeout) throws SocketTimeoutException, ConnectTimeoutException,Exception {
+		return get(url, header, timeout, CHARSET);
+	}
 	/**
 	 * GET 调用
 	 * @param url
@@ -286,6 +298,22 @@ public class PoolHttpClient {
 	 */
 	public static String get(String url, String data, int timeout) throws SocketTimeoutException,ConnectTimeoutException, Exception {
 		return post(url, data, null, timeout, CHARSET);
+	}
+	
+	/**
+	 * Post 调用
+	 * @param url
+	 * @param data
+	 * @param header
+	 * @param timeout
+	 * @return
+	 * @throws SocketTimeoutException
+	 * @throws ConnectTimeoutException
+	 * @throws Exception
+	 */
+	public static String post(String url, String data, Map<String, String> header,int timeout)
+			throws SocketTimeoutException, ConnectTimeoutException,Exception {
+		return post(url, data, header, timeout, CHARSET);
 	}
 
 	/**
